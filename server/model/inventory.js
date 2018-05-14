@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 // create a schema
 const inventorySchema = new Schema({
-  id: { type: String, required: true, unique: true },
+  sku: { type: String, required: true, unique: true },
   name: { type: String, required: true }
 }, { collection : 'inventory' });
 

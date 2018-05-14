@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ShowInventoryService } from './show-inventory.service';
 import { Materiales } from '../models/materiales.model';
-import { MatSort, MatSortable, MatTableDataSource } from '@angular/material'
-import { DataTableModule } from 'primeng/datatable';
+import { TableModule } from 'primeng/table';
 
 @Component({
   selector: 'app-show-inventory',

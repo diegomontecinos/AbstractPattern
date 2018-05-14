@@ -3,10 +3,18 @@ import { ModuleWithProviders } from '@angular/core/src/metadata/ng_module';
 
 import { LoginComponent } from './login/login.component';
 import { HomeBodegueroComponent } from './home-bodeguero/home-bodeguero.component';
+import { ShowDispatchComponent } from './show-dispatch/show-dispatch.component';
+import { ShowInventoryComponent } from './show-inventory/show-inventory.component';
+import { ShowAcquisitionComponent } from './show-acquisition/show-acquisition.component';
+import { ShowOrderComponent } from './show-order/show-order.component';
 
 export const AppRoutes: Routes = [
     { path: '', component: LoginComponent },
-    { path: 'home_bodeguero', component: HomeBodegueroComponent}
+    { path: 'bodeguero/home', component: HomeBodegueroComponent },
+    { path: 'bodeguero/despachos', component: ShowDispatchComponent },
+    { path: 'bodeguero/inventario', component: ShowInventoryComponent },
+    { path: 'bodeguero/adquisiciones', component: ShowAcquisitionComponent },
+    { path: 'bodeguero/ordenes', component: ShowOrderComponent }
 ];
 
 export const ROUTING: ModuleWithProviders = RouterModule.forRoot(AppRoutes);

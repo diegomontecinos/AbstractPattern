@@ -22,7 +22,7 @@ export class LoginComponent {
         this.loginService.validateLogin(this.user).subscribe(result => {
         console.log('result is ', result);
         if(result['status'] === 'success') {
-          this.router.navigate(['/home_bodeguero']);
+          this.router.navigate(['/bodeguero/home']);
         } else {
           alert('Wrong username password');
         }

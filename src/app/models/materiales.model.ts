@@ -1,8 +1,8 @@
 export class Materiales {
     constructor(){
-      	this.id = '';
+      	this.sku = '';
       	this.name = '';
     }
-    public id;
+    public sku;
     public name;
 }
