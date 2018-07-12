@@ -8,6 +8,8 @@ import { TableModule } from 'primeng/table';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { MenuItem } from 'primeng/api';
 import { PanelModule } from 'primeng/panel';
+import {DialogModule} from 'primeng/dialog';
+import {ButtonModule} from 'primeng/button';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -16,6 +18,9 @@ import { ShowInventoryComponent } from './show-inventory/show-inventory.componen
 import { ShowDispatchComponent } from './show-dispatch/show-dispatch.component';
 import { ShowOrderComponent } from './show-order/show-order.component';
 import { ShowAcquisitionComponent } from './show-acquisition/show-acquisition.component';
+import { MenubarComponent } from './menubar/menubar.component';
+import { MenubarGrocerComponent } from './menubar-grocer/menubar-grocer.component';
+import { ShowOrder0Component } from './show-order0/show-order0.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +30,10 @@ import { ShowAcquisitionComponent } from './show-acquisition/show-acquisition.co
     ShowInventoryComponent,
     ShowDispatchComponent,
     ShowOrderComponent,
-    ShowAcquisitionComponent
+    ShowAcquisitionComponent,
+    MenubarComponent,
+    MenubarGrocerComponent,
+    ShowOrder0Component
   ],
   imports: [
     BrowserModule,
@@ -35,7 +43,9 @@ import { ShowAcquisitionComponent } from './show-acquisition/show-acquisition.co
     BrowserAnimationsModule,
     TableModule,
     PanelMenuModule,
-    PanelModule
+    PanelModule,
+    DialogModule,
+    ButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

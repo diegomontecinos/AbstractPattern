@@ -6,6 +6,7 @@ const url = 'mongodb://localhost/gpi2db';
 
 const User = require('./model/user');
 const Inventory = require('./model/inventory');
+const Order = require('./model/order');
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended : false}))
@@ -37,6 +38,69 @@ app.post('/api/inventory/getAllMat', (req, res) => {
     mongoose.connect(url, function(err){
         if(err) throw err;
         Inventory.find({},[],{ sort: { _id: -1 } },(err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+    });
+})
+
+app.post('/api/orders/getAllOrd', (req, res) => {
+    mongoose.connect(url, function(err){
+        if(err) throw err;
+        Order.find({},[],{ sort: { _id: -1 } },(err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+    });
+})
+
+app.post('/api/orders/createOrder', (req, res) => {
+    mongoose.connect(url, function(err){
+        if(err) throw err;
+        const order = new Order({
+            name: req.body.name,
+            qty: req.body.qty,
+            status: req.body.status
+        })
+        order.save((err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+    });
+})
+
+app.post('/api/orders/updateOrder', (req, res) => {
+    mongoose.connect(url, function(err){
+        if(err) throw err;
+        Order.update(
+            { _id: req.body.id },
+            { name: req.body.name,
+            qty: req.body.qty,
+            status: req.body.status },
+            (err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+    });
+})
+
+app.post('/api/orders/deleteOrder', (req, res) => {
+    mongoose.connect(url, function(err){
+        if(err) throw err;
+        Order.findByIdAndRemove(req.body.id,
+            (err, doc) => {
             if(err) throw err;
             return res.status(200).json({
                 status: 'success',

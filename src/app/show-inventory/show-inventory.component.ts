@@ -12,7 +12,6 @@ import { TableModule } from 'primeng/table';
 export class ShowInventoryComponent implements OnInit {
 
   public materiales : any [];
-  public kaka = 'lala';
 
   constructor(private showInventoryService: ShowInventoryService) {
 

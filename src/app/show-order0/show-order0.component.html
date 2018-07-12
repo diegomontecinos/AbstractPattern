@@ -1,0 +1,69 @@
+<div class="ui-g">
+  <div class="ui-g-2 menu">
+    <app-menubar-grocer></app-menubar-grocer>
+  </div>
+  <div class="ui-g-1 margen">
+  </div>
+  <div class="ui-g-6 center-table">
+
+
+<p-table [columns]="cols" [value]="orders" selectionMode="single" [(selection)]="selectedOrder" (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="15">
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns">
+                {{col.header}}
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [pSelectableRow]="rowData">
+            <td *ngFor="let col of columns">
+                {{rowData[col.field]}}
+            </td>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="summary" let-rowData>
+        <div style="text-align:left">
+            <button type="button" pButton icon="fa-plus" (click)="showDialogToAdd()" label="Agregar orden"></button>
+        </div>
+    </ng-template>
+
+</p-table>
+
+</div>
+
+<p-dialog header="Detalle ordenes" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
+    <div class="ui-g ui-fluid" *ngIf="order">
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="name">Nombre</label>
+            </div>
+            <div class="ui-g-8">
+                <input pInputText id="name" [(ngModel)]="order.name" />
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="qty">Cantidad</label>
+            </div>
+            <div class="ui-g-8">
+                <input pInputText id="qty" [(ngModel)]="order.qty" />
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="status">Estado</label>
+            </div>
+            <div class="ui-g-8">
+                <input pInputText id="status" [(ngModel)]="order.status" />
+            </div>
+        </div>
+    </div>
+    <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                <button type="button" pButton icon="fa fa-close" (click)="deleteOrder()" label="Borrar"></button>
+                <button type="button" pButton icon="fa fa-check" (click)="addOrder()" label="Guardar"></button>
+            </div>
+    </p-footer>
+</p-dialog>
