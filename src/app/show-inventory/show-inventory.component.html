@@ -5,29 +5,81 @@
   <div class="ui-g-1 margen">
   </div>
   <div class="ui-g-6 center-table">
-    <p-table [value]="materiales" >
-      <ng-template pTemplate="header">
-          <tr>
-              <th>SKU</th>
-              <th>Nombre</th>
-              <th>Marca</th>
-              <th>Bodega 1</th>
-              <th>Bodega 2</th>
-              <th>Bodega 2</th>
-          </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-material>
-          <tr>
-              <td>{{material.sku}}</td>
-              <td>{{material.name}}</td>
-              <td>{{material.brand}}</td>
-              <td>{{material.wh1}}</td>
-              <td>{{material.wh2}}</td>
-              <td>{{material.wh3}}</td>
-          </tr>
-      </ng-template>
-    </p-table>
-  </div>
-  <div class="ui-g-4">
-  </div>
+
+
+<p-table [columns]="cols" [value]="materials" selectionMode="single" [(selection)]="selectedMaterial" (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="15">
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns">
+                {{col.header}}
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [pSelectableRow]="rowData">
+            <td *ngFor="let col of columns">
+                {{rowData[col.field]}}
+            </td>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="summary" let-rowData>
+        <div style="text-align:left">
+            <button type="button" pButton icon="fa-plus" (click)="showDialogToAdd()" label="Agregar item"></button>
+        </div>
+    </ng-template>
+
+</p-table>
+
 </div>
+
+<p-dialog header="Detalle inventario" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
+    <div class="ui-g ui-fluid" *ngIf="material">
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="name">SKU</label>
+            </div>
+            <div class="ui-g-8">
+                <input pInputText id="sku" [(ngModel)]="material.sku" />
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="qty">Nombre</label>
+            </div>
+            <div class="ui-g-8">
+                <input pInputText id="name" [(ngModel)]="material.name" />
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="status">Marca</label>
+            </div>
+            <div class="ui-g-8">
+                <input pInputText id="brand" [(ngModel)]="material.brand" />
+            </div>
+            <div class="ui-g-12">
+              <p-table [value]="stockWH" >
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Bodega</th>
+                        <th>Stock</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-WH>
+                    <tr>
+                        <td>{{WH.name}}</td>
+                        <td>{{WH.stock}}</td>
+                    </tr>
+                </ng-template>
+              </p-table>
+            </div>
+        </div>
+    </div>
+    <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                <button type="button" pButton icon="fa fa-close" (click)="deleteMaterial()" label="Borrar"></button>
+                <button type="button" pButton icon="fa fa-check" (click)="addMaterial()" label="Guardar"></button>
+            </div>
+    </p-footer>
+</p-dialog>

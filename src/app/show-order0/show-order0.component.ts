@@ -58,15 +58,14 @@ export class ShowOrder0Component implements OnInit {
       else{
         this.showOrder0Service.updateOrder(this.order).subscribe(res =>{console.log('response is ', res)});
       }
-        this.displayDialog = false;
+        this.displayDialog = false
     }
 
     deleteOrder() {
       if(!this.newOrder){
-        this.showOrder0Service.deleteOrder(this.order).subscribe(res =>{console.log('response is ', res)});
-        this.displayDialog = false;
+        this.showOrder0Service.deleteOrder(this.order).subscribe(res =>{console.log('response is ', res)});    
       }
-
+        this.displayDialog = false;
     }
 
     cloneOrder(c: Orders): Orders {

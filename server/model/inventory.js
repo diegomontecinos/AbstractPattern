@@ -1,10 +1,16 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// create a schema
+const stock_whSchema = new Schema({
+  wh: { type: Schema.Types.ObjectId, required: true, unique: true },
+  name: { type: Number, required: true }
+}, { collection : 'inventory' });
+
 const inventorySchema = new Schema({
-  sku: { type: String, required: true, unique: true },
-  name: { type: String, required: true }
+  sku: { type: String, required: true },
+  name: { type: String, required: true },
+  brand: { type: String, required: true},
+  stock_wh: [stock_whSchema]
 }, { collection : 'inventory' });
 
 const Inventory = mongoose.model('Inventory', inventorySchema);
