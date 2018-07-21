@@ -8,6 +8,7 @@ const User = require('./model/user');
 const Inventory = require('./model/inventory');
 const Order = require('./model/order');
 const Warehouse = require('./model/warehouse');
+const Acquisition = require('./model/acquisition');
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended : false}))
@@ -111,11 +112,23 @@ app.post('/api/orders/deleteOrder', (req, res) => {
     });
 })
 
-
 app.post('/api/warehouse/getAllWH', (req, res) => {
     mongoose.connect(url, function(err){
         if(err) throw err;
         Warehouse.find({},[],{ sort: { _id: -1 } },(err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+    });
+})
+
+app.post('/api/acquisition/getAllAcq', (req, res) => {
+    mongoose.connect(url, function(err){
+        if(err) throw err;
+        Acquisition.find({},[],{ sort: { _id: -1 } },(err, doc) => {
             if(err) throw err;
             return res.status(200).json({
                 status: 'success',

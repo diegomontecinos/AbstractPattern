@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const stock_whSchema = new Schema({
-  wh: { type: Schema.Types.ObjectId, required: true, unique: true },
+  wh: { type: Schema.Types.ObjectId, required: true },
   name: { type: Number, required: true }
 }, { collection : 'inventory' });
 
