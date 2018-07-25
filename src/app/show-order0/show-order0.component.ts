@@ -16,15 +16,11 @@ import { DialogModule } from 'primeng/dialog';
 export class ShowOrder0Component implements OnInit {
 
     displayDialog: boolean;
-
+    displayDispatch: boolean;
     order: Orders;
-
     selectedOrder: Orders;
-
     newOrder: boolean;
-
     orders: Orders[];
-
     cols: any[];
 
     constructor(private showOrder0Service: ShowOrder0Service) { }
@@ -33,8 +29,9 @@ export class ShowOrder0Component implements OnInit {
         this.showOrder0Service.getAllOrd().subscribe(result => {this.orders = result['data'];});
 
         this.cols = [
-            { field: 'name', header: 'Nombre' },
+            { field: 'art', header: 'Nombre' },
             { field: 'qty', header: 'Cantidad' },
+            { field: 'destination', header: 'Destino' },
             { field: 'status', header: 'Estado' }
         ];
     }
@@ -63,7 +60,7 @@ export class ShowOrder0Component implements OnInit {
 
     deleteOrder() {
       if(!this.newOrder){
-        this.showOrder0Service.deleteOrder(this.order).subscribe(res =>{console.log('response is ', res)});    
+        this.showOrder0Service.deleteOrder(this.order).subscribe(res =>{console.log('response is ', res)});
       }
         this.displayDialog = false;
     }
@@ -74,5 +71,16 @@ export class ShowOrder0Component implements OnInit {
             order[prop] = c[prop];
         }
         return order;
+    }
+
+    dispatch() {
+      this.displayDialog = false;
+      this.displayDispatch = true;
+    }
+
+    createDispatch() {}
+
+    cancelDispatch() {
+      this.displayDispatch = false;
     }
 }

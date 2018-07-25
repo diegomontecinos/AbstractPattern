@@ -3,8 +3,9 @@ const Schema = mongoose.Schema;
 
 // create a schema
 const orderSchema = new Schema({
-  name: { type: String, required: true },
-  qty: { type: String, required: true },
+  art: { type: Schema.Types.ObjectId, required: true},
+  qty: { type: Number, required: true },
+  destination: { type: Schema.Types.ObjectId, required: true},
   status: { type: String, required: true}
 }, { collection : 'order' });
 

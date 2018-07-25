@@ -80,6 +80,50 @@
             <div class="ui-dialog-buttonpane ui-helper-clearfix">
                 <button type="button" pButton icon="fa fa-close" (click)="deleteMaterial()" label="Borrar"></button>
                 <button type="button" pButton icon="fa fa-check" (click)="addMaterial()" label="Guardar"></button>
+                <button type="button" pButton icon="fa fa-check" (click)="acquire()" label="Adquirir"></button>
+            </div>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Adquirir artículo" [(visible)]="displayAcquire" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
+    <div class="ui-g ui-fluid" *ngIf="material">
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="name">SKU:</label>
+            </div>
+            <div class="ui-g-8">
+                {{material.sku}}
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="qty">Nombre:</label>
+            </div>
+            <div class="ui-g-8">
+                {{material.name}}
+            </div>
+        </div>
+    </div>
+    <div class="ui-g-12">
+        <div class="ui-g-4">
+            <label for="qty">Cantidad:</label>
+        </div>
+        <div class="ui-g-8">
+            <p-spinner [(ngModel)]="qtyAcquire"></p-spinner>
+        </div>
+    </div>
+    <div class="ui-g-12">
+        <div class="ui-g-4">
+            <label for="qty">Comentarios:</label>
+        </div>
+        <div class="ui-g-8">
+            <textarea  [rows]="3" pInputTextarea [(ngModel)]="comentsAcquire"></textarea>
+        </div>
+    </div>
+    <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                <button type="button" pButton icon="fa fa-close" (click)="cancelAcquire()" label="Cancelar"></button>
+                <button type="button" pButton icon="fa fa-check" (click)="createAcquire()" label="Comprar"></button>
             </div>
     </p-footer>
 </p-dialog>

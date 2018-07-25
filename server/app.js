@@ -9,6 +9,7 @@ const Inventory = require('./model/inventory');
 const Order = require('./model/order');
 const Warehouse = require('./model/warehouse');
 const Acquisition = require('./model/acquisition');
+const Dispatch = require('./model/dispatch');
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended : false}))
@@ -129,6 +130,39 @@ app.post('/api/acquisition/getAllAcq', (req, res) => {
     mongoose.connect(url, function(err){
         if(err) throw err;
         Acquisition.find({},[],{ sort: { _id: -1 } },(err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+    });
+})
+
+app.post('/api/acquisition/createAcq', (req, res) => {
+    mongoose.connect(url, function(err){
+        if(err) throw err;
+        const acquisition = new Acquisition({
+            art: req.body.art,
+            qty: req.body.qty,
+            status: req.body.status,
+            coments: req.body.coments,
+            date: req.body.date
+        })
+        acquisition.save((err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+    });
+})
+
+app.post('/api/dispatch/getAllDis', (req, res) => {
+    mongoose.connect(url, function(err){
+        if(err) throw err;
+        Dispatch.find({},[],{ sort: { _id: -1 } },(err, doc) => {
             if(err) throw err;
             return res.status(200).json({
                 status: 'success',

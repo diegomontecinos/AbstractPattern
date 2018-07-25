@@ -10,6 +10,7 @@ import { MenuItem } from 'primeng/api';
 import { PanelModule } from 'primeng/panel';
 import {DialogModule} from 'primeng/dialog';
 import {ButtonModule} from 'primeng/button';
+import {SpinnerModule} from 'primeng/spinner';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -45,7 +46,8 @@ import { ShowOrder0Component } from './show-order0/show-order0.component';
     PanelMenuModule,
     PanelModule,
     DialogModule,
-    ButtonModule
+    ButtonModule,
+    SpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

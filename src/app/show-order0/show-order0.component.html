@@ -37,15 +37,15 @@
     <div class="ui-g ui-fluid" *ngIf="order">
         <div class="ui-g-12">
             <div class="ui-g-4">
-                <label for="name">Nombre</label>
+                <label for="name">Nombre:</label>
             </div>
             <div class="ui-g-8">
-                <input pInputText id="name" [(ngModel)]="order.name" />
+                {{order.art}}
             </div>
         </div>
         <div class="ui-g-12">
             <div class="ui-g-4">
-                <label for="qty">Cantidad</label>
+                <label for="qty">Cantidad:</label>
             </div>
             <div class="ui-g-8">
                 <input pInputText id="qty" [(ngModel)]="order.qty" />
@@ -64,6 +64,35 @@
             <div class="ui-dialog-buttonpane ui-helper-clearfix">
                 <button type="button" pButton icon="fa fa-close" (click)="deleteOrder()" label="Borrar"></button>
                 <button type="button" pButton icon="fa fa-check" (click)="addOrder()" label="Guardar"></button>
+                <button type="button" pButton icon="fa fa-check" (click)="dispatch()" label="Despachar"></button>
+            </div>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Detalle ordenes" [(visible)]="displayDispatch" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
+    <div class="ui-g ui-fluid" *ngIf="order">
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="name">Nombre:</label>
+            </div>
+            <div class="ui-g-8">
+                {{order.art}}
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="qty">Cantidad:</label>
+            </div>
+            <div class="ui-g-8">
+                {{order.qty}}
+            </div>
+        </div>
+
+    </div>
+    <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                <button type="button" pButton icon="fa fa-close" (click)="cancelDispatch()" label="Cancelar"></button>
+                <button type="button" pButton icon="fa fa-check" (click)="createDispatch()" label="Despachar"></button>
             </div>
     </p-footer>
 </p-dialog>

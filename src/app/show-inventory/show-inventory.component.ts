@@ -6,6 +6,7 @@ import { TableModule } from 'primeng/table';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as _ from 'underscore';
+import {SpinnerModule} from 'primeng/spinner';
 
 @Component({
   selector: 'app-show-inventory',
@@ -16,6 +17,7 @@ import * as _ from 'underscore';
 export class ShowInventoryComponent implements OnInit {
 
   displayDialog: boolean;
+  displayAcquire: boolean;
   material: Inventory;
   selectedMaterial: Inventory;
   newMaterial: boolean;
@@ -23,6 +25,8 @@ export class ShowInventoryComponent implements OnInit {
   cols: any[];
   warehouse: Warehouse[];
   stockWH: any[];
+  qtyAcquire: number;
+  comentsAcquire: string;
 
   constructor(private showInventoryService: ShowInventoryService) { }
 
@@ -80,6 +84,20 @@ export class ShowInventoryComponent implements OnInit {
     return _.extend(item, _.omit(_.findWhere(d, {_id: item.wh})));
     });
     return finalArray;
+  }
+
+  acquire() {
+    this.displayDialog = false;
+    this.displayAcquire = true;
+  }
+
+  cancelAcquire() {
+    this.displayAcquire = false;
+  }
+
+  createAcquire() {
+    this.showInventoryService.createAcquire(this.material._id, this.qtyAcquire, this.comentsAcquire).subscribe(res =>{console.log('response is ', res)});
+    this.displayAcquire = false;
   }
 
 }
