@@ -11,6 +11,7 @@ import { PanelModule } from 'primeng/panel';
 import {DialogModule} from 'primeng/dialog';
 import {ButtonModule} from 'primeng/button';
 import {SpinnerModule} from 'primeng/spinner';
+import {DropdownModule} from 'primeng/dropdown';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -47,7 +48,8 @@ import { ShowOrder0Component } from './show-order0/show-order0.component';
     PanelModule,
     DialogModule,
     ButtonModule,
-    SpinnerModule
+    SpinnerModule,
+    DropdownModule
   ],
   providers: [],
   bootstrap: [AppComponent]

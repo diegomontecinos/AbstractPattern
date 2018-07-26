@@ -172,4 +172,42 @@ app.post('/api/dispatch/getAllDis', (req, res) => {
     });
 })
 
+app.post('/api/dispatch/createDis', (req, res) => {
+    mongoose.connect(url, function(err){
+        if(err) throw err;
+        const dispatch = new Dispatch({
+            art: req.body.art,
+            origin: req.body.origin,
+            destination: req.body.destination,
+            qty: req.body.qty,
+            date_dis: req.body.date_dis,
+            status: req.body.status
+        })
+        dispatch.save((err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+    });
+})
+
+app.post('/api/dispatch/updateStatusDis', (req, res) => {
+    mongoose.connect(url, function(err){
+        if(err) throw err;
+        Dispatch.update(
+            { _id: req.body.id },
+            { coments: req.body.coments,
+            status: req.body.status },
+            (err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+    });
+})
+
 app.listen(3000, () => console.log('Servidor up! en puerto 3000!!!'))
