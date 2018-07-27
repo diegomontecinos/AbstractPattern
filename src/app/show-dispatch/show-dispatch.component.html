@@ -2,12 +2,10 @@
   <div class="ui-g-2 menu">
     <app-menubar-grocer></app-menubar-grocer>
   </div>
-  <div class="ui-g-1 margen">
-  </div>
-  <div class="ui-g-6 center-table">
+  <div class="ui-g-8 center-table">
 
 
-<p-table [columns]="cols" [value]="dispatchs" selectionMode="single" [(selection)]="selectedDispatch" (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="15">
+<p-table [columns]="cols" [value]="dispatchs" selectionMode="single" [(selection)]="selectedDispatch" (onRowSelect)="onRowSelect($event)" [autoLayout]="true" [paginator]="true" [rows]="15">
     <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of columns">
@@ -82,7 +80,7 @@
                 <label for="name">Código despacho</label>
             </div>
             <div class="ui-g-8">
-                {{dispatch.art}}
+                {{dispatch._id}}
             </div>
         </div>
         <div class="ui-g-12">
@@ -90,14 +88,14 @@
                 <label for="qty">Comentarios:</label>
             </div>
             <div class="ui-g-8">
-                <textarea  [rows]="3" pInputTextarea [(ngModel)]="comentsDispatch"></textarea>
+                <textarea  [rows]="3" pInputTextarea [(ngModel)]="dispatch.coments"></textarea>
             </div>
         </div>
     </div>
     <p-footer>
             <div class="ui-dialog-buttonpane ui-helper-clearfix">
                 <button type="button" pButton icon="fa fa-close" (click)="cancelDispatch()" label="Cancelar"></button>
-                <button type="button" pButton icon="fa fa-check" (click)="rejectDispatch()" label="Rechazar"></button>
+                <button type="button" pButton icon="fa fa-ban" (click)="rejectDispatch()" label="Rechazar"></button>
                 <button type="button" pButton icon="fa fa-check" (click)="receiveDispatch()" label="Recibir"></button>
             </div>
     </p-footer>

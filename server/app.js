@@ -147,9 +147,27 @@ app.post('/api/acquisition/createAcq', (req, res) => {
             qty: req.body.qty,
             status: req.body.status,
             coments: req.body.coments,
-            date: req.body.date
+            dateAcq: req.body.dateAcq,
+            destination: req.body.destination
         })
         acquisition.save((err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+    });
+})
+
+app.post('/api/acquisition/updateStatusAcq', (req, res) => {
+    mongoose.connect(url, function(err){
+        if(err) throw err;
+        Acquisition.update(
+            { _id: req.body.id },
+            { coments2: req.body.coments2,
+            status: req.body.status },
+            (err, doc) => {
             if(err) throw err;
             return res.status(200).json({
                 status: 'success',

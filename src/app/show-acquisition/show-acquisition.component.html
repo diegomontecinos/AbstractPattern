@@ -7,7 +7,7 @@
   <div class="ui-g-6 center-table">
 
 
-<p-table [columns]="cols" [value]="acquisitions" selectionMode="single" [(selection)]="selectedAcq" (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="15">
+<p-table [columns]="cols" [value]="acquisitions" selectionMode="single" [(selection)]="selectedAcq" (onRowSelect)="onRowSelect($event)" [autoLayout]="true" [paginator]="true" [rows]="15">
     <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of columns">
@@ -33,37 +33,79 @@
 
 </div>
 
-<p-dialog header="Detalle compra" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
-    <div class="ui-g ui-fluid" *ngIf="acquisition">
+<p-dialog header="Detalle compra" [(visible)]="displayDialogNew" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
+    <div class="ui-g-12">
+        <div class="ui-g-4">
+            <label for="name">Articulo</label>
+        </div>
+        <div class="ui-g-8">
+            <p-dropdown [options]="arts" [(ngModel)]="newArt" placeholder="Seleccione articulo" optionLabel="name" [showClear]="true"></p-dropdown>
+        </div>
+    </div>
+    <div class="ui-g-12">
+        <div class="ui-g-4">
+            <label for="name">Destino</label>
+        </div>
+        <div class="ui-g-8">
+            <p-dropdown [options]="warehouse" [(ngModel)]="newDestination" placeholder="Seleccione destino" optionLabel="name" [showClear]="true"></p-dropdown>
+        </div>
+    </div>
+    <div class="ui-g-12" *ngIf="acquisition">
         <div class="ui-g-12">
             <div class="ui-g-4">
-                <label for="name">Nombre</label>
+                <label for="name">Cantidad</label>
             </div>
             <div class="ui-g-8">
-                <input pInputText id="name" [(ngModel)]="acquisition.art" />
+                <input pInputText id="sku" [(ngModel)]="acquisition.qty" />
             </div>
         </div>
         <div class="ui-g-12">
             <div class="ui-g-4">
-                <label for="qty">Cantidad</label>
+                <label for="qty">Comentarios:</label>
             </div>
             <div class="ui-g-8">
-                <input pInputText id="qty" [(ngModel)]="acquisition.qty" />
-            </div>
-        </div>
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="status">Estado</label>
-            </div>
-            <div class="ui-g-8">
-                <input pInputText id="status" [(ngModel)]="acquisition.status" />
+                <textarea  [rows]="3" pInputTextarea [(ngModel)]="acquisition.coments"></textarea>
             </div>
         </div>
     </div>
     <p-footer>
             <div class="ui-dialog-buttonpane ui-helper-clearfix">
-                <button type="button" pButton icon="fa fa-close" (click)="deleteAcq()" label="Borrar"></button>
-                <button type="button" pButton icon="fa fa-check" (click)="addAcq()" label="Guardar"></button>
+                <button type="button" pButton icon="fa fa-check" (click)="addAcq()" label="Crear"></button>
+            </div>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Detalle compra" [(visible)]="displayDialogEdit" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
+    <div class="ui-g ui-fluid" *ngIf="acquisition">
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="name">Código adquisición</label>
+            </div>
+            <div class="ui-g-8">
+                {{acquisition._id}}
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="qty">Comentarios adquisición:</label>
+            </div>
+            <div class="ui-g-8">
+                {{acquisition.coments}}
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="qty">Comentarios confirmación:</label>
+            </div>
+            <div class="ui-g-8">
+                <textarea  [rows]="3" pInputTextarea [(ngModel)]="acquisition.coments2"></textarea>
+            </div>
+        </div>
+    </div>
+    <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                <button type="button" pButton icon="fa fa-close" (click)="cancelAcq()" label="Cancelar"></button>
+                <button type="button" pButton icon="fa fa-check" (click)="receiveAcq()" label="Recibir"></button>
             </div>
     </p-footer>
 </p-dialog>

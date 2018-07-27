@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Acquisition } from '../models/acquisition.model';
+import { Warehouse } from '../models/warehouse.model';
+import { Inventory } from '../models/inventory.model';
 
 @Injectable()
 export class ShowAcquisitionService {
@@ -13,23 +15,35 @@ export class ShowAcquisitionService {
       return this.http.post('/api/acquisition/getAllAcq',{})
     }
 
-    addAcq(acquisition: Acquisition){
+    addAcq(acquisition: Acquisition, n_art, n_destination){
       return this.http.post('/api/acquisition/createAcq',{
+          art: n_art,
           qty: acquisition.qty,
-          status: acquisition.status
+          status: "Proceso",
+          coments: acquisition.coments,
+          dateAcq: Date.now(),
+          destination: n_destination
         })
     }
 
-    updateAcq(acquisition: Acquisition){
-      return this.http.post('/api/acquisition/updateAcq',{
+    updateStatusAcq(acquisition: Acquisition){
+      return this.http.post('/api/acquisition/updateStatusAcq',{
         id: acquisition._id,
-        qty: acquisition.qty,
+        coments2: acquisition.coments2,
         status: acquisition.status
     })
 }
 
     deleteAcq(id){
       return this.http.post('/api/acquisition/deleteAcq',{id : id})
+    }
+
+    getAllWH(){
+        return this.http.post('/api/warehouse/getAllWH',{})
+    }
+
+    getAllInv(){
+        return this.http.post('/api/inventory/getAllInv',{})
     }
 
 }

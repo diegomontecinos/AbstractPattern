@@ -5,6 +5,8 @@ export interface Dispatch {
     destination?;
     qty?;
     status?;
-    date?;
+    date_dis?;
     coments?;
+    dateFormat?;
+    date_rec?;
 }

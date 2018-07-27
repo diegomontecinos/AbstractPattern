@@ -9,7 +9,8 @@ const dispatchSchema = new Schema({
   qty: { type: Number, required: true},
   status: { type: String, required: true },
   coments: { type: String },
-  date_dis: { type: Date, required: true }
+  date_dis: { type: Date, required: true },
+  date_rec: { type: Date}
 }, {versionKey: false}, { collection : 'dispatch' });
 
 const Dispatch = mongoose.model('Dispatch', dispatchSchema);

@@ -3,7 +3,8 @@ import { ShowDispatchService } from './show-dispatch.service';
 import { Dispatch } from '../models/dispatch.model';
 import { Warehouse } from '../models/warehouse.model';
 import { Inventory } from '../models/inventory.model';
-import {DropdownModule} from 'primeng/dropdown';
+import { DropdownModule } from 'primeng/dropdown';
+import * as moment from 'moment';
 
 
 @Component({
@@ -32,16 +33,37 @@ export class ShowDispatchComponent implements OnInit {
 
 
   ngOnInit() {
-      this.showDispatchService.getAllDis().subscribe(result => {this.dispatchs = result['data'];});
-      this.showDispatchService.getAllWH().subscribe(result => {this.warehouse = result['data'];});
-      this.showDispatchService.getAllInv().subscribe(result => {this.arts = result['data'];});
+
+      this.showDispatchService.getAllWH().subscribe(result => {this.warehouse = result['data'];
+        this.showDispatchService.getAllInv().subscribe(result => {this.arts = result['data'];
+          this.showDispatchService.getAllDis().subscribe(result => {this.dispatchs = result['data'];
+            this.parseDispatchs();
+          });
+        });
+      });
 
       this.cols = [
           { field: '_id', header: 'Código despacho' },
           { field: 'art', header: 'Artículo' },
-          { field: 'qty', header: 'Cantidad' },
+          { field: 'qty', header: 'Cantidad', style: {width: '180px'} },
+          { field: 'origin', header: 'Origen' },
+          { field: 'destination', header: 'Destino' },
+          { field: 'dateFormat', header: 'Fecha' },
           { field: 'status', header: 'Estado' }
       ];
+
+
+  }
+
+  parseDispatchs() {
+    var i;
+    for (i = 0; i < this.dispatchs.length; i++) {
+        this.dispatchs[i].art = (this.arts.find(objAux => objAux._id === this.dispatchs[i].art)).name;
+        this.dispatchs[i].origin = (this.warehouse.find(objAux => objAux._id === this.dispatchs[i].origin)).name;
+        this.dispatchs[i].destination = (this.warehouse.find(objAux => objAux._id === this.dispatchs[i].destination)).name;
+        this.dispatchs[i].dateFormat = moment(this.dispatchs[i].date_dis).format("DD/MM/YYYY");
+    }
+
   }
 
   showDialogToAdd() {
@@ -62,17 +84,17 @@ export class ShowDispatchComponent implements OnInit {
   }
 
   cancelDispatch() {
-      this.showDispatchService.updateStatusDis(this.dispatch, this.comentsDispatch, "Cancelado").subscribe(res =>{console.log('response is ', res)});
+      this.showDispatchService.updateStatusDis(this.dispatch, "Cancelado").subscribe(res =>{console.log('response is ', res)});
       this.displayDialogEdit = false;
   }
 
   rejectDispatch() {
-      this.showDispatchService.updateStatusDis(this.dispatch, this.comentsDispatch, "Rechazado").subscribe(res =>{console.log('response is ', res)});
+      this.showDispatchService.updateStatusDis(this.dispatch, "Rechazado").subscribe(res =>{console.log('response is ', res)});
       this.displayDialogEdit = false;
   }
 
   receiveDispatch() {
-      this.showDispatchService.updateStatusDis(this.dispatch, this.comentsDispatch, "Recibido").subscribe(res =>{console.log('response is ', res)});
+      this.showDispatchService.updateStatusDis(this.dispatch, "Recibido").subscribe(res =>{console.log('response is ', res)});
       this.displayDialogEdit = false;
   }
 

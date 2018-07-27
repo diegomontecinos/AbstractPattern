@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Dispatch } from '../models/dispatch.model';
 import { Warehouse } from '../models/warehouse.model';
+import { Inventory } from '../models/inventory.model';
 
 @Injectable()
 export class ShowDispatchService {
@@ -24,10 +25,10 @@ export class ShowDispatchService {
       })
   }
 
-  updateStatusDis(dispatch: Dispatch, n_coments, n_status){
+  updateStatusDis(dispatch: Dispatch, n_status){
     return this.http.post('/api/dispatch/updateStatusDis',{
       id: dispatch._id,
-      coments: n_coments,
+      coments: dispatch.coments,
       status: n_status
   })
   }
