@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Inventory } from '../models/inventory.model';
+import { Withdraw } from '../models/withdraw.model';
 
 @Injectable()
 export class ShowInventoryService {
@@ -17,7 +18,8 @@ export class ShowInventoryService {
       return this.http.post('/api/inventory/createInv',{
           sku : material.sku,
           name: material.name,
-          brand: material.brand
+          brand: material.brand,
+          stock_wh: material.stock_wh
         })
     }
 
@@ -26,7 +28,8 @@ export class ShowInventoryService {
         id: material._id,
         sku : material.sku,
         name: material.name,
-        brand: material.brand
+        brand: material.brand,
+        stock_wh: material.stock_wh
     })
 }
 
@@ -46,6 +49,17 @@ export class ShowInventoryService {
         coments: n_coments,
         dateAcq: Date.now(),
         destination: n_destination
+      })
+    }
+
+    createWithdraw(n_art, withdraw: Withdraw){
+      return this.http.post('api/withdraw/createWith',{
+        art: n_art,
+        qty: withdraw.qty,
+        status: withdraw.status,
+        coments1: withdraw.coments1,
+        date1: Date.now(),
+        warehouse: "5b4d6a850ea6ac19a061b34d"
       })
     }
 

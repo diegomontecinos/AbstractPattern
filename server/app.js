@@ -10,6 +10,7 @@ const Order = require('./model/order');
 const Warehouse = require('./model/warehouse');
 const Acquisition = require('./model/acquisition');
 const Dispatch = require('./model/dispatch');
+const Withdraw = require('./model/withdraw');
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended : false}))
@@ -41,6 +42,25 @@ app.post('/api/inventory/getAllInv', (req, res) => {
     mongoose.connect(url, function(err){
         if(err) throw err;
         Inventory.find({},[],{ sort: { _id: -1 } },(err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+    });
+})
+
+app.post('/api/inventory/createInv', (req, res) => {
+    mongoose.connect(url, function(err){
+        if(err) throw err;
+        const inventory = new Inventory({
+            sku : req.body.sku,
+            name: req.body.name,
+            brand: req.body.brand,
+            stock_wh: req.body.stock_wh
+        })
+        inventory.save((err, doc) => {
             if(err) throw err;
             return res.status(200).json({
                 status: 'success',
@@ -219,6 +239,27 @@ app.post('/api/dispatch/updateStatusDis', (req, res) => {
             { coments: req.body.coments,
             status: req.body.status },
             (err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+    });
+})
+
+app.post('/api/withdraw/createWith', (req, res) => {
+    mongoose.connect(url, function(err){
+        if(err) throw err;
+        const withdraw = new Withdraw({
+            art: req.body.art,
+            qty: req.body.qty,
+            status: req.body.status,
+            coments1: req.body.coments1,
+            date1: req.body.date1,
+            warehouse: req.body.warehouse
+        })
+        withdraw.save((err, doc) => {
             if(err) throw err;
             return res.status(200).json({
                 status: 'success',

@@ -8,6 +8,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as _ from 'underscore';
 import {SpinnerModule} from 'primeng/spinner';
+import {ToggleButtonModule} from 'primeng/togglebutton';
 
 @Component({
   selector: 'app-show-inventory',
@@ -17,6 +18,7 @@ import {SpinnerModule} from 'primeng/spinner';
 })
 export class ShowInventoryComponent implements OnInit {
 
+  isMenuOpen?: boolean;
   displayDialogNew: boolean;
   displayDialogEdit: boolean;
   displayAcquire: boolean;
@@ -32,6 +34,8 @@ export class ShowInventoryComponent implements OnInit {
   comentsAcquire: string;
   newDestination: Warehouse;
   newWithdraw: Withdraw;
+  newWHStock: any[];
+  withdrawDev: boolean;
 
   constructor(private showInventoryService: ShowInventoryService) { }
 
@@ -62,6 +66,15 @@ export class ShowInventoryComponent implements OnInit {
 
   addMaterial() {
     if(this.newMaterial){
+      this.material.stock_wh = [];
+      var i;
+      var objAux;
+      for (i = 0; i < this.warehouse.length; i++) {
+        objAux = {};
+        objAux.wh = this.warehouse[i]._id;
+        objAux.stock = 0;
+        this.material.stock_wh.push(objAux);
+      }
       this.showInventoryService.addInv(this.material).subscribe(res =>{console.log('response is ', res)});
       this.displayDialogNew = false;
     }
@@ -87,7 +100,17 @@ export class ShowInventoryComponent implements OnInit {
     this.displayWithdraw = false;
   }
 
-  createWithdraw () {}
+  createWithdraw () {
+    this.displayWithdraw = false;
+    this.displayDialogEdit = false;
+    if(this.withdrawDev){
+      this.newWithdraw.status = "Espera devolución"
+    }
+    else{
+      this.newWithdraw.status = "Retirado"
+    }
+    this.showInventoryService.createWithdraw(this.material._id, this.newWithdraw).subscribe(res =>{console.log('response is ', res)});
+  }
 
   cloneMaterial(c: Inventory): Inventory {
       let material = {};

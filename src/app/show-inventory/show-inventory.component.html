@@ -49,6 +49,14 @@
                 <input pInputText id="name" [(ngModel)]="material.name" />
             </div>
         </div>
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="qty">Marca</label>
+            </div>
+            <div class="ui-g-8">
+                <input pInputText id="name" [(ngModel)]="material.brand" />
+            </div>
+        </div>
     </div>
     <p-footer>
             <div class="ui-dialog-buttonpane ui-helper-clearfix">
@@ -103,7 +111,7 @@
     </div>
     <p-footer>
             <div class="ui-dialog-buttonpane ui-helper-clearfix">
-                <button type="button" pButton icon="fa fa-close" (click)="deleteMaterial()" label="Borrar"></button>
+                <!--<button type="button" pButton icon="fa fa-close" (click)="deleteMaterial()" label="Borrar"></button>-->
                 <button type="button" pButton icon="fa fa-save" (click)="addMaterial()" label="Guardar"></button>
                 <button type="button" pButton icon="fa fa-check" (click)="acquire()" label="Adquirir"></button>
                 <button type="button" pButton icon="fa fa-reply" (click)="showWithdraw()" label="Retirar"></button>
@@ -192,6 +200,14 @@
       </div>
       <div class="ui-g-12">
           <div class="ui-g-4">
+              <label for="qty">Devolución:</label>
+          </div>
+          <div class="ui-g-8">
+              <p-toggleButton [(ngModel)]="withdrawDev" onLabel="Si" offLabel="No" onIcon="pi pi-check" offIcon="pi pi-times" [style]="{'width':'100px'}"></p-toggleButton>
+          </div>
+      </div>
+      <div class="ui-g-12">
+          <div class="ui-g-4">
               <label for="qty">Comentarios:</label>
           </div>
           <div class="ui-g-8">
@@ -199,8 +215,8 @@
           </div>
       </div>
     </div>
-    <p-footer>
-            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+    <p-footer ng-style="{'visibility': isMenuOpen?'visible':'hidden'}">
+            <div class="ui-dialog-buttonpane ui-helper-clearfix" >
                 <button type="button" pButton icon="fa fa-close" (click)="cancelWithdraw()" label="Cancelar"></button>
                 <button type="button" pButton icon="fa fa-check" (click)="createWithdraw()" label="Retirar"></button>
             </div>

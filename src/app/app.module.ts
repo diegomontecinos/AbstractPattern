@@ -12,6 +12,7 @@ import {DialogModule} from 'primeng/dialog';
 import {ButtonModule} from 'primeng/button';
 import {SpinnerModule} from 'primeng/spinner';
 import {DropdownModule} from 'primeng/dropdown';
+import {ToggleButtonModule} from 'primeng/togglebutton';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -51,7 +52,8 @@ import { ShowWithdrawComponent } from './show-withdraw/show-withdraw.component';
     DialogModule,
     ButtonModule,
     SpinnerModule,
-    DropdownModule
+    DropdownModule,
+    ToggleButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
