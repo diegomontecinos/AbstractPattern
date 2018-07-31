@@ -8,6 +8,7 @@ import { ShowInventoryComponent } from './show-inventory/show-inventory.componen
 import { ShowAcquisitionComponent } from './show-acquisition/show-acquisition.component';
 import { ShowOrderComponent } from './show-order/show-order.component';
 import { ShowOrder0Component } from './show-order0/show-order0.component';
+import { ShowWithdrawComponent } from './show-withdraw/show-withdraw.component';
 
 export const AppRoutes: Routes = [
     { path: '', component: LoginComponent },
@@ -16,7 +17,8 @@ export const AppRoutes: Routes = [
     { path: 'bodeguero/inventario', component: ShowInventoryComponent },
     { path: 'bodeguero/adquisiciones', component: ShowAcquisitionComponent },
     { path: 'bodeguero/ordenes', component: ShowOrderComponent },
-    { path: 'bodeguero/ordenes0', component: ShowOrder0Component }
+    { path: 'bodeguero/ordenes0', component: ShowOrder0Component },
+    { path: 'bodeguero/retiros', component: ShowWithdrawComponent }
 ];
 
 export const ROUTING: ModuleWithProviders = RouterModule.forRoot(AppRoutes);

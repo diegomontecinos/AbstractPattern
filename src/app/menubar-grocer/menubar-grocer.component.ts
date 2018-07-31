@@ -20,7 +20,8 @@ export class MenubarGrocerComponent implements OnInit {
       {label: 'Inventario', routerLink: ['/bodeguero/inventario']},
       {label: 'Despachos', routerLink: ['/bodeguero/despachos']},
       {label: 'Adquisiciones', routerLink: ['/bodeguero/adquisiciones']},
-      {label: 'Ordenes', routerLink: ['/bodeguero/ordenes0']}
+      {label: 'Ordenes', routerLink: ['/bodeguero/ordenes0']},
+      {label: 'Retiros', routerLink: ['/bodeguero/retiros']}
     ];
   }
 

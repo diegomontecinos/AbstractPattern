@@ -23,6 +23,7 @@ import { ShowAcquisitionComponent } from './show-acquisition/show-acquisition.co
 import { MenubarComponent } from './menubar/menubar.component';
 import { MenubarGrocerComponent } from './menubar-grocer/menubar-grocer.component';
 import { ShowOrder0Component } from './show-order0/show-order0.component';
+import { ShowWithdrawComponent } from './show-withdraw/show-withdraw.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { ShowOrder0Component } from './show-order0/show-order0.component';
     ShowAcquisitionComponent,
     MenubarComponent,
     MenubarGrocerComponent,
-    ShowOrder0Component
+    ShowOrder0Component,
+    ShowWithdrawComponent
   ],
   imports: [
     BrowserModule,

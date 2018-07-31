@@ -12,6 +12,7 @@ import {DialogModule} from 'primeng/dialog';
   styleUrls: ['./show-order.component.css'],
   providers: [ ShowOrderService ]
 })
+
 export class ShowOrderComponent implements OnInit {
 
   public orders : any [];

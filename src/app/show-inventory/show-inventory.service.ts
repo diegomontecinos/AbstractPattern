@@ -38,13 +38,14 @@ export class ShowInventoryService {
         return this.http.post('/api/warehouse/getAllWH',{})
     }
 
-    createAcquire(n_art, n_qty, n_coments){
+    createAcquire(n_art, n_qty, n_coments, n_destination){
       return this.http.post('api/acquisition/createAcq',{
         art: n_art,
         qty: n_qty,
         status: "Proceso",
         coments: n_coments,
-        date: Date.now()
+        dateAcq: Date.now(),
+        destination: n_destination
       })
     }
 

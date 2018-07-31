@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ShowInventoryService } from './show-inventory.service';
 import { Inventory } from '../models/inventory.model';
 import { Warehouse } from '../models/warehouse.model';
+import { Withdraw } from '../models/withdraw.model';
 import { TableModule } from 'primeng/table';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -16,8 +17,10 @@ import {SpinnerModule} from 'primeng/spinner';
 })
 export class ShowInventoryComponent implements OnInit {
 
-  displayDialog: boolean;
+  displayDialogNew: boolean;
+  displayDialogEdit: boolean;
   displayAcquire: boolean;
+  displayWithdraw: boolean;
   material: Inventory;
   selectedMaterial: Inventory;
   newMaterial: boolean;
@@ -27,6 +30,8 @@ export class ShowInventoryComponent implements OnInit {
   stockWH: any[];
   qtyAcquire: number;
   comentsAcquire: string;
+  newDestination: Warehouse;
+  newWithdraw: Withdraw;
 
   constructor(private showInventoryService: ShowInventoryService) { }
 
@@ -44,32 +49,45 @@ export class ShowInventoryComponent implements OnInit {
   showDialogToAdd() {
       this.newMaterial = true;
       this.material = {};
-      this.displayDialog = true;
+      this.displayDialogNew = true;
   }
 
   onRowSelect(event) {
+      this.qtyAcquire = 0;
       this.newMaterial = false;
       this.material = this.cloneMaterial(event.data);
       this.stockWH = this.mergeStock(this.material, this.warehouse);
-      this.displayDialog = true;
+      this.displayDialogEdit = true;
   }
 
   addMaterial() {
     if(this.newMaterial){
       this.showInventoryService.addInv(this.material).subscribe(res =>{console.log('response is ', res)});
+      this.displayDialogNew = false;
     }
     else{
       this.showInventoryService.updateInv(this.material).subscribe(res =>{console.log('response is ', res)});
+      this.displayDialogEdit = false;
     }
-      this.displayDialog = false;
   }
 
   deleteMaterial() {
     if(!this.newMaterial){
       this.showInventoryService.deleteInv(this.material).subscribe(res =>{console.log('response is ', res)});
     }
-      this.displayDialog = false;
+      this.displayDialogEdit = false;
   }
+
+  showWithdraw () {
+    this.newWithdraw = {};
+    this.displayWithdraw = true;
+  }
+
+  cancelWithdraw() {
+    this.displayWithdraw = false;
+  }
+
+  createWithdraw () {}
 
   cloneMaterial(c: Inventory): Inventory {
       let material = {};
@@ -87,7 +105,7 @@ export class ShowInventoryComponent implements OnInit {
   }
 
   acquire() {
-    this.displayDialog = false;
+    this.displayDialogEdit = false;
     this.displayAcquire = true;
   }
 
@@ -96,7 +114,7 @@ export class ShowInventoryComponent implements OnInit {
   }
 
   createAcquire() {
-    this.showInventoryService.createAcquire(this.material._id, this.qtyAcquire, this.comentsAcquire).subscribe(res =>{console.log('response is ', res)});
+    this.showInventoryService.createAcquire(this.material._id, this.qtyAcquire, this.comentsAcquire, this.newDestination._id).subscribe(res =>{console.log('response is ', res)});
     this.displayAcquire = false;
   }
 
