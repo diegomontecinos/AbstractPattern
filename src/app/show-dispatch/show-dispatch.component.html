@@ -2,6 +2,8 @@
   <div class="ui-g-2 menu">
     <app-menubar-grocer></app-menubar-grocer>
   </div>
+  <div class="ui-g-1 margen">
+  </div>
   <div class="ui-g-8 center-table">
 
 
@@ -37,7 +39,7 @@
             <label for="name">Articulo</label>
         </div>
         <div class="ui-g-8">
-            <p-dropdown [options]="arts" [(ngModel)]="newArt" placeholder="Seleccione articulo" optionLabel="name" [showClear]="true"></p-dropdown>
+            <p-dropdown [options]="arts" [(ngModel)]="newArt" placeholder="Seleccione articulo" optionLabel="name" [showClear]="true" filter="true"></p-dropdown>
         </div>
     </div>
     <div class="ui-g-12">
@@ -62,7 +64,7 @@
                 <label for="name">Cantidad</label>
             </div>
             <div class="ui-g-8">
-                <input pInputText id="sku" [(ngModel)]="dispatch.qty" />
+                <p-spinner [(ngModel)]="dispatch.qty"></p-spinner>
             </div>
         </div>
     </div>

@@ -53,7 +53,7 @@ export class ShowInventoryService {
     }
 
     createWithdraw(n_art, withdraw: Withdraw){
-      return this.http.post('api/withdraw/createWith',{
+      return this.http.post('api/withdraw/createWithdraw',{
         art: n_art,
         qty: withdraw.qty,
         status: withdraw.status,

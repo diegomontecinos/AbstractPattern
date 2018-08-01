@@ -21,6 +21,9 @@ import * as moment from 'moment';
 export class ShowWithdrawComponent implements OnInit {
 
   displayDialogEdit: boolean;
+  displayDialogFinal: boolean;
+  displayDialogCancel: boolean;
+  displayDialogCancel2: boolean;
   withdraw: Withdraw;
   selectedWithdraw: Withdraw;
   newWithdraw: boolean;
@@ -32,6 +35,7 @@ export class ShowWithdrawComponent implements OnInit {
   newOrigin: Warehouse;
   newArt: Inventory;
   arts: Inventory[];
+  qtyAux: number;
 
   constructor(private showWithdrawService: ShowWithdrawService) { }
 
@@ -40,7 +44,7 @@ export class ShowWithdrawComponent implements OnInit {
 
       this.showWithdrawService.getAllWH().subscribe(result => {this.warehouse = result['data'];
         this.showWithdrawService.getAllInv().subscribe(result => {this.arts = result['data'];
-          this.showWithdrawService.getAllDis().subscribe(result => {this.withdraws = result['data'];
+          this.showWithdrawService.getAllWithdraw().subscribe(result => {this.withdraws = result['data'];
             this.parseWithdraws();
           });
         });
@@ -53,8 +57,6 @@ export class ShowWithdrawComponent implements OnInit {
           { field: 'dateFormat1', header: 'Fecha' },
           { field: 'status', header: 'Estado' }
       ];
-
-
   }
 
   parseWithdraws() {
@@ -67,26 +69,47 @@ export class ShowWithdrawComponent implements OnInit {
 
   }
 
-
   onRowSelect(event) {
       this.newWithdraw = false;
       this.withdraw = this.cloneWithdraw(event.data);
-      this.displayDialogEdit = true;
+      this.qtyAux = this.withdraw.qty;
+      if(this.withdraw.status == "Espera devolución") {
+        this.displayDialogEdit = true;
+      } else if (this.withdraw.status == "Cancelado" || this.withdraw.status == "No regresado" || this.withdraw.status == "Regreado parcial"
+                    || this.withdraw.status == "Regresado") {
+        this.displayDialogFinal = true;
+      } else if (this.withdraw.status == "Retirado") {
+        this.displayDialogCancel = true;
+      }
+
   }
 
   cancelWithdraw() {
-      this.showWithdrawService.updateStatusDis(this.withdraw, "Cancelado").subscribe(res =>{console.log('response is ', res)});
-      this.displayDialogEdit = false;
+      this.displayDialogCancel2 = true;
   }
 
-  rejectWithdraw() {
-      this.showWithdrawService.updateStatusDis(this.withdraw, "Rechazado").subscribe(res =>{console.log('response is ', res)});
-      this.displayDialogEdit = false;
+  cancelWithdraw2() {
+      this.withdraw.status = "Cancelado"
+      this.showWithdrawService.updateStatusWithdraw(this.withdraw).subscribe(res =>{console.log('response is ', res)});
+      this.displayDialogCancel = false;
+      this.displayDialogCancel2 = false;
   }
 
-  receiveWithdraw() {
-      this.showWithdrawService.updateStatusDis(this.withdraw, "Recibido").subscribe(res =>{console.log('response is ', res)});
-      this.displayDialogEdit = false;
+  givebackWithdraw() {
+      if(this.qtyAux == this.withdraw.qty) {
+        this.withdraw.status = "Regresado";
+        this.showWithdrawService.updateStatusWithdraw(this.withdraw).subscribe(res =>{console.log('response is ', res)});
+        this.displayDialogEdit = false;
+      } else if (this.qtyAux < this.withdraw.qty) {
+        this.withdraw.status = "Regresado parcial";
+        this.showWithdrawService.updateStatusWithdraw(this.withdraw).subscribe(res =>{console.log('response is ', res)});
+        this.displayDialogEdit = false;
+      } else if (this.qtyAux > this.withdraw.qty) {}
+  }
+
+  nogivebackWithdraw() {
+    this.withdraw.status = "No regresado";
+    this.showWithdrawService.updateStatusWithdraw(this.withdraw).subscribe(res =>{console.log('response is ', res)});
   }
 
   cloneWithdraw(c: Withdraw): Withdraw {

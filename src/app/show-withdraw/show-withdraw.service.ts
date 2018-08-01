@@ -3,38 +3,24 @@ import { HttpClient } from '@angular/common/http';
 import { Dispatch } from '../models/dispatch.model';
 import { Warehouse } from '../models/warehouse.model';
 import { Inventory } from '../models/inventory.model';
+import { Withdraw } from '../models/withdraw.model';
 
 @Injectable()
 export class ShowWithdrawService {
 
   constructor(private http: HttpClient){}
 
-  getAllDis(){
-      return this.http.post('/api/dispatch/getAllDis',{})
+  getAllWithdraw(){
+      return this.http.post('/api/withdraw/getAllWithdraw',{})
   }
 
-  addDis(dispatch: Dispatch, n_art, n_origin, n_destination){
-    return this.http.post('/api/dispatch/createDis',{
-        art: n_art,
-        origin: n_origin,
-        destination: n_destination,
-        qty: dispatch.qty,
-        date_dis: Date.now(),
-        status: "Despachado",
-        coments: dispatch.coments
-      })
-  }
-
-  updateStatusDis(dispatch: Dispatch, n_status){
-    return this.http.post('/api/dispatch/updateStatusDis',{
-      id: dispatch._id,
-      coments: dispatch.coments,
-      status: n_status
+  updateStatusWithdraw(withdraw: Withdraw){
+    return this.http.post('/api/withdraw/updateStatusWithdraw',{
+      id: withdraw._id,
+      coments2: withdraw.coments2,
+      status: withdraw.status,
+      date2: withdraw.date2
   })
-  }
-
-  deleteDis(id){
-    return this.http.post('/api/dispatch/deleteDis',{id : id})
   }
 
   getAllWH(){

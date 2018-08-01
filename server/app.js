@@ -136,7 +136,7 @@ app.post('/api/orders/deleteOrder', (req, res) => {
 app.post('/api/warehouse/getAllWH', (req, res) => {
     mongoose.connect(url, function(err){
         if(err) throw err;
-        Warehouse.find({},[],{ sort: { _id: -1 } },(err, doc) => {
+        Warehouse.find({},[],{ sort: { _id: 1 } },(err, doc) => {
             if(err) throw err;
             return res.status(200).json({
                 status: 'success',
@@ -248,7 +248,20 @@ app.post('/api/dispatch/updateStatusDis', (req, res) => {
     });
 })
 
-app.post('/api/withdraw/createWith', (req, res) => {
+app.post('/api/withdraw/getAllWithdraw', (req, res) => {
+    mongoose.connect(url, function(err){
+        if(err) throw err;
+        Withdraw.find({},[],{ sort: { _id: -1 } },(err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+    });
+})
+
+app.post('/api/withdraw/createWithdraw', (req, res) => {
     mongoose.connect(url, function(err){
         if(err) throw err;
         const withdraw = new Withdraw({
@@ -260,6 +273,24 @@ app.post('/api/withdraw/createWith', (req, res) => {
             warehouse: req.body.warehouse
         })
         withdraw.save((err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+    });
+})
+
+app.post('/api/withdraw/updateStatusWithdraw', (req, res) => {
+    mongoose.connect(url, function(err){
+        if(err) throw err;
+        Withdraw.update(
+            { _id: req.body.id },
+            { coments2: req.body.coments2,
+            status: req.body.status,
+            date2: req.body.date2 },
+            (err, doc) => {
             if(err) throw err;
             return res.status(200).json({
                 status: 'success',
