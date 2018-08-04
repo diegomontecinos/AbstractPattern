@@ -18,36 +18,48 @@ import {ToggleButtonModule} from 'primeng/togglebutton';
 })
 export class ShowInventoryComponent implements OnInit {
 
-  isMenuOpen?: boolean;
   displayDialogNew: boolean;
   displayDialogEdit: boolean;
   displayAcquire: boolean;
   displayWithdraw: boolean;
+  displayDialogStock: boolean;
+  displayDialogEDelete: boolean;
   material: Inventory;
   selectedMaterial: Inventory;
   newMaterial: boolean;
   materials: Inventory[];
   cols: any[];
+  cols2: any[];
   warehouse: Warehouse[];
-  stockWH: any[];
+  stockWH: any[any];
   qtyAcquire: number;
   comentsAcquire: string;
   newDestination: Warehouse;
   newWithdraw: Withdraw;
-  newWHStock: any[];
   withdrawDev: boolean;
+  selectedStock: any;
 
   constructor(private showInventoryService: ShowInventoryService) { }
 
   ngOnInit() {
-      this.showInventoryService.getAllInv().subscribe(result => {this.materials = result['data'];});
-      this.showInventoryService.getAllWH().subscribe(result => {this.warehouse = result['data'];});
+      this.showInventoryService.getAllWH().subscribe(result => {this.warehouse = result['data'];
+      this.getInventory();
+    });
 
       this.cols = [
           { field: 'sku', header: 'SKU' },
           { field: 'name', header: 'Nombre' },
           { field: 'brand', header: 'Marca' }
       ];
+
+      this.cols2 = [
+          { field: 'name', header: 'Bodega' },
+          { field: 'stock', header: 'Stock' }
+      ];
+  }
+
+  getInventory() {
+      this.showInventoryService.getAllInv().subscribe(result => {this.materials = result['data'];});
   }
 
   showDialogToAdd() {
@@ -64,6 +76,15 @@ export class ShowInventoryComponent implements OnInit {
       this.displayDialogEdit = true;
   }
 
+  onRowSelectWHStock(event) {
+    this.displayDialogStock = true;
+  }
+
+  editStock() {
+    this.showInventoryService.updateStock(this.material._id, this.selectedStock).subscribe(res =>{console.log('response is ', res);});
+    this.displayDialogStock = false;
+  }
+
   addMaterial() {
     if(this.newMaterial){
       this.material.stock_wh = [];
@@ -75,20 +96,30 @@ export class ShowInventoryComponent implements OnInit {
         objAux.stock = 0;
         this.material.stock_wh.push(objAux);
       }
-      this.showInventoryService.addInv(this.material).subscribe(res =>{console.log('response is ', res)});
+      this.showInventoryService.addInv(this.material).subscribe(res =>{console.log('response is ', res)
+      this.getInventory();
+      });
       this.displayDialogNew = false;
     }
     else{
-      this.showInventoryService.updateInv(this.material).subscribe(res =>{console.log('response is ', res)});
+      this.showInventoryService.updateInv(this.material).subscribe(res =>{console.log('response is ', res);});
       this.displayDialogEdit = false;
     }
+
   }
 
   deleteMaterial() {
     if(!this.newMaterial){
       this.showInventoryService.deleteInv(this.material).subscribe(res =>{console.log('response is ', res)});
     }
+      let index = this.materials.indexOf(this.selectedMaterial);
+      this.materials = this.materials.filter((val, i) => i != index);
+      this.displayDialogEDelete = false;
       this.displayDialogEdit = false;
+  }
+
+  deleteMaterial2() {
+    this.displayDialogEDelete = true;
   }
 
   showWithdraw () {
@@ -104,12 +135,22 @@ export class ShowInventoryComponent implements OnInit {
     this.displayWithdraw = false;
     this.displayDialogEdit = false;
     if(this.withdrawDev){
-      this.newWithdraw.status = "Espera devolución"
+      this.newWithdraw.status = "Espera devolución";
     }
     else{
-      this.newWithdraw.status = "Retirado"
+      this.newWithdraw.status = "Retirado";
+    }
+    let actualWarehouse = "5b4d6a850ea6ac19a061b34d";
+    var i;
+    var index;
+    for (i = 0; i < this.stockWH.length; i++) {
+      if(this.stockWH[i].wh == actualWarehouse) {
+        index = i;
+        this.stockWH[i].stock = this.stockWH[i].stock - this.newWithdraw.qty;
+      }
     }
     this.showInventoryService.createWithdraw(this.material._id, this.newWithdraw).subscribe(res =>{console.log('response is ', res)});
+    this.showInventoryService.updateStock(this.material._id, this.stockWH[index]).subscribe(res =>{console.log('response is ', res);});
   }
 
   cloneMaterial(c: Inventory): Inventory {
@@ -118,6 +159,14 @@ export class ShowInventoryComponent implements OnInit {
           material[prop] = c[prop];
       }
       return material;
+  }
+
+  cloneStock(c) {
+      let whSotck = {};
+      for (let prop in c) {
+          whSotck[prop] = c[prop];
+      }
+      return whSotck;
   }
 
   mergeStock(c: Inventory, d: Warehouse[]) {

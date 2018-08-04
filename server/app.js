@@ -14,10 +14,10 @@ const Withdraw = require('./model/withdraw');
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended : false}))
+mongoose.connect(url, function(err){
+    if(err) throw err;});
 
 app.post('/api/user/login', (req, res) => {
-    mongoose.connect(url, function(err){
-        if(err) throw err;
         User.find({
             username : req.body.username, password : req.body.password
         }, function(err, user){
@@ -33,14 +33,10 @@ app.post('/api/user/login', (req, res) => {
                     message: 'Login Failed'
                 })
             }
-
         })
-    });
 })
 
 app.post('/api/inventory/getAllInv', (req, res) => {
-    mongoose.connect(url, function(err){
-        if(err) throw err;
         Inventory.find({},[],{ sort: { _id: -1 } },(err, doc) => {
             if(err) throw err;
             return res.status(200).json({
@@ -48,12 +44,20 @@ app.post('/api/inventory/getAllInv', (req, res) => {
                 data: doc
             })
         })
-    });
+})
+
+app.post('/api/inventory/deleteInv', (req, res) => {
+        Inventory.findByIdAndRemove(req.body.id,
+            (err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
 })
 
 app.post('/api/inventory/createInv', (req, res) => {
-    mongoose.connect(url, function(err){
-        if(err) throw err;
         const inventory = new Inventory({
             sku : req.body.sku,
             name: req.body.name,
@@ -67,12 +71,42 @@ app.post('/api/inventory/createInv', (req, res) => {
                 data: doc
             })
         })
-    });
+})
+
+app.post('/api/inventory/updateInventory', (req, res) => {
+        Inventory.update(
+            { _id: req.body.id },
+            { sku: req.body.sku,
+            name: req.body.name,
+            brand: req.body.brand,
+            stockWH: req.body.stocwh
+            },
+            (err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+})
+
+app.post('/api/inventory/updateStock', (req, res) => {
+        Inventory.update(
+            { _id: req.body.id,
+            "stock_wh.wh": req.body.wh },
+            { "$set":
+            { "stock_wh.$.stock": req.body.stock }
+            },
+            (err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
 })
 
 app.post('/api/orders/getAllOrd', (req, res) => {
-    mongoose.connect(url, function(err){
-        if(err) throw err;
         Order.find({},[],{ sort: { _id: -1 } },(err, doc) => {
             if(err) throw err;
             return res.status(200).json({
@@ -80,12 +114,9 @@ app.post('/api/orders/getAllOrd', (req, res) => {
                 data: doc
             })
         })
-    });
 })
 
 app.post('/api/orders/createOrder', (req, res) => {
-    mongoose.connect(url, function(err){
-        if(err) throw err;
         const order = new Order({
             name: req.body.name,
             qty: req.body.qty,
@@ -98,12 +129,9 @@ app.post('/api/orders/createOrder', (req, res) => {
                 data: doc
             })
         })
-    });
 })
 
 app.post('/api/orders/updateOrder', (req, res) => {
-    mongoose.connect(url, function(err){
-        if(err) throw err;
         Order.update(
             { _id: req.body.id },
             { name: req.body.name,
@@ -116,12 +144,9 @@ app.post('/api/orders/updateOrder', (req, res) => {
                 data: doc
             })
         })
-    });
 })
 
 app.post('/api/orders/deleteOrder', (req, res) => {
-    mongoose.connect(url, function(err){
-        if(err) throw err;
         Order.findByIdAndRemove(req.body.id,
             (err, doc) => {
             if(err) throw err;
@@ -130,12 +155,9 @@ app.post('/api/orders/deleteOrder', (req, res) => {
                 data: doc
             })
         })
-    });
 })
 
 app.post('/api/warehouse/getAllWH', (req, res) => {
-    mongoose.connect(url, function(err){
-        if(err) throw err;
         Warehouse.find({},[],{ sort: { _id: 1 } },(err, doc) => {
             if(err) throw err;
             return res.status(200).json({
@@ -143,12 +165,10 @@ app.post('/api/warehouse/getAllWH', (req, res) => {
                 data: doc
             })
         })
-    });
 })
 
 app.post('/api/acquisition/getAllAcq', (req, res) => {
-    mongoose.connect(url, function(err){
-        if(err) throw err;
+
         Acquisition.find({},[],{ sort: { _id: -1 } },(err, doc) => {
             if(err) throw err;
             return res.status(200).json({
@@ -156,12 +176,10 @@ app.post('/api/acquisition/getAllAcq', (req, res) => {
                 data: doc
             })
         })
-    });
+
 })
 
 app.post('/api/acquisition/createAcq', (req, res) => {
-    mongoose.connect(url, function(err){
-        if(err) throw err;
         const acquisition = new Acquisition({
             art: req.body.art,
             qty: req.body.qty,
@@ -177,12 +195,9 @@ app.post('/api/acquisition/createAcq', (req, res) => {
                 data: doc
             })
         })
-    });
 })
 
 app.post('/api/acquisition/updateStatusAcq', (req, res) => {
-    mongoose.connect(url, function(err){
-        if(err) throw err;
         Acquisition.update(
             { _id: req.body.id },
             { coments2: req.body.coments2,
@@ -194,12 +209,9 @@ app.post('/api/acquisition/updateStatusAcq', (req, res) => {
                 data: doc
             })
         })
-    });
 })
 
 app.post('/api/dispatch/getAllDis', (req, res) => {
-    mongoose.connect(url, function(err){
-        if(err) throw err;
         Dispatch.find({},[],{ sort: { _id: -1 } },(err, doc) => {
             if(err) throw err;
             return res.status(200).json({
@@ -207,12 +219,9 @@ app.post('/api/dispatch/getAllDis', (req, res) => {
                 data: doc
             })
         })
-    });
 })
 
 app.post('/api/dispatch/createDis', (req, res) => {
-    mongoose.connect(url, function(err){
-        if(err) throw err;
         const dispatch = new Dispatch({
             art: req.body.art,
             origin: req.body.origin,
@@ -228,12 +237,9 @@ app.post('/api/dispatch/createDis', (req, res) => {
                 data: doc
             })
         })
-    });
 })
 
 app.post('/api/dispatch/updateStatusDis', (req, res) => {
-    mongoose.connect(url, function(err){
-        if(err) throw err;
         Dispatch.update(
             { _id: req.body.id },
             { coments: req.body.coments,
@@ -245,12 +251,9 @@ app.post('/api/dispatch/updateStatusDis', (req, res) => {
                 data: doc
             })
         })
-    });
 })
 
 app.post('/api/withdraw/getAllWithdraw', (req, res) => {
-    mongoose.connect(url, function(err){
-        if(err) throw err;
         Withdraw.find({},[],{ sort: { _id: -1 } },(err, doc) => {
             if(err) throw err;
             return res.status(200).json({
@@ -258,12 +261,9 @@ app.post('/api/withdraw/getAllWithdraw', (req, res) => {
                 data: doc
             })
         })
-    });
 })
 
 app.post('/api/withdraw/createWithdraw', (req, res) => {
-    mongoose.connect(url, function(err){
-        if(err) throw err;
         const withdraw = new Withdraw({
             art: req.body.art,
             qty: req.body.qty,
@@ -279,12 +279,9 @@ app.post('/api/withdraw/createWithdraw', (req, res) => {
                 data: doc
             })
         })
-    });
 })
 
 app.post('/api/withdraw/updateStatusWithdraw', (req, res) => {
-    mongoose.connect(url, function(err){
-        if(err) throw err;
         Withdraw.update(
             { _id: req.body.id },
             { coments2: req.body.coments2,
@@ -297,7 +294,6 @@ app.post('/api/withdraw/updateStatusWithdraw', (req, res) => {
                 data: doc
             })
         })
-    });
 })
 
 app.listen(3000, () => console.log('Servidor up! en puerto 3000!!!'))
