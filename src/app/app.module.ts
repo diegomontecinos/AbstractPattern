@@ -1,26 +1,59 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { ROUTING } from './app.routing';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TableModule } from 'primeng/table';
+import { PanelMenuModule } from 'primeng/panelmenu';
+import { MenuItem } from 'primeng/api';
+import { PanelModule } from 'primeng/panel';
+import {DialogModule} from 'primeng/dialog';
+import {ButtonModule} from 'primeng/button';
+import {SpinnerModule} from 'primeng/spinner';
+import {DropdownModule} from 'primeng/dropdown';
+import {ToggleButtonModule} from 'primeng/togglebutton';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
-
-
-// Define the routes
-const ROUTES = [
-
-  {path: '',redirectTo: 'posts',pathMatch: 'full'},
-  {path: 'login',component: LoginComponent}
-];
+import { HomeBodegueroComponent } from './home-bodeguero/home-bodeguero.component';
+import { ShowInventoryComponent } from './show-inventory/show-inventory.component';
+import { ShowDispatchComponent } from './show-dispatch/show-dispatch.component';
+import { ShowOrderComponent } from './show-order/show-order.component';
+import { ShowAcquisitionComponent } from './show-acquisition/show-acquisition.component';
+import { MenubarComponent } from './menubar/menubar.component';
+import { MenubarGrocerComponent } from './menubar-grocer/menubar-grocer.component';
+import { ShowOrder0Component } from './show-order0/show-order0.component';
+import { ShowWithdrawComponent } from './show-withdraw/show-withdraw.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    HomeBodegueroComponent,
+    ShowInventoryComponent,
+    ShowDispatchComponent,
+    ShowOrderComponent,
+    ShowAcquisitionComponent,
+    MenubarComponent,
+    MenubarGrocerComponent,
+    ShowOrder0Component,
+    ShowWithdrawComponent
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(ROUTES) // Add routes to the app
+    ROUTING,
+    FormsModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    TableModule,
+    PanelMenuModule,
+    PanelModule,
+    DialogModule,
+    ButtonModule,
+    SpinnerModule,
+    DropdownModule,
+    ToggleButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

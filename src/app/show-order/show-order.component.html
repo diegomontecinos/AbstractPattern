@@ -1,0 +1,42 @@
+<div class="ui-g">
+  <div class="ui-g-2 menu">
+    <app-menubar-grocer></app-menubar-grocer>
+  </div>
+  <div class="ui-g-1 margen">
+  </div>
+  <div class="ui-g-6 center-table">
+    <p-table [value]="orders" >
+      <ng-template pTemplate="header">
+          <tr>
+              <th>Orden</th>
+              <th>Nombre</th>
+              <th>Cantidad</th>
+              <th>Estado</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-order>
+          <tr>
+              <td>{{order.id}}</td>
+              <td>{{order.name}}</td>
+              <td>{{order.qty}}</td>
+              <td>{{order.status}}</td>
+          </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <div class="ui-g-4">
+  </div>
+</div>
+
+<p-dialog header="Car Details" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="300">
+    <div class="ui-g ui-fluid" *ngIf="orders">
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="id">ID</label>
+            </div>
+            <div class="ui-g-8">
+                <input pInputText id="vin" [(ngModel)]="orders.id" />
+            </div>
+        </div>
+    </div>
+</p-dialog>
