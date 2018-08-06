@@ -1,0 +1,1 @@
+{"_id":{"$oid":"5b61dcbf7aeaad1b4cd0db7f"},"art":{"$oid":"5b61da1768596d19b05d5f1d"},"origin":{"$oid":"5b4d6a850ea6ac19a061b34d"},"destination":{"$oid":"5b4d6a990ea6ac19a061b34e"},"qty":{"$numberInt":"8"},"date_dis":{"$date":{"$numberLong":"1533140159755"}},"status":"Rechazado","coments":null}

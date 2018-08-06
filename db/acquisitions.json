@@ -1,0 +1,1 @@
+{"_id":{"$oid":"5b61dce47aeaad1b4cd0db80"},"art":{"$oid":"5af9e808726e9b23245cbb67"},"qty":{"$numberInt":"3"},"status":"Recibido","coments":"jjj","dateAcq":{"$date":{"$numberLong":"1533140196498"}},"destination":{"$oid":"5b4d6a850ea6ac19a061b34d"},"coments2":"uuuuu"}
