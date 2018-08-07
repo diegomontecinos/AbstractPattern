@@ -13,6 +13,7 @@ import {ButtonModule} from 'primeng/button';
 import {SpinnerModule} from 'primeng/spinner';
 import {DropdownModule} from 'primeng/dropdown';
 import {ToggleButtonModule} from 'primeng/togglebutton';
+import {GrowlModule} from 'primeng/growl';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -53,7 +54,8 @@ import { ShowWithdrawComponent } from './show-withdraw/show-withdraw.component';
     ButtonModule,
     SpinnerModule,
     DropdownModule,
-    ToggleButtonModule
+    ToggleButtonModule,
+    GrowlModule
   ],
   providers: [],
   bootstrap: [AppComponent]

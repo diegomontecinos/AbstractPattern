@@ -1,10 +1,12 @@
 export interface Withdraw {
   _id?;
-  art?;
+  arts?;
   warehouse?;
-  qty?;
+  worker?;
   date1?;
   date2?;
+  qty?;
+  art?;
   status?;
   coments1?;
   coments2?;

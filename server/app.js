@@ -11,6 +11,7 @@ const Warehouse = require('./model/warehouse');
 const Acquisition = require('./model/acquisition');
 const Dispatch = require('./model/dispatch');
 const Withdraw = require('./model/withdraw');
+const Worker = require('./model/worker');
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended : false}))
@@ -265,12 +266,12 @@ app.post('/api/withdraw/getAllWithdraw', (req, res) => {
 
 app.post('/api/withdraw/createWithdraw', (req, res) => {
         const withdraw = new Withdraw({
-            art: req.body.art,
-            qty: req.body.qty,
+            arts: req.body.arts,
             status: req.body.status,
             coments1: req.body.coments1,
             date1: req.body.date1,
-            warehouse: req.body.warehouse
+            warehouse: req.body.warehouse,
+            worker: req.body.worker
         })
         withdraw.save((err, doc) => {
             if(err) throw err;
@@ -281,13 +282,40 @@ app.post('/api/withdraw/createWithdraw', (req, res) => {
         })
 })
 
-app.post('/api/withdraw/updateStatusWithdraw', (req, res) => {
+app.post('/api/withdraw/updateWithdraw', (req, res) => {
         Withdraw.update(
             { _id: req.body.id },
             { coments2: req.body.coments2,
             status: req.body.status,
             date2: req.body.date2 },
             (err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+})
+
+app.post('/api/withdraw/updateWithdrawItem', (req, res) => {
+        Withdraw.update(
+            { _id: req.body.id,
+            "arts.art": req.body.art },
+            { "$set":
+            { "arts.$.status": req.body.status,
+              "arts.$.giveback": req.body.giveback,}
+            },
+            (err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+})
+
+app.post('/api/worker/getAllWorkers', (req, res) => {
+        Worker.find({},[],{ sort: { _id: -1 } },(err, doc) => {
             if(err) throw err;
             return res.status(200).json({
                 status: 'success',
