@@ -1,3 +1,5 @@
+<p-growl [(value)]="msgs"></p-growl>
+
 <div class="ui-g">
   <div class="ui-g-2 menu">
     <app-menubar-grocer></app-menubar-grocer>
@@ -7,7 +9,7 @@
   <div class="ui-g-6 center-table">
 
 
-<p-table [columns]="cols" [value]="withdraws" selectionMode="single" [(selection)]="selectedWith" (onRowSelect)="onRowSelect($event)" [autoLayout]="true" [paginator]="true" [rows]="15">
+<p-table [columns]="cols" [value]="withdraws" selectionMode="single" [(selection)]="selectedWithdraw" (onRowSelect)="onRowSelect($event)" [autoLayout]="true" [paginator]="true" [rows]="15">
     <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of columns">
@@ -22,9 +24,12 @@
             </td>
         </tr>
     </ng-template>
-
+    <ng-template pTemplate="summary" let-rowData>
+        <div style="text-align:left">
+            <button type="button" pButton icon="fa-plus" (click)="showDialogToAdd()" label="Agregar retiro"></button>
+        </div>
+    </ng-template>
 </p-table>
-
 </div>
 
 <p-dialog header="Detalle retiro" [(visible)]="displayDialogCancel" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
@@ -77,6 +82,88 @@
     </p-footer>
 </p-dialog>
 
+<p-dialog header="Nuevo retiro" [(visible)]="displayDialogAdd" [responsive]="true" showEffect="fade" [modal]="true" [width]="900">
+    <div class="ui-g ui-fluid" *ngIf="withdraw">
+        <div class="ui-g-12">
+            <div class="ui-g-2">
+                <label for="qty">Trabajador:</label>
+            </div>
+            <div class="ui-g-4">
+                  <p-dropdown [options]="workers" [(ngModel)]="withdraw.worker" placeholder="Seleccione trabajador" optionLabel="name" [showClear]="true"></p-dropdown>
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-2">
+                <label for="qty">Comentarios retiro:</label>
+            </div>
+            <div class="ui-g-6">
+                <textarea  [rows]="3" pInputTextarea [(ngModel)]="withdraw.coments1"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <p-table [columns]="cols2" [value]="items" selectionMode="single" [(selection)]="selectedItem" (onRowSelect)="onRowSelectAddItem($event)" [autoLayout]="true">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns">
+                    {{col.header}}
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr [pSelectableRow]="rowData">
+                <td *ngFor="let col of columns">
+                    {{rowData[col.field]}}
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                <button type="button" pButton icon="fa fa-plus" (click)="addItem()" label="Agregar artículo"></button>
+                <button type="button" pButton icon="fa fa-check" (click)="addWithdraw()" label="Agregar retiro"></button>
+            </div>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Añadir artículo al retiro" [(visible)]="displayDialogAddItem" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
+    <div class="ui-g ui-fluid" *ngIf="newItem">
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="qty">Item:</label>
+            </div>
+            <div class="ui-g-8">
+                  <p-dropdown [options]="arts" [(ngModel)]="newArt" placeholder="Seleccione artículo" optionLabel="name" [showClear]="true" (onChange)="getStock()"></p-dropdown>
+            </div>
+        </div>
+          <div class="ui-g-12">
+              <div class="ui-g-4">Stock:</div><div class="ui-g-8">{{stockAux}}</div>
+          </div>
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="qty">Cantidad:</label>
+            </div>
+            <div class="ui-g-8">
+                <p-spinner [(ngModel)]="newItem.qty"></p-spinner>
+            </div>
+        </div>
+    </div>
+    <div class="ui-g-12">
+        <div class="ui-g-4">
+            <label for="qty">Devolución:</label>
+        </div>
+        <div class="ui-g-8">
+            <p-toggleButton [(ngModel)]="withdrawDev" onLabel="Si" offLabel="No" onIcon="pi pi-check" offIcon="pi pi-times" [style]="{'width':'100px'}"></p-toggleButton>
+        </div>
+    </div>
+    <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                <button type="button" pButton icon="fa fa-plus" (click)="addItem2()" label="Agregar artículo"></button>
+            </div>
+    </p-footer>
+</p-dialog>
+
 <p-dialog header="Detalle retiro" [(visible)]="displayDialogCancel2" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
     <div class="ui-g ui-fluid" *ngIf="withdraw">
       <div class="ui-g-12">
@@ -95,122 +182,88 @@
     </p-footer>
 </p-dialog>
 
-<p-dialog header="Detalle retiro" [(visible)]="displayDialogEdit" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
-    <div class="ui-g ui-fluid" *ngIf="withdraw">
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="name">Código retiro</label>
-            </div>
-            <div class="ui-g-8">
-                {{withdraw._id}}
-            </div>
-        </div>
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="name">Artículo</label>
-            </div>
-            <div class="ui-g-8">
-                {{withdraw.art}}
-            </div>
-        </div>
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="name">Cantidad</label>
-            </div>
-            <div class="ui-g-8">
-                <p-spinner [(ngModel)]="qtyAux"></p-spinner>
-            </div>
-        </div>
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="qty">Fecha retiro:</label>
-            </div>
-            <div class="ui-g-8">
-                {{withdraw.dateFormat1}}
-            </div>
-        </div>
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="qty">Comentarios retiro:</label>
-            </div>
-            <div class="ui-g-8">
-                {{withdraw.coments1}}
-            </div>
-        </div>
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="qty">Comentarios devolución:</label>
-            </div>
-            <div class="ui-g-8">
-                <textarea  [rows]="3" pInputTextarea [(ngModel)]="withdraw.coments2"></textarea>
-            </div>
-        </div>
+<p-dialog header="Detalle retiro" [(visible)]="displayDialogEdit" [responsive]="true" showEffect="fade" [modal]="true" [width]="900">
+  <div class="ui-g ui-fluid" *ngIf="withdraw">
+    <div class="ui-g-6">
+      <div class="ui-g-12"><b>Código:</b> {{withdraw._id}}</div>
+      <div class="ui-g-12"><b>Estado:</b> {{withdraw.status}}</div>
+      <div class="ui-g-12"><b>Fecha retiro:</b> {{withdraw.dateFormat1}}</div>
+      <div class="ui-g-12"><b>Trabajador:</b> {{withdraw.worker}}</div>
+      <div class="ui-g-12"><b>Comentarios retiro:</b> {{withdraw.coments1}}</div>
     </div>
+    <div class="ui-g-6">
+      <div class="ui-g-12"><b>Comentarios edición:</b></div>
+      <div class="ui-g-12">
+         <textarea  [rows]="3" pInputTextarea [(ngModel)]="withdraw.coments2"></textarea>
+      </div>
+    </div>
+    <div class="ui-g-12"></div>
+  <p-table [columns]="cols2" [value]="withdraw.arts" selectionMode="single" [(selection)]="selectedItem" (onRowSelect)="onRowSelectEditStatus($event)">
+      <ng-template pTemplate="header" let-columns>
+          <tr>
+              <th *ngFor="let col of columns">
+                  {{col.header}}
+              </th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+          <tr [pSelectableRow]="rowData">
+              <td *ngFor="let col of columns">
+                  {{rowData[col.field]}}
+              </td>
+          </tr>
+      </ng-template>
+  </p-table>
+</div>
     <p-footer>
             <div class="ui-dialog-buttonpane ui-helper-clearfix">
-                <button type="button" pButton icon="fa fa-check" (click)="givebackWithdraw()" label="Devolver"></button>
-                <button type="button" pButton icon="fa fa-check" (click)="nogivebackWithdraw()" label="No regresado"></button>
+                <button type="button" pButton icon="fa fa-save" (click)="updateWithdraw()" label="Guardar"></button>
             </div>
     </p-footer>
 </p-dialog>
 
-<p-dialog header="Detalle retiro" [(visible)]="displayDialogFinal" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
-    <div class="ui-g ui-fluid" *ngIf="withdraw">
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="name">Código retiro</label>
+<p-dialog header="Detalle retiro" [(visible)]="displayDialogGiveback" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
+    <div class="ui-g ui-fluid" *ngIf="selectedItem">
+        <div class="ui-g-12"> <b>Artículo:</b> {{selectedItem.art}} </div>
+        <div class="ui-g-12"> <b>Cantidad:</b> {{selectedItem.qty}} </div>
+        <div class="ui-g-12"> <b>Devueltos:</b><p-spinner [(ngModel)]="givebackAux"></p-spinner> </div>
+    </div>
+    <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                <button type="button" pButton icon="fa fa-close" (click)="givebackItem()" label="Devolver"></button>
             </div>
-            <div class="ui-g-8">
-                {{withdraw._id}}
-            </div>
-        </div>
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="name">Artículo</label>
-            </div>
-            <div class="ui-g-8">
-                {{withdraw.art}}
-            </div>
-        </div>
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="name">Cantidad</label>
-            </div>
-            <div class="ui-g-8">
-                {{withdraw.qty}}
-            </div>
-        </div>
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="qty">Fecha retiro:</label>
-            </div>
-            <div class="ui-g-8">
-                {{withdraw.dateFormat1}}
-            </div>
-        </div>
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="qty">Comentarios retiro:</label>
-            </div>
-            <div class="ui-g-8">
-                {{withdraw.coments1}}
-            </div>
-        </div>
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="qty">Fecha estado final:</label>
-            </div>
-            <div class="ui-g-8">
-                {{withdraw.coments2}}
-            </div>
-        </div>
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="qty">Comentarios estado final:</label>
-            </div>
-            <div class="ui-g-8">
-                {{withdraw.coments2}}
-            </div>
-        </div>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Detalle retiro" [(visible)]="displayDialogFinal" [responsive]="true" showEffect="fade" [modal]="true" [width]="900">
+  <div class="ui-g ui-fluid" *ngIf="withdraw">
+    <div class="ui-g-6">
+      <div class="ui-g-12"><b>Código:</b> {{withdraw._id}}</div>
+      <div class="ui-g-12"><b>Estado:</b> {{withdraw.status}}</div>
+      <div class="ui-g-12"><b>Trabajador:</b> {{withdraw.worker}}</div>
+      <div class="ui-g-12"><b>Comentarios retiro:</b> {{withdraw.coments1}}</div>
+    </div>
+    <div class="ui-g-6">
+      <div class="ui-g-12"><b>Fecha retiro:</b> {{withdraw.dateFormat1}}</div>
+      <div class="ui-g-12"><b>Fecha edición:</b> {{withdraw.dateFormat2}}</div>
+      <div class="ui-g-12"><b>Comentarios edición:</b> {{withdraw.coments2}}</div>
+    </div>
+    <div class="ui-g-12"></div>
+  <p-table [columns]="cols2" [value]="withdraw.arts">
+      <ng-template pTemplate="header" let-columns>
+          <tr>
+              <th *ngFor="let col of columns">
+                  {{col.header}}
+              </th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+          <tr [pSelectableRow]="rowData">
+              <td *ngFor="let col of columns">
+                  {{rowData[col.field]}}
+              </td>
+          </tr>
+      </ng-template>
+  </p-table>
     </div>
 </p-dialog>
