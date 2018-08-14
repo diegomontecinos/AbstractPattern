@@ -4,7 +4,10 @@ import { Dispatch } from '../models/dispatch.model';
 import { Warehouse } from '../models/warehouse.model';
 import { Inventory } from '../models/inventory.model';
 import { DropdownModule } from 'primeng/dropdown';
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { DialogModule } from 'primeng/dialog';
 
 
 @Component({
@@ -17,11 +20,13 @@ export class ShowDispatchComponent implements OnInit {
 
   displayDialogNew: boolean;
   displayDialogEdit: boolean;
+  displayDialogFinal: boolean;
   dispatch: Dispatch;
   selectedDispatch: Dispatch;
   newDispatch: boolean;
   dispatchs: Dispatch[];
   cols: any[];
+  cols2: any[];
   warehouse: Warehouse[];
   comentsDispatch: string;
   newDestination: Warehouse;
@@ -33,35 +38,45 @@ export class ShowDispatchComponent implements OnInit {
 
 
   ngOnInit() {
-
-      this.showDispatchService.getAllWH().subscribe(result => {this.warehouse = result['data'];
-        this.showDispatchService.getAllInv().subscribe(result => {this.arts = result['data'];
-          this.showDispatchService.getAllDis().subscribe(result => {this.dispatchs = result['data'];
-            this.parseDispatchs();
-          });
-        });
-      });
+      this.getDispatchs();
 
       this.cols = [
           { field: '_id', header: 'Código despacho' },
-          { field: 'art', header: 'Artículo' },
-          { field: 'qty', header: 'Cantidad', style: {width: '180px'} },
           { field: 'origin', header: 'Origen' },
           { field: 'destination', header: 'Destino' },
-          { field: 'dateFormat', header: 'Fecha' },
+          { field: 'dateFormat1', header: 'Fecha' },
           { field: 'status', header: 'Estado' }
+      ];
+
+      this.cols2 = [
+          { field: 'name', header: 'Nombre' },
+          { field: 'qty', header: 'Cantidad' }
       ];
 
 
   }
 
+  getDispatchs() {
+    this.showDispatchService.getAllWH().subscribe(result => {this.warehouse = result['data'];
+      this.showDispatchService.getAllInv().subscribe(result => {this.arts = result['data'];
+        this.showDispatchService.getAllDis().subscribe(result => {this.dispatchs = result['data'];
+          this.parseDispatchs();
+        });
+      });
+    });
+  }
+
   parseDispatchs() {
     var i;
+    var j;
     for (i = 0; i < this.dispatchs.length; i++) {
-        this.dispatchs[i].art = (this.arts.find(objAux => objAux._id === this.dispatchs[i].art)).name;
         this.dispatchs[i].origin = (this.warehouse.find(objAux => objAux._id === this.dispatchs[i].origin)).name;
         this.dispatchs[i].destination = (this.warehouse.find(objAux => objAux._id === this.dispatchs[i].destination)).name;
-        this.dispatchs[i].dateFormat = moment(this.dispatchs[i].date_dis).format("DD/MM/YYYY");
+        this.dispatchs[i].dateFormat1 = moment(this.dispatchs[i].date1).tz('America/Santiago').format("DD/MM/YYYY HH:mm:ss");
+        this.dispatchs[i].dateFormat2 = moment(this.dispatchs[i].date2).tz('America/Santiago').format("DD/MM/YYYY HH:mm:ss");
+        for (j = 0; j < this.dispatchs[i].arts.length; j++) {
+          this.dispatchs[i].arts[j].name = (this.arts.find(objAux => objAux._id === this.dispatchs[i].arts[j].art)).name;
+        }
     }
 
   }
@@ -73,9 +88,12 @@ export class ShowDispatchComponent implements OnInit {
   }
 
   onRowSelect(event) {
-      this.newDispatch = false;
-      this.dispatch = this.cloneDispatch(event.data);
-      this.displayDialogEdit = true;
+      if(this.selectedDispatch.status == "Despachado") {
+        this.displayDialogEdit = true;
+      }
+      else {
+        this.displayDialogFinal = true;
+      }
   }
 
   createDispatch() {
@@ -89,12 +107,14 @@ export class ShowDispatchComponent implements OnInit {
   }
 
   rejectDispatch() {
-      this.showDispatchService.updateStatusDis(this.dispatch, "Rechazado").subscribe(res =>{console.log('response is ', res)});
+      this.showDispatchService.updateStatusDis(this.selectedDispatch, "Rechazado").subscribe(res =>{console.log('response is ', res)});
+      this.getDispatchs();
       this.displayDialogEdit = false;
   }
 
   receiveDispatch() {
-      this.showDispatchService.updateStatusDis(this.dispatch, "Recibido").subscribe(res =>{console.log('response is ', res)});
+      this.showDispatchService.updateStatusDis(this.selectedDispatch, "Recibido").subscribe(res =>{console.log('response is ', res)});
+      this.getDispatchs();
       this.displayDialogEdit = false;
   }
 

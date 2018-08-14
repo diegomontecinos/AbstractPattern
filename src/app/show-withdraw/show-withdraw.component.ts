@@ -9,7 +9,7 @@ import { DialogModule } from 'primeng/dialog';
 import { Warehouse } from '../models/warehouse.model';
 import { Inventory } from '../models/inventory.model';
 import { Worker } from '../models/worker.model';
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
 import {GrowlModule} from 'primeng/growl';
 import {Message} from 'primeng/components/common/api';
 import { ShowInventoryService } from '../show-inventory/show-inventory.service';
@@ -80,8 +80,8 @@ export class ShowWithdrawComponent implements OnInit {
     for (i = 0; i < this.withdraws.length; i++) {
         /**this.withdraws[i].art = (this.arts.find(objAux => objAux._id === this.withdraws[i].art)).name; */
         this.withdraws[i].worker = (this.workers.find(objAux => objAux._id === this.withdraws[i].worker)).name;
-        this.withdraws[i].dateFormat1 = moment(this.withdraws[i].date1).format("DD/MM/YYYY");
-        this.withdraws[i].dateFormat2 = moment(this.withdraws[i].date2).format("DD/MM/YYYY");
+        this.withdraws[i].dateFormat1 = moment(this.withdraws[i].date1).tz('America/Santiago').format("DD/MM/YYYY HH:mm:ss");
+        this.withdraws[i].dateFormat2 = moment(this.withdraws[i].date2).tz('America/Santiago').format("DD/MM/YYYY HH:mm:ss");
         for (j = 0; j < this.withdraws[i].arts.length; j++) {
           this.withdraws[i].arts[j].name = (this.arts.find(objAux => objAux._id === this.withdraws[i].arts[j].art)).name;
         }
@@ -120,12 +120,14 @@ export class ShowWithdrawComponent implements OnInit {
     this.newItem = {};
     this.newArt = null;
     this.withdrawDev = false;
+    this.stockAux = null;
     this.displayDialogAddItem = true;
   }
 
   getStock() {
-    var artAux;
-    this.stockAux = this.newArt.stock_wh.find(objAux => objAux.wh == this.groser_wh).stock;
+    var artAux = null;
+    this.newItem.qty = 0;
+    this.stockAux = this.newItem.art.stock_wh.find(objAux => objAux.wh == this.groser_wh).stock;
   }
 
   addItem2() {
@@ -148,8 +150,8 @@ export class ShowWithdrawComponent implements OnInit {
   }
 
   onRowSelectEditStatus(event) {
-    this.displayDialogGiveback = true;
     this.givebackAux = this.selectedItem.qty;
+    this.displayDialogGiveback = true;
   }
 
   givebackItem() {
@@ -178,16 +180,20 @@ export class ShowWithdrawComponent implements OnInit {
     let allAux = true;
     var actualItem;
     var actualStock;
-    if (this.items.length < 1) {
+    var msgAux;
+    if (this.items.length < 1 || this.withdraw.worker==null || this.withdraw.coments1==null) {
       this.msgs = [];
-      this.msgs.push({severity:'error', summary:'Error', detail:'Se requiere al menos un elemento a ser retirado'});
-    } else if(this.withdraw.worker==null) {
-        this.msgs = [];
-        this.msgs.push({severity:'error', summary:'Error', detail:'Trabajador requerido'});
-    } else if(this.withdraw.coments1==null) {
-        this.msgs = [];
-        this.msgs.push({severity:'error', summary:'Error', detail:'Comentarios requeridos'});
-    } else {
+      msgAux = null;
+      if (this.items.length < 1) {
+        msgAux = 'Se requiere al menos un elemento a ser retirado';
+      } else if(this.withdraw.worker==null) {
+        msgAux = 'Trabajador requerido';
+      } else if(this.withdraw.coments1==null) {
+        msgAux = 'Comentarios requeridos';
+      }
+      this.msgs.push({severity:'error', summary:'Error', detail:msgAux});
+    }
+     else {
       for (i = 0; i < this.items.length; i++) {
         actualItem = this.arts.find(objAux => objAux._id == this.items[i].art);
         actualStock = actualItem.stock_wh.find(objAux => objAux.wh == this.groser_wh).stock;

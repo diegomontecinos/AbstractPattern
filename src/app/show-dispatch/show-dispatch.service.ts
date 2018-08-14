@@ -18,18 +18,18 @@ export class ShowDispatchService {
         art: n_art,
         origin: n_origin,
         destination: n_destination,
-        qty: dispatch.qty,
         date_dis: Date.now(),
         status: "Despachado",
-        coments: dispatch.coments
+        coments1: dispatch.coments1
       })
   }
 
   updateStatusDis(dispatch: Dispatch, n_status){
     return this.http.post('/api/dispatch/updateStatusDis',{
       id: dispatch._id,
-      coments: dispatch.coments,
-      status: n_status
+      coments2: dispatch.coments2,
+      status: n_status,
+      date2: Date.now()
   })
   }
 

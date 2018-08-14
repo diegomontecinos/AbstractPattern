@@ -1,12 +1,14 @@
 export interface Dispatch {
     _id?;
-    art?;
+    arts?;
     origin?;
     destination?;
-    qty?;
     status?;
-    date_dis?;
-    coments?;
-    dateFormat?;
-    date_rec?;
+    date1?;
+    date2?;
+    coments1?;
+    coments2?;
+    dateFormat1?;
+    dateFormat2?;
+    order?;
 }

@@ -9,7 +9,13 @@
   <div class="ui-g-6 center-table">
 
 
-<p-table [columns]="cols" [value]="withdraws" selectionMode="single" [(selection)]="selectedWithdraw" (onRowSelect)="onRowSelect($event)" [autoLayout]="true" [paginator]="true" [rows]="15">
+<p-table #dt [columns]="cols" [value]="withdraws" selectionMode="single" [(selection)]="selectedWithdraw" (onRowSelect)="onRowSelect($event)" [autoLayout]="true" [paginator]="true" [rows]="15">
+  <ng-template pTemplate="caption">
+          <div style="text-align: right">
+              <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+              <input type="text" pInputText size="50" placeholder="Filtro" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+          </div>
+      </ng-template>
     <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of columns">
@@ -101,7 +107,6 @@
             </div>
         </div>
     </div>
-
     <p-table [columns]="cols2" [value]="items" selectionMode="single" [(selection)]="selectedItem" (onRowSelect)="onRowSelectAddItem($event)" [autoLayout]="true">
         <ng-template pTemplate="header" let-columns>
             <tr>
@@ -118,7 +123,6 @@
             </tr>
         </ng-template>
     </p-table>
-
     <p-footer>
             <div class="ui-dialog-buttonpane ui-helper-clearfix">
                 <button type="button" pButton icon="fa fa-plus" (click)="addItem()" label="Agregar artículo"></button>
@@ -134,7 +138,7 @@
                 <label for="qty">Item:</label>
             </div>
             <div class="ui-g-8">
-                  <p-dropdown [options]="arts" [(ngModel)]="newArt" placeholder="Seleccione artículo" optionLabel="name" [showClear]="true" (onChange)="getStock()"></p-dropdown>
+                  <p-dropdown [options]="arts" [(ngModel)]="newItem.art" placeholder="Seleccione artículo" optionLabel="name" [showClear]="true" (onChange)="getStock()"></p-dropdown>
             </div>
         </div>
           <div class="ui-g-12">
@@ -145,7 +149,7 @@
                 <label for="qty">Cantidad:</label>
             </div>
             <div class="ui-g-8">
-                <p-spinner [(ngModel)]="newItem.qty"></p-spinner>
+                <p-spinner [(ngModel)]="newItem.qty" [min]="0" [max]=stockAux></p-spinner>
             </div>
         </div>
     </div>

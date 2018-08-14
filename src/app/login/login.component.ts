@@ -24,14 +24,13 @@ export class LoginComponent {
         if(result['status'] === 'success') {
           this.router.navigate(['/bodeguero/home']);
         } else {
-          alert('Wrong username password');
+          alert('Usuario o contraseña incorrecta');
         }
-
       }, error => {
         console.log('error is ', error);
       });
     } else {
-        alert('enter user name and password');
+        alert('Ingrese usurio y contraseña');
     }
   }
 

@@ -119,9 +119,11 @@ app.post('/api/orders/getAllOrd', (req, res) => {
 
 app.post('/api/orders/createOrder', (req, res) => {
         const order = new Order({
-            name: req.body.name,
-            qty: req.body.qty,
-            status: req.body.status
+            destination: req.body.destination,
+            status: req.body.status,
+            date1: req.body.date1,
+            coments1: req.body.coments1,
+            arts: req.body.arts
         })
         order.save((err, doc) => {
             if(err) throw err;
@@ -147,8 +149,38 @@ app.post('/api/orders/updateOrder', (req, res) => {
         })
 })
 
+app.post('/api/orders/updateOrderStatus', (req, res) => {
+        Order.update(
+            { _id: req.body.id },
+            { status: req.body.status },
+            (err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+})
+
 app.post('/api/orders/deleteOrder', (req, res) => {
         Order.findByIdAndRemove(req.body.id,
+            (err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+})
+
+app.post('/api/orders/updateOrderItem', (req, res) => {
+        Order.update(
+            { _id: req.body.id,
+            "arts.art": req.body.art },
+            { "$set":
+            { "arts.$.status": req.body.status,
+              "arts.$.disp": req.body.disp }
+            },
             (err, doc) => {
             if(err) throw err;
             return res.status(200).json({
@@ -222,14 +254,15 @@ app.post('/api/dispatch/getAllDis', (req, res) => {
         })
 })
 
-app.post('/api/dispatch/createDis', (req, res) => {
+app.post('/api/dispatch/createDispatch', (req, res) => {
         const dispatch = new Dispatch({
-            art: req.body.art,
+            arts: req.body.arts,
             origin: req.body.origin,
             destination: req.body.destination,
-            qty: req.body.qty,
-            date_dis: req.body.date_dis,
-            status: req.body.status
+            date1: req.body.date1,
+            coments1: req.body.coments1,
+            status: req.body.status,
+            order: req.body.order
         })
         dispatch.save((err, doc) => {
             if(err) throw err;
@@ -243,8 +276,9 @@ app.post('/api/dispatch/createDis', (req, res) => {
 app.post('/api/dispatch/updateStatusDis', (req, res) => {
         Dispatch.update(
             { _id: req.body.id },
-            { coments: req.body.coments,
-            status: req.body.status },
+            { coments2: req.body.coments2,
+            status: req.body.status,
+            date2: req.body.date2 },
             (err, doc) => {
             if(err) throw err;
             return res.status(200).json({

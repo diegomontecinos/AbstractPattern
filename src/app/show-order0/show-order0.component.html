@@ -1,3 +1,5 @@
+<p-growl [(value)]="msgs"></p-growl>
+
 <div class="ui-g">
   <div class="ui-g-2 menu">
     <app-menubar-grocer></app-menubar-grocer>
@@ -7,7 +9,13 @@
   <div class="ui-g-6 center-table">
 
 
-<p-table [columns]="cols" [value]="orders" selectionMode="single" [(selection)]="selectedOrder" (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="15">
+<p-table #dt [columns]="cols" [value]="orders" selectionMode="single" [(selection)]="selectedOrder" (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="15">
+  <ng-template pTemplate="caption">
+          <div style="text-align: right">
+              <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+              <input type="text" pInputText size="50" placeholder="Filtro" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+          </div>
+      </ng-template>
     <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of columns">
@@ -25,7 +33,7 @@
 
     <ng-template pTemplate="summary" let-rowData>
         <div style="text-align:left">
-            <button type="button" pButton icon="fa-plus" (click)="showDialogToAdd()" label="Agregar orden"></button>
+            <button type="button" pButton icon="fa-plus" (click)="showDialogAddOrder()" label="Agregar orden"></button>
         </div>
     </ng-template>
 
@@ -33,66 +41,179 @@
 
 </div>
 
-<p-dialog header="Detalle ordenes" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
-    <div class="ui-g ui-fluid" *ngIf="order">
+<p-dialog header="Agregar nueva orden" [(visible)]="displayDialogAddOrder" [responsive]="true" showEffect="fade" [modal]="true" [width]="900">
+    <div class="ui-g ui-fluid" *ngIf="newOrder">
+        <div class="ui-g-12"><b>Comentarios:</b></div>
         <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="name">Nombre:</label>
-            </div>
-            <div class="ui-g-8">
-                {{order.art}}
-            </div>
+          <textarea  [rows]="3" pInputTextarea [(ngModel)]="newOrder.coments1"></textarea>
         </div>
         <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="qty">Cantidad:</label>
-            </div>
-            <div class="ui-g-8">
-                <input pInputText id="qty" [(ngModel)]="order.qty" />
-            </div>
-        </div>
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="status">Estado</label>
-            </div>
-            <div class="ui-g-8">
-                <input pInputText id="status" [(ngModel)]="order.status" />
-            </div>
+          <p-table [columns]="cols2" [value]="newOrder.arts" selectionMode="single" [(selection)]="selectedItem" (onRowSelect)="onRowSelectAddItem($event)" [autoLayout]="true">
+              <ng-template pTemplate="header" let-columns>
+                  <tr>
+                      <th *ngFor="let col of columns">
+                          {{col.header}}
+                      </th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-rowData let-columns="columns">
+                  <tr [pSelectableRow]="rowData">
+                      <td *ngFor="let col of columns">
+                          {{rowData[col.field]}}
+                      </td>
+                  </tr>
+              </ng-template>
+          </p-table>
         </div>
     </div>
     <p-footer>
             <div class="ui-dialog-buttonpane ui-helper-clearfix">
-                <button type="button" pButton icon="fa fa-close" (click)="deleteOrder()" label="Borrar"></button>
-                <button type="button" pButton icon="fa fa-check" (click)="addOrder()" label="Guardar"></button>
-                <button type="button" pButton icon="fa fa-check" (click)="dispatch()" label="Despachar"></button>
+                <button type="button" pButton icon="fa fa-plus" (click)="addItem()" label="Agregar artículo"></button>
+                <button type="button" pButton icon="fa fa-check" (click)="createOrder()" label="Agregar orden"></button>
             </div>
     </p-footer>
 </p-dialog>
 
-<p-dialog header="Detalle ordenes" [(visible)]="displayDispatch" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
-    <div class="ui-g ui-fluid" *ngIf="order">
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="name">Nombre:</label>
-            </div>
-            <div class="ui-g-8">
-                {{order.art}}
-            </div>
-        </div>
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="qty">Cantidad:</label>
-            </div>
-            <div class="ui-g-8">
-                {{order.qty}}
-            </div>
-        </div>
+<p-dialog header="Agregar artículo a orden" [(visible)]="displayDialogAddItem" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
+  <div class="ui-g ui-fluid" *ngIf="newItem">
+      <div class="ui-g-12">
+          <div class="ui-g-4"><b>Item:</b></div>
+          <div class="ui-g-8">
+                <p-dropdown [options]="arts" [(ngModel)]="newItem.art" placeholder="Seleccione artículo" optionLabel="name" [showClear]="true" (onChange)="getStock()"></p-dropdown>
+          </div>
+      </div>
+      <div class="ui-g-12">
+          <div class="ui-g-4"><b>Cantidad:</b></div>
+          <div class="ui-g-8">
+              <p-spinner [(ngModel)]="newItem.qty" [min]="1"></p-spinner>
+          </div>
+      </div>
+  </div>
+  <p-footer>
+          <div class="ui-dialog-buttonpane ui-helper-clearfix">
+              <button type="button" pButton icon="fa fa-plus" (click)="addItem2()" label="Agregar artículo"></button>
+          </div>
+  </p-footer>
+</p-dialog>
 
+<p-dialog header="Detalles orden" [(visible)]="displayDialogEdit" [responsive]="true" showEffect="fade" [modal]="true" [width]="900">
+    <div class="ui-g ui-fluid" *ngIf="selectedOrder">
+        <div class="ui-g-12"><b>Comentarios orden:</b> {{selectedOrder.coments1}}</div>
+        <div class="ui-g-12">
+          <p-table [columns]="cols2" [value]="selectedOrder.arts" [autoLayout]="true">
+              <ng-template pTemplate="header" let-columns>
+                  <tr>
+                      <th *ngFor="let col of columns">
+                          {{col.header}}
+                      </th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-rowData let-columns="columns">
+                  <tr [pSelectableRow]="rowData">
+                      <td *ngFor="let col of columns">
+                          {{rowData[col.field]}}
+                      </td>
+                  </tr>
+              </ng-template>
+          </p-table>
+        </div>
     </div>
     <p-footer>
             <div class="ui-dialog-buttonpane ui-helper-clearfix">
-                <button type="button" pButton icon="fa fa-close" (click)="cancelDispatch()" label="Cancelar"></button>
-                <button type="button" pButton icon="fa fa-check" (click)="createDispatch()" label="Despachar"></button>
+                <button type="button" pButton icon="fa fa-check" (click)="generateDispatch()" label="Crear despacho"></button>
             </div>
     </p-footer>
+</p-dialog>
+
+<p-dialog header="Detalles orden" [(visible)]="displayDialogFinal" [responsive]="true" showEffect="fade" [modal]="true" [width]="900">
+    <div class="ui-g ui-fluid" *ngIf="selectedOrder">
+        <div class="ui-g-12"><b>Comentarios orden:</b> {{selectedOrder.coments1}}</div>
+        <div class="ui-g-12">
+          <p-table [columns]="cols2" [value]="selectedOrder.arts" [autoLayout]="true">
+              <ng-template pTemplate="header" let-columns>
+                  <tr>
+                      <th *ngFor="let col of columns">
+                          {{col.header}}
+                      </th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-rowData let-columns="columns">
+                  <tr [pSelectableRow]="rowData">
+                      <td *ngFor="let col of columns">
+                          {{rowData[col.field]}}
+                      </td>
+                  </tr>
+              </ng-template>
+          </p-table>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Crear nuevo despacho" [(visible)]="displayDialogDispatch" [responsive]="true" showEffect="fade" [modal]="true" [width]="900">
+    <div class="ui-g ui-fluid" *ngIf="newDispatch">
+      <!-- <div class="ui-g-6"><b>Origen: </b>
+        <p-dropdown [options]="warehouse" [(ngModel)]="originAux" placeholder="Seleccione origen" optionLabel="name" [showClear]="true" (onChange)=setOrigin($event)></p-dropdown>
+      </div> -->
+      <div class="ui-g-12"><b>Comentarios orden:</b> {{selectedOrder.coments1}}</div>
+      <div class="ui-g-12"><b>Comentarios despacho:</b></div>
+      <div class="ui-g-12"><textarea  [rows]="3" pInputTextarea [(ngModel)]="newDispatch.coments1"></textarea></div>
+      <div class="ui-g-12"></div>
+    </div>
+    <div class="ui-g-12"><b>Faltantes:</b></div>
+    <div class="ui-g-12" *ngIf="artsXDispatch">
+      <p-table [columns]="cols2" [value]="artsXDispatch" selectionMode="single" [(selection)]="selectedItemDispatch" (onRowSelect)="onRowSelectDispatch($event)" [autoLayout]="true">
+          <ng-template pTemplate="header" let-columns>
+              <tr>
+                  <th *ngFor="let col of columns">
+                      {{col.header}}
+                  </th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-columns="columns">
+              <tr [pSelectableRow]="rowData">
+                  <td *ngFor="let col of columns">
+                      {{rowData[col.field]}}
+                  </td>
+              </tr>
+          </ng-template>
+      </p-table>
+    </div>
+    <div class="ui-g-12"><b>En esta orden:</b></div>
+    <div class="ui-g-12" *ngIf="newDispatch">
+      <p-table [columns]="cols2" [value]="newDispatch.arts" [autoLayout]="true">
+          <ng-template pTemplate="header" let-columns>
+              <tr>
+                  <th *ngFor="let col of columns">
+                      {{col.header}}
+                  </th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-columns="columns">
+              <tr [pSelectableRow]="rowData">
+                  <td *ngFor="let col of columns">
+                      {{rowData[col.field]}}
+                  </td>
+              </tr>
+          </ng-template>
+      </p-table>
+    </div>
+    <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                <button type="button" pButton icon="fa fa-check" (click)="createDispatch()" label="Crear despacho"></button>
+            </div>
+    </p-footer>
+</p-dialog>
+
+
+<p-dialog header="Agregar item al despacho" [(visible)]="displayDialogDispatch2" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
+  <div class="ui-g ui-fluid" *ngIf="selectedItemDispatch">
+      <div class="ui-g-12"><b>Item:</b> {{selectedItemDispatch.name}}</div>
+      <div class="ui-g-12"><b>Stock:</b> {{stockAux}}</div>
+      <div class="ui-g-12"><b>Cantidad:</b><p-spinner [(ngModel)]="selectedItemDispatch.disp" [min]="1" [max]=stockAux></p-spinner></div>
+  </div>
+  <p-footer>
+          <div class="ui-dialog-buttonpane ui-helper-clearfix">
+              <button type="button" pButton icon="fa fa-plus" (click)="addItemDispatch()" label="Agregar artículo"></button>
+          </div>
+  </p-footer>
 </p-dialog>
