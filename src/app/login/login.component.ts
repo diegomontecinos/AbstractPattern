@@ -18,6 +18,7 @@ export class LoginComponent {
   }
 
   validateLogin() {
+    sessionStorage.setItem('user', this.user.username);
     if(this.user.username && this.user.password) {
         this.loginService.validateLogin(this.user).subscribe(result => {
         console.log('result is ', result);

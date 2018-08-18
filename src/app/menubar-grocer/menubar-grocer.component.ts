@@ -15,7 +15,10 @@ export class MenubarGrocerComponent implements OnInit {
 
   public items: MenuItem[];
 
+  username: string;
+
   ngOnInit() {
+    this.username = sessionStorage.getItem('user')
     this.items = [
       {label: 'Inventario', routerLink: ['/bodeguero/inventario']},
       {label: 'Despachos', routerLink: ['/bodeguero/despachos']},

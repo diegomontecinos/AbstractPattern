@@ -1,3 +1,9 @@
 .menu {
   max-width: 260px;
 }
+
+#layout-content {
+    margin-left: 300px;
+    padding-top: 70px;
+    background-color: #807C7B;
+}
