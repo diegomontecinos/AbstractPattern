@@ -5,8 +5,11 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  type: { type: String, required: true },
+  wh: { type: Schema.Types.ObjectId },
+  whName: { type: String },
   name: { type: String }
-}, { collection : 'user' });
+}, {versionKey: false}, { collection : 'user' });
 
 const User = mongoose.model('User', userSchema);
 

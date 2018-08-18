@@ -7,3 +7,15 @@
     padding-top: 70px;
     background-color: #807C7B;
 }
+
+.msgs {
+  padding-top: 70px;
+}
+
+.myGrowl.ui-growl {
+  position:fixed;
+  bottom: 30% !important;
+  left: 37%;
+  width: 500px;
+  z-index:9999;
+}
