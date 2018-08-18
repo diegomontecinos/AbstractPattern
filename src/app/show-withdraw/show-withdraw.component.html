@@ -1,4 +1,4 @@
-<p-growl [(value)]="msgs"></p-growl>
+﻿<p-growl [(value)]="msgs"></p-growl>
 
 <div id="layout-content">
   <div>
@@ -138,7 +138,7 @@
                 <label for="qty">Item:</label>
             </div>
             <div class="ui-g-8">
-                  <p-dropdown [options]="arts" [(ngModel)]="newItem.art" placeholder="Seleccione artículo" optionLabel="name" [showClear]="true" (onChange)="getStock()"></p-dropdown>
+                  <p-dropdown [options]="arts" [(ngModel)]="newArt" placeholder="Seleccione artículo" optionLabel="name" [showClear]="true" (onChange)="getStock()"></p-dropdown>
             </div>
         </div>
           <div class="ui-g-12">

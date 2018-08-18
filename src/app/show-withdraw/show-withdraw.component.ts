@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import { ShowWithdrawService } from './show-withdraw.service';
 import { Acquisition } from '../models/acquisition.model';
 import { Withdraw } from '../models/withdraw.model';
@@ -127,7 +127,7 @@ export class ShowWithdrawComponent implements OnInit {
   getStock() {
     var artAux = null;
     this.newItem.qty = 0;
-    this.stockAux = this.newItem.art.stock_wh.find(objAux => objAux.wh == this.groser_wh).stock;
+    this.stockAux = this.newArt.stock_wh.find(objAux => objAux.wh == this.groser_wh).stock;
   }
 
   addItem2() {
