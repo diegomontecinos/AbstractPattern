@@ -212,14 +212,12 @@ app.post('/api/acquisition/getAllAcq', (req, res) => {
 
 })
 
-app.post('/api/acquisition/createAcq', (req, res) => {
+app.post('/api/acquisition/createAcquisition', (req, res) => {
         const acquisition = new Acquisition({
-            art: req.body.art,
-            qty: req.body.qty,
+            arts: req.body.arts,
             status: req.body.status,
-            coments: req.body.coments,
-            dateAcq: req.body.dateAcq,
-            destination: req.body.destination
+            coments1: req.body.coments1,
+            date1: req.body.date1,
         })
         acquisition.save((err, doc) => {
             if(err) throw err;

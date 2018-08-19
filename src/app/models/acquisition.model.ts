@@ -1,13 +1,13 @@
 export interface Acquisition {
     _id?;
-    art?;
-    qty?;
-    dateAcq?;
+    arts?;
+    date1?;
+    date2?;
+    date3?;
     status?;
-    coments?;
+    coments1?;
     coments2?;
-    destination?;
-    dateRec?;
-    dateAcqFormat?;
-    dateRecFormat?;
+    date1Format?;
+    date2Format?;
+    date3Format?;
 }

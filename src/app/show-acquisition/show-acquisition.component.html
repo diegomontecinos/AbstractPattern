@@ -1,3 +1,5 @@
+<p-growl baseZIndex=80 [(value)]="msgs"></p-growl>
+
 <div id="layout-content">
   <div>
     <app-menubar-grocer></app-menubar-grocer>
@@ -33,44 +35,66 @@
 
 </div>
 
-<p-dialog header="Detalle compra" [(visible)]="displayDialogNew" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
+<p-dialog header="Detalle compra" [(visible)]="displayDialogNew" [responsive]="true" showEffect="fade" [modal]="true" [width]="600">
+    <div class="ui-g ui-fluid" *ngIf="newAcquisition">
+      <div class="ui-g-12"><b>Comentarios petición:</b></div>
+      <div class="ui-g-12"><textarea  [rows]="3" pInputTextarea [(ngModel)]="newAcquisition.coments1"></textarea></div>
     <div class="ui-g-12">
-        <div class="ui-g-4">
-            <label for="name">Articulo</label>
-        </div>
-        <div class="ui-g-8">
-            <p-dropdown [options]="arts" [(ngModel)]="newArt" placeholder="Seleccione articulo" optionLabel="name" [showClear]="true"></p-dropdown>
-        </div>
-    </div>
-    <div class="ui-g-12">
-        <div class="ui-g-4">
-            <label for="name">Destino</label>
-        </div>
-        <div class="ui-g-8">
-            <p-dropdown [options]="warehouse" [(ngModel)]="newDestination" placeholder="Seleccione destino" optionLabel="name" [showClear]="true"></p-dropdown>
-        </div>
-    </div>
-    <div class="ui-g-12" *ngIf="acquisition">
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="name">Cantidad</label>
-            </div>
-            <div class="ui-g-8">
-                <input pInputText id="sku" [(ngModel)]="acquisition.qty" />
-            </div>
-        </div>
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="qty">Comentarios:</label>
-            </div>
-            <div class="ui-g-8">
-                <textarea  [rows]="3" pInputTextarea [(ngModel)]="acquisition.coments"></textarea>
-            </div>
-        </div>
+        <p-table [columns]="cols2" [value]="newAcquisition.arts" [autoLayout]="true">
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of columns">
+                        {{col.header}}
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr [pSelectableRow]="rowData">
+                    <td *ngFor="let col of columns">
+                        {{rowData[col.field]}}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+      </div>
     </div>
     <p-footer>
             <div class="ui-dialog-buttonpane ui-helper-clearfix">
-                <button type="button" pButton icon="fa fa-check" (click)="addAcq()" label="Crear"></button>
+                <button type="button" pButton icon="fa fa-check" (click)="createAcquisition()" label="Crear adquisión"></button>
+                <button type="button" pButton icon="fa fa-plus" (click)="addItem()" label="Añadir artículo"></button>
+            </div>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Detalle compra" [(visible)]="displayDialogAddItem" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
+  <div class="ui-g ui-fluid" *ngIf="newItem">
+    <div class="ui-g-12">
+      <div class="ui-g-4"><b>Item:</b></div>
+      <div class="ui-g-8">
+        <p-dropdown [options]="arts" [(ngModel)]="newItem" [style]="{'width':'150px'}" filter="true" optionLabel="name" placeholder="Seleccione item"></p-dropdown>
+      </div>
+    </div>
+    <div class="ui-g-12">
+      <div class="ui-g-4"><b>Marca:</b></div>
+      <div class="ui-g-8">
+        {{newItem.brand}}
+      </div>
+    </div>
+    <div class="ui-g-12">
+      <div class="ui-g-4"><b>Cantidad:</b></div>
+      <div class="ui-g-8">
+        <p-spinner size="1" [(ngModel)]="newItemQty" [min]="1"></p-spinner>
+      </div>
+    </div>
+  </div>
+  <div class="ui-g-12"></div>
+  <div class="ui-g-12"></div>
+  <div class="ui-g-12"></div>
+  <div class="ui-g-12"></div>
+  <div class="ui-g-12"></div>
+    <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                <button type="button" pButton icon="fa fa-plus" (click)="addItem2()" label="Añadir item"></button>
             </div>
     </p-footer>
 </p-dialog>

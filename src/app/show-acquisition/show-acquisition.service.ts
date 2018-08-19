@@ -15,14 +15,12 @@ export class ShowAcquisitionService {
       return this.http.post('/api/acquisition/getAllAcq',{})
     }
 
-    addAcq(acquisition: Acquisition, n_art, n_destination){
-      return this.http.post('/api/acquisition/createAcq',{
-          art: n_art,
-          qty: acquisition.qty,
-          status: "Proceso",
-          coments: acquisition.coments,
-          dateAcq: Date.now(),
-          destination: n_destination
+    createAcquisition(acquisition: Acquisition){
+      return this.http.post('/api/acquisition/createAcquisition',{
+          status: acquisition.status,
+          coments1: acquisition.coments1,
+          date1: Date.now(),
+          arts: acquisition.arts
         })
     }
 

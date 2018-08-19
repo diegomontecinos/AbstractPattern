@@ -7,7 +7,9 @@ import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { Warehouse } from '../models/warehouse.model';
 import { Inventory } from '../models/inventory.model';
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
+import { Message } from 'primeng/components/common/api';
+import {GrowlModule} from 'primeng/growl';
 
 @Component({
   selector: 'app-show-acquisition',
@@ -19,88 +21,122 @@ import * as moment from 'moment';
 export class ShowAcquisitionComponent implements OnInit {
 
     displayDialogNew: boolean;
-    displayDialogEdit: boolean;
+    displayDialogConfirm: boolean;
+    displayDialogReceive: boolean;
+    displayDialogAddItem: boolean;
+    newAcquisition: Acquisition;
     acquisition: Acquisition;
-    selectedAcq: Acquisition;
-    newAcquisition: boolean;
+    selectedAcquisition: Acquisition;
     acquisitions: Acquisition[];
     cols: any[];
+    cols2: any[];
     arts: Inventory[];
     warehouse: Warehouse[];
     newDestination: Warehouse;
-    newArt: Inventory;
+    newItem: Inventory;
+    newItemQty: number;
+    msgs: Message[] = [];
 
     constructor(private showAcquisitionService: ShowAcquisitionService) { }
 
     ngOnInit() {
-        this.showAcquisitionService.getAllWH().subscribe(result => {this.warehouse = result['data'];
-          this.showAcquisitionService.getAllInv().subscribe(result => {this.arts = result['data'];
-            this.showAcquisitionService.getAllAcq().subscribe(result => {this.acquisitions = result['data'];
-              this.parseAcq();
-            });
-          });
-        });
+        this.getAcquisition();
 
         this.cols = [
             { field: '_id', header: 'Código adquisición' },
-            { field: 'art', header: 'Nombre' },
-            { field: 'qty', header: 'Cantidad' },
-            { field: 'destination', header: 'Destino' },
-            { field: 'dateAcqFormat', header: 'Fecha' },
+            { field: 'date1Format', header: 'Fecha' },
             { field: 'status', header: 'Estado' }
+        ];
+
+        this.cols2 = [
+            { field: 'name', header: 'Nombre' },
+            { field: 'qty', header: 'Cantidad' }
         ];
     }
 
-    parseAcq() {
+    getAcquisition() {
+      this.showAcquisitionService.getAllWH().subscribe(result => {this.warehouse = result['data'];
+        this.showAcquisitionService.getAllInv().subscribe(result => {this.arts = result['data'];
+          this.showAcquisitionService.getAllAcq().subscribe(result => {this.acquisitions = result['data'];
+            this.parseAcquisition();
+          });
+        });
+      });
+    }
+
+    parseAcquisition() {
       var i;
+      var j;
       for (i = 0; i < this.acquisitions.length; i++) {
-          this.acquisitions[i].art = (this.arts.find(objAux => objAux._id === this.acquisitions[i].art)).name;
-          this.acquisitions[i].destination = (this.warehouse.find(objAux => objAux._id === this.acquisitions[i].destination)).name;
-          this.acquisitions[i].dateAcqFormat = moment(this.acquisitions[i].dateAcq).format("DD/MM/YYYY");
+          this.acquisitions[i].date1Format = moment(this.acquisitions[i].date1).tz('America/Santiago').format("DD/MM/YYYY HH:mm:ss");
+          this.acquisitions[i].date2Format = moment(this.acquisitions[i].date2).tz('America/Santiago').format("DD/MM/YYYY HH:mm:ss");
+          this.acquisitions[i].date3Format = moment(this.acquisitions[i].date3).tz('America/Santiago').format("DD/MM/YYYY HH:mm:ss");
+          for (j = 0; j < this.acquisition[i].arts.length; j++) {
+            this.acquisition[i].arts[j].name = (this.arts.find(objAux => objAux._id === this.acquisition[i].arts[j].art)).name;
+          }
       }
     }
 
     showDialogToAdd() {
-        this.newAcquisition = true;
-        this.acquisition = {};
-        this.displayDialogNew = true;
+      this.newAcquisition = {};
+      this.newAcquisition.arts = [];
+      this.displayDialogNew = true;
     }
 
     onRowSelect(event) {
-        this.newAcquisition = false;
-        this.acquisition = this.cloneAcq(event.data);
-        this.displayDialogEdit = true;
+      this.displayDialogReceive = true;
     }
 
-    addAcq() {
-        this.showAcquisitionService.addAcq(this.acquisition, this.newArt._id, this.newDestination._id).subscribe(res =>{console.log('response is ', res)});
+    addItem() {
+      this.newItem = {};
+      this.newItemQty = null;
+      this.displayDialogAddItem = true;
+    }
+
+    addItem2() {
+      this.newAcquisition.arts.push({name: this.newItem.name, art: this.newItem._id, qty: this.newItemQty})
+      this.displayDialogAddItem = false;
+    }
+
+    createAcquisition() {
+      var i;
+      var msgAux;
+      if (this.newAcquisition.arts.length < 1 || this.newAcquisition.coments1==null) {
+        this.msgs = [];
+        msgAux = null;
+        if (this.newAcquisition.arts.length < 1) {
+          msgAux = 'Se requiere al menos un elemento a ser retirado';
+        } else if(this.newAcquisition.coments1==null) {
+          msgAux = 'Comentarios requeridos';
+        }
+        this.msgs.push({severity:'error', summary:'Error', detail:msgAux});
+      }
+       else {
+        for (i = 0; i < this.newAcquisition.arts.length; i++) {
+          delete this.newAcquisition.arts[i].name;
+        }
+        this.newAcquisition.status = "Espera"
+        this.showAcquisitionService.createAcquisition(this.newAcquisition).subscribe(res =>{console.log('response is ', res)});
+        this.getAcquisition();
         this.displayDialogNew = false;
+      }
     }
 
     cancelAcq() {
         this.acquisition.status = "Cancelado"
         this.showAcquisitionService.updateStatusAcq(this.acquisition).subscribe(res =>{console.log('response is ', res)});
-        this.displayDialogEdit = false;
+        this.displayDialogReceive = false;
     }
 
     receiveAcq() {
         this.acquisition.status = "Recibido"
         this.showAcquisitionService.updateStatusAcq(this.acquisition).subscribe(res =>{console.log('response is ', res)});
-        this.displayDialogEdit = false;
+        this.displayDialogReceive = false;
     }
 
     deleteAcq() {
-      if(!this.newAcquisition){
         this.showAcquisitionService.deleteAcq(this.acquisition).subscribe(res =>{console.log('response is ', res)});
-      }
         this.displayDialogNew = false;
     }
 
-    cloneAcq(c: Acquisition): Acquisition {
-        let acquisition = {};
-        for (let prop in c) {
-            acquisition[prop] = c[prop];
-        }
-        return acquisition;
-    }
 }
