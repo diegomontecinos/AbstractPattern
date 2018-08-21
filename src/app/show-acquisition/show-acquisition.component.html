@@ -9,7 +9,7 @@
   <div class="ui-g-6 center-table">
 
 
-<p-table [columns]="cols" [value]="acquisitions" selectionMode="single" [(selection)]="selectedAcq" (onRowSelect)="onRowSelect($event)" [autoLayout]="true" [paginator]="true" [rows]="15">
+<p-table [columns]="cols" [value]="acquisitions" selectionMode="single" [(selection)]="selectedAcquisition" (onRowSelect)="onRowSelect($event)" [autoLayout]="true" [paginator]="true" [rows]="15">
     <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of columns">
@@ -99,37 +99,263 @@
     </p-footer>
 </p-dialog>
 
-<p-dialog header="Detalle compra" [(visible)]="displayDialogEdit" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
-    <div class="ui-g ui-fluid" *ngIf="acquisition">
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="name">Código adquisición</label>
-            </div>
-            <div class="ui-g-8">
-                {{acquisition._id}}
-            </div>
+<p-dialog header="Detalle compra" [(visible)]="displayDialogEdit" [responsive]="true" showEffect="fade" [modal]="true" [width]="600">
+    <div class="ui-g ui-fluid" *ngIf="selectedAcquisition">
+      <div class="ui-g-6">
+        <div class="ui-g-12 espacio"><b>Código adquisición:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition._id}}</div>
+        <div class="ui-g-12 espacio"><b>Fecha adquisición:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.dateFormat1}}</div>
+        <div class="ui-g-12 espacio"><b>Comentarios adquisicón:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.coments1}}</div>
+        <div class="ui-g-12 espacio"><b>Status adquisición:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.status}}</div>
+      </div>
+      <div class="ui-g-6"></div>
+      <div class="ui-g-12">
+          <p-table [columns]="cols2" [value]="selectedAcquisition.arts" [autoLayout]="true">
+              <ng-template pTemplate="header" let-columns>
+                  <tr>
+                      <th *ngFor="let col of columns">
+                          {{col.header}}
+                      </th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-rowData let-columns="columns">
+                  <tr [pSelectableRow]="rowData">
+                      <td *ngFor="let col of columns">
+                          {{rowData[col.field]}}
+                      </td>
+                  </tr>
+              </ng-template>
+          </p-table>
         </div>
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="qty">Comentarios adquisición:</label>
-            </div>
-            <div class="ui-g-8">
-                {{acquisition.coments}}
-            </div>
+      </div>
+      <p-footer>
+              <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                  <button type="button" pButton icon="fa fa-close" (click)="cancelAcquisition()" label="Cancelar"></button>
+              </div>
+      </p-footer>
+</p-dialog>
+
+<p-dialog header="Detalle compra" [(visible)]="displayDialogConfirm" [responsive]="true" showEffect="fade" [modal]="true" [width]="600">
+    <div class="ui-g ui-fluid" *ngIf="selectedAcquisition">
+      <div class="ui-g-6">
+        <div class="ui-g-12 espacio"><b>Código adquisición:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition._id}}</div>
+        <div class="ui-g-12 espacio"><b>Fecha adquisición:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.dateFormat1}}</div>
+        <div class="ui-g-12 espacio"><b>Comentarios adquisicón:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.coments1}}</div>
+        <div class="ui-g-12 espacio"><b>Status adquisición:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.status}}</div>
+      </div>
+      <div class="ui-g-6">
+        <div class="ui-g-12 espacio"><b>Comentarios confirmación:</b></div>
+        <div class="ui-g-12 espacio2"><textarea  [rows]="3" pInputTextarea [(ngModel)]="selectedAcquisition.coments2"></textarea></div>
+      </div>
+      <div class="ui-g-12">
+          <p-table [columns]="cols2" [value]="selectedAcquisition.arts" [autoLayout]="true">
+              <ng-template pTemplate="header" let-columns>
+                  <tr>
+                      <th *ngFor="let col of columns">
+                          {{col.header}}
+                      </th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-rowData let-columns="columns">
+                  <tr [pSelectableRow]="rowData">
+                      <td *ngFor="let col of columns">
+                          {{rowData[col.field]}}
+                      </td>
+                  </tr>
+              </ng-template>
+          </p-table>
         </div>
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="qty">Comentarios confirmación:</label>
-            </div>
-            <div class="ui-g-8">
-                <textarea  [rows]="3" pInputTextarea [(ngModel)]="acquisition.coments2"></textarea>
-            </div>
+      </div>
+      <p-footer>
+              <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                  <button type="button" pButton icon="fa fa-check" (click)="confirmAcquisition()" label="Confirmar"></button>
+                  <button type="button" pButton icon="fa fa-close" (click)="rejectAcquisition()" label="Rechazar"></button>
+              </div>
+      </p-footer>
+</p-dialog>
+
+<p-dialog header="Detalle compra" [(visible)]="displayDialogConfirmGroser" [responsive]="true" showEffect="fade" [modal]="true" [width]="600">
+    <div class="ui-g ui-fluid" *ngIf="selectedAcquisition">
+      <div class="ui-g-6">
+        <div class="ui-g-12 espacio"><b>Código adquisición:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition._id}}</div>
+        <div class="ui-g-12 espacio"><b>Fecha adquisición:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.dateFormat1}}</div>
+        <div class="ui-g-12 espacio"><b>Comentarios adquisicón:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.coments1}}</div>
+        <div class="ui-g-12 espacio"><b>Status adquisición:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.status}}</div>
+      </div>
+      <div class="ui-g-6">
+        <div class="ui-g-12 espacio"><b>Fecha confirmación:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.dateFormat2}}</div>
+        <div class="ui-g-12 espacio"><b>Comentarios confirmación:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.coments2}}</div>
+      </div>
+      <div class="ui-g-12">
+          <p-table [columns]="cols2" [value]="selectedAcquisition.arts" [autoLayout]="true">
+              <ng-template pTemplate="header" let-columns>
+                  <tr>
+                      <th *ngFor="let col of columns">
+                          {{col.header}}
+                      </th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-rowData let-columns="columns">
+                  <tr [pSelectableRow]="rowData">
+                      <td *ngFor="let col of columns">
+                          {{rowData[col.field]}}
+                      </td>
+                  </tr>
+              </ng-template>
+          </p-table>
         </div>
-    </div>
-    <p-footer>
-            <div class="ui-dialog-buttonpane ui-helper-clearfix">
-                <button type="button" pButton icon="fa fa-close" (click)="cancelAcq()" label="Cancelar"></button>
-                <button type="button" pButton icon="fa fa-check" (click)="receiveAcq()" label="Recibir"></button>
-            </div>
-    </p-footer>
+      </div>
+</p-dialog>
+
+<p-dialog header="Detalle compra" [(visible)]="displayDialogDispatch" [responsive]="true" showEffect="fade" [modal]="true" [width]="600">
+    <div class="ui-g ui-fluid" *ngIf="selectedAcquisition">
+      <div class="ui-g-6">
+        <div class="ui-g-12 espacio"><b>Código adquisición:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition._id}}</div>
+        <div class="ui-g-12 espacio"><b>Fecha adquisición:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.dateFormat1}}</div>
+        <div class="ui-g-12 espacio"><b>Comentarios adquisicón:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.coments1}}</div>
+        <div class="ui-g-12 espacio"><b>Status adquisición:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.status}}</div>
+      </div>
+      <div class="ui-g-6">
+        <div class="ui-g-12 espacio"><b>Fecha confirmación:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.dateFormat2}}</div>
+        <div class="ui-g-12 espacio"><b>Comentarios confirmación:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.coments2}}</div>
+        <div class="ui-g-12 espacio"><b>Comentarios despacho:</b></div>
+        <div class="ui-g-12 espacio2"><textarea  [rows]="3" pInputTextarea [(ngModel)]="selectedAcquisition.coments3"></textarea></div>
+      </div>
+      <div class="ui-g-12">
+          <p-table [columns]="cols2" [value]="selectedAcquisition.arts" [autoLayout]="true">
+              <ng-template pTemplate="header" let-columns>
+                  <tr>
+                      <th *ngFor="let col of columns">
+                          {{col.header}}
+                      </th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-rowData let-columns="columns">
+                  <tr [pSelectableRow]="rowData">
+                      <td *ngFor="let col of columns">
+                          {{rowData[col.field]}}
+                      </td>
+                  </tr>
+              </ng-template>
+          </p-table>
+        </div>
+      </div>
+      <p-footer>
+              <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                  <button type="button" pButton icon="fa fa-check" (click)="dispatchAcquisition()" label="Despachar"></button>
+              </div>
+      </p-footer>
+</p-dialog>
+
+<p-dialog header="Detalle compra" [(visible)]="displayDialogDispatch2" [responsive]="true" showEffect="fade" [modal]="true" [width]="600">
+    <div class="ui-g ui-fluid" *ngIf="selectedAcquisition">
+      <div class="ui-g-6">
+        <div class="ui-g-12 espacio"><b>Código adquisición:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition._id}}</div>
+        <div class="ui-g-12 espacio"><b>Fecha adquisición:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.dateFormat1}}</div>
+        <div class="ui-g-12 espacio"><b>Comentarios adquisicón:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.coments1}}</div>
+        <div class="ui-g-12 espacio"><b>Status adquisición:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.status}}</div>
+      </div>
+      <div class="ui-g-6">
+        <div class="ui-g-12 espacio"><b>Fecha adquisición:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.dateFormat2}}</div>
+        <div class="ui-g-12 espacio"><b>Comentarios adquisicón:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.coments2}}</div>
+        <div class="ui-g-12 espacio"><b>Fecha Despacho:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.dateFormat3}}</div>
+        <div class="ui-g-12 espacio"><b>Comentarios Despacho:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.coments3}}</div>
+      </div>
+      <div class="ui-g-12">
+          <p-table [columns]="cols2" [value]="selectedAcquisition.arts" [autoLayout]="true">
+              <ng-template pTemplate="header" let-columns>
+                  <tr>
+                      <th *ngFor="let col of columns">
+                          {{col.header}}
+                      </th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-rowData let-columns="columns">
+                  <tr [pSelectableRow]="rowData">
+                      <td *ngFor="let col of columns">
+                          {{rowData[col.field]}}
+                      </td>
+                  </tr>
+              </ng-template>
+          </p-table>
+        </div>
+      </div>
+</p-dialog>
+
+<p-dialog header="Detalle compra" [(visible)]="displayDialogReceive" [responsive]="true" showEffect="fade" [modal]="true" [width]="600">
+    <div class="ui-g ui-fluid" *ngIf="selectedAcquisition">
+      <div class="ui-g-6">
+        <div class="ui-g-12 espacio"><b>Código adquisición:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition._id}}</div>
+        <div class="ui-g-12 espacio"><b>Fecha adquisición:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.dateFormat1}}</div>
+        <div class="ui-g-12 espacio"><b>Comentarios adquisicón:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.coments1}}</div>
+        <div class="ui-g-12 espacio"><b>Status adquisición:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.status}}</div>
+      </div>
+      <div class="ui-g-6">
+        <div class="ui-g-12 espacio"><b>Fecha adquisición:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.dateFormat2}}</div>
+        <div class="ui-g-12 espacio"><b>Comentarios adquisicón:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.coments2}}</div>
+        <div class="ui-g-12 espacio"><b>Fecha Despacho:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.dateFormat3}}</div>
+        <div class="ui-g-12 espacio"><b>Comentarios Despacho:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.coments3}}</div>
+        <div class="ui-g-12 espacio"><b>Comentarios Recepción:</b></div>
+        <div class="ui-g-12 espacio2"><textarea  [rows]="3" pInputTextarea [(ngModel)]="selectedAcquisition.coments4"></textarea></div>
+      </div>
+      <div class="ui-g-12">
+          <p-table [columns]="cols2" [value]="selectedAcquisition.arts" [autoLayout]="true">
+              <ng-template pTemplate="header" let-columns>
+                  <tr>
+                      <th *ngFor="let col of columns">
+                          {{col.header}}
+                      </th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-rowData let-columns="columns">
+                  <tr [pSelectableRow]="rowData">
+                      <td *ngFor="let col of columns">
+                          {{rowData[col.field]}}
+                      </td>
+                  </tr>
+              </ng-template>
+          </p-table>
+        </div>
+      </div>
+      <p-footer>
+              <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                  <button type="button" pButton icon="fa fa-check" (click)="receiveAcquisition()" label="Recibir"></button>
+              </div>
+      </p-footer>
+</p-dialog>
+
+<p-dialog header="Detalle compra" [(visible)]="displayDialogFinal" [responsive]="true" showEffect="fade" [modal]="true" [width]="600">
+    <div class="ui-g ui-fluid" *ngIf="selectedAcquisition">
+      <div class="ui-g-6">
+        <div class="ui-g-12 espacio"><b>Código adquisición:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition._id}}</div>
+        <div class="ui-g-12 espacio"><b>Fecha adquisición:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.dateFormat1}}</div>
+        <div class="ui-g-12 espacio"><b>Comentarios adquisicón:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.coments1}}</div>
+        <div class="ui-g-12 espacio"><b>Status adquisición:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.status}}</div>
+      </div>
+      <div class="ui-g-6">
+        <div class="ui-g-12 espacio"><b>Fecha adquisición:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.dateFormat2}}</div>
+        <div class="ui-g-12 espacio"><b>Comentarios adquisicón:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.coments2}}</div>
+        <div class="ui-g-12 espacio"><b>Fecha Despacho:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.dateFormat3}}</div>
+        <div class="ui-g-12 espacio"><b>Comentarios Despacho:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.coments3}}</div>
+        <div class="ui-g-12 espacio"><b>Fecha Recepción:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.dateFormat4}}</div>
+        <div class="ui-g-12 espacio"><b>Comentarios Recepción:</b></div> <div class="ui-g-12 espacio2">{{selectedAcquisition.coments4}}</div>
+      </div>
+      <div class="ui-g-12">
+          <p-table [columns]="cols2" [value]="selectedAcquisition.arts" [autoLayout]="true">
+              <ng-template pTemplate="header" let-columns>
+                  <tr>
+                      <th *ngFor="let col of columns">
+                          {{col.header}}
+                      </th>
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-rowData let-columns="columns">
+                  <tr [pSelectableRow]="rowData">
+                      <td *ngFor="let col of columns">
+                          {{rowData[col.field]}}
+                      </td>
+                  </tr>
+              </ng-template>
+          </p-table>
+        </div>
+      </div>
 </p-dialog>

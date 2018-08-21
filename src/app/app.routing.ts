@@ -15,7 +15,7 @@ export const AppRoutes: Routes = [
     { path: 'bodeguero/home', component: HomeBodegueroComponent },
     { path: 'bodeguero/despachos', component: ShowDispatchComponent },
     { path: 'bodeguero/inventario', component: ShowInventoryComponent },
-    { path: 'bodeguero/adquisiciones', component: ShowAcquisitionComponent },
+    { path: 'adquisiciones', component: ShowAcquisitionComponent },
     { path: 'bodeguero/ordenes', component: ShowOrderComponent },
     { path: 'bodeguero/ordenes0', component: ShowOrder0Component },
     { path: 'bodeguero/retiros', component: ShowWithdrawComponent }

@@ -24,7 +24,7 @@ export class LoginComponent {
         console.log('result is ', result);
         if(result['status'] === 'success') {
           this.dataGroser = result['data'][0];
-          sessionStorage.setItem('user', this.user.username);
+          sessionStorage.setItem('user', this.dataGroser.name);
           sessionStorage.setItem('type', this.dataGroser.type);
           sessionStorage.setItem('wh', this.dataGroser.wh);
           sessionStorage.setItem('whName', this.dataGroser.whName);

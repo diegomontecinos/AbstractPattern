@@ -17,21 +17,23 @@ export class MenubarGrocerComponent implements OnInit {
 
   type: string;
   username: string;
+  whName: string;
 
   ngOnInit() {
     this.username = sessionStorage.getItem('user')
-    this.type = sessionStorage.getItem('whName')
+    this.type = sessionStorage.getItem('type')
+    this.whName = sessionStorage.getItem('whName')
     if(sessionStorage.getItem('type')=='admin'){
       this.items = [
         {label: 'Inventario', routerLink: ['/bodeguero/inventario']},
-        {label: 'Adquisiciones', routerLink: ['/bodeguero/adquisiciones']},
+        {label: 'Adquisiciones', routerLink: ['/adquisiciones']},
       ];
     }
     else if(sessionStorage.getItem('type')=='central'){
       this.items = [
         {label: 'Inventario', routerLink: ['/bodeguero/inventario']},
         {label: 'Despachos', routerLink: ['/bodeguero/despachos']},
-        {label: 'Adquisiciones', routerLink: ['/bodeguero/adquisiciones']},
+        {label: 'Adquisiciones', routerLink: ['/adquisiciones']},
         {label: 'Ordenes', routerLink: ['/bodeguero/ordenes0']},
         {label: 'Retiros', routerLink: ['/bodeguero/retiros']}
       ];
