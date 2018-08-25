@@ -1,0 +1,39 @@
+<p-growl baseZIndex=80 [(value)]="msgs"></p-growl>
+
+<div id="layout-content">
+  <div>
+    <app-menubar-grocer></app-menubar-grocer>
+  </div>
+  <div class="ui-g-1 margen">
+  </div>
+
+<div class="ui-g-6 center-table">
+<p-table #dt [columns]="cols" [value]="warehouse" selectionMode="single" [(selection)]="selectedAcquisition" (onRowSelect)="onRowSelect($event)" [autoLayout]="true" [paginator]="true" [rows]="15">
+  <ng-template pTemplate="caption">
+      <div style="text-align: right">
+          <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+          <input type="text" pInputText size="50" placeholder="Búsqueda" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+      </div>
+  </ng-template>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns">
+                {{col.header}}
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [pSelectableRow]="rowData">
+            <td *ngFor="let col of columns">
+                {{rowData[col.field]}}
+            </td>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="summary" let-rowData>
+        <div style="text-align:left">
+            <button type="button" pButton icon="fa-plus" (click)="showDialogToAdd()" label="Agregar bodega"></button>
+        </div>
+    </ng-template>
+</p-table>
+</div>

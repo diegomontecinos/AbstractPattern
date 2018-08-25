@@ -27,6 +27,7 @@ export class MenubarGrocerComponent implements OnInit {
       this.items = [
         {label: 'Inventario', routerLink: ['/bodeguero/inventario']},
         {label: 'Adquisiciones', routerLink: ['/adquisiciones']},
+        {label: 'Bodegas', routerLink: ['/bodegas']}
       ];
     }
     else if(sessionStorage.getItem('type')=='central'){

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ShowAcquisitionService } from './show-acquisition.service';
+import { ShowInventoryService } from '../show-inventory/show-inventory.service';
 import { Acquisition } from '../models/acquisition.model';
 import { TableModule } from 'primeng/table';
 import { NgModule } from '@angular/core';
@@ -16,7 +17,7 @@ import { Router } from '@angular/router';
   selector: 'app-show-acquisition',
   templateUrl: './show-acquisition.component.html',
   styleUrls: ['./show-acquisition.component.css'],
-  providers: [ ShowAcquisitionService ]
+  providers: [ ShowAcquisitionService, ShowInventoryService ]
 })
 
 export class ShowAcquisitionComponent implements OnInit {
@@ -44,11 +45,14 @@ export class ShowAcquisitionComponent implements OnInit {
     newItemQty: number;
     msgs: Message[] = [];
     userType: string;
+    groser_wh: string;
 
-    constructor(private showAcquisitionService: ShowAcquisitionService, private router: Router) { }
+    constructor(private showAcquisitionService: ShowAcquisitionService, private router: Router,
+                private showInventoryService: ShowInventoryService) { }
 
     ngOnInit() {
-        this.userType = sessionStorage.getItem('type')
+        this.userType = sessionStorage.getItem('type');
+        this.groser_wh = sessionStorage.getItem('wh');
         if(this.userType == 'admin' || this.userType == 'central') {
         }
         else {
@@ -184,6 +188,73 @@ export class ShowAcquisitionComponent implements OnInit {
         this.acquisition.status = "Cancelado"
         this.showAcquisitionService.updateStatusAcq(this.acquisition).subscribe(res =>{console.log('response is ', res)});
         this.displayDialogReceive = false;
+    }
+
+    cancelAcquisition() {
+      this.showAcquisitionService.cancelAcquisition(this.selectedAcquisition._id).subscribe(res =>{console.log('response is ', res)});
+      let index = this.acquisitions.indexOf(this.selectedAcquisition);
+      this.acquisitions = this.acquisitions.filter((val, i) => i != index);
+      this.displayDialogEdit = false;
+    }
+
+    confirmAcquisition() {
+      if(this.selectedAcquisition.coments2 == null) {
+        this.msgs = [];
+        this.msgs.push({severity:'error', summary:'Error', detail:'Comentarios requeridos'});
+      }
+      else {
+        this.selectedAcquisition.status = "Confirmado";
+        this.selectedAcquisition.date2 = Date.now();
+        this.showAcquisitionService.updateAcquisition(this.selectedAcquisition).subscribe(res =>{console.log('response is ', res)});
+        this.displayDialogConfirm = false;
+      }
+    }
+
+    rejectAcquisition() {
+      if(this.selectedAcquisition.coments2 == null) {
+        this.msgs = [];
+        this.msgs.push({severity:'error', summary:'Error', detail:'Comentarios requeridos'});
+      }
+      else {
+        this.selectedAcquisition.status = "Rechazado";
+        this.selectedAcquisition.date2 = Date.now();
+        this.showAcquisitionService.updateAcquisition(this.selectedAcquisition).subscribe(res =>{console.log('response is ', res)});
+        this.displayDialogConfirm = false;
+      }
+    }
+
+    dispatchAcquisition() {
+      if(this.selectedAcquisition.coments3 == null) {
+        this.msgs = [];
+        this.msgs.push({severity:'error', summary:'Error', detail:'Comentarios requeridos'});
+      }
+      else {
+        this.selectedAcquisition.status = "Despachado";
+        this.selectedAcquisition.date3 = Date.now();
+        this.showAcquisitionService.updateAcquisition(this.selectedAcquisition).subscribe(res =>{console.log('response is ', res)});
+        this.displayDialogDispatch = false;
+      }
+    }
+
+    receiveAcquisition() {
+      if(this.selectedAcquisition.coments4 == null) {
+        this.msgs = [];
+        this.msgs.push({severity:'error', summary:'Error', detail:'Comentarios requeridos'});
+      }
+      else {
+        var actualItem;
+        var actualStock;
+        var i;
+        for (i = 0; i < this.selectedAcquisition.arts.length; i++) {
+          actualItem = this.arts.find(objAux => objAux._id == this.selectedAcquisition.arts[i].art);
+          actualStock = actualItem.stock_wh.find(objAux => objAux.wh == this.groser_wh).stock;
+          this.showInventoryService.updateStock(this.selectedAcquisition.arts[i].art, {wh: this.groser_wh, stock: actualStock + this.selectedAcquisition.arts[i].qty}).subscribe(res =>{console.log('response is ', res)});
+        }
+        this.selectedAcquisition.status = "Recibido";
+        this.selectedAcquisition.date4 = Date.now();
+        this.showAcquisitionService.updateAcquisition(this.selectedAcquisition).subscribe(res =>{console.log('response is ', res)});
+        this.displayDialogReceive = false;
+      }
     }
 
     receiveAcq() {

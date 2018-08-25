@@ -29,11 +29,28 @@ export class ShowAcquisitionService {
         id: acquisition._id,
         coments2: acquisition.coments2,
         status: acquisition.status
-    })
-}
+      })
+    }
+
+    updateAcquisition(acquisition: Acquisition){
+      return this.http.post('/api/acquisition/updateAcquisition',{
+        id: acquisition._id,
+        status: acquisition.status,
+        date2: acquisition.date2,
+        date3: acquisition.date3,
+        date4: acquisition.date4,
+        coments2: acquisition.coments2,
+        coments3: acquisition.coments3,
+        coments4: acquisition.coments4
+      })
+    }
 
     deleteAcq(id){
       return this.http.post('/api/acquisition/deleteAcq',{id : id})
+    }
+
+    cancelAcquisition(id){
+      return this.http.post('/api/acquisition/cancelAcquisition',{id : id})
     }
 
     getAllWH(){

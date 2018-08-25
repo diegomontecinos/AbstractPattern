@@ -228,6 +228,36 @@ app.post('/api/acquisition/createAcquisition', (req, res) => {
         })
 })
 
+app.post('/api/acquisition/cancelAcquisition', (req, res) => {
+        Acquisition.findByIdAndRemove(req.body.id,
+            (err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+})
+
+app.post('/api/acquisition/updateAcquisition', (req, res) => {
+        Acquisition.update(
+            { _id: req.body.id },
+            { status: req.body.status,
+              date2: req.body.date2,
+              date3: req.body.date3,
+              date4: req.body.date4,
+              coments2: req.body.coments2,
+              coments3: req.body.coments3,
+              coments4: req.body.coments4 },
+            (err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+})
+
 app.post('/api/acquisition/updateStatusAcq', (req, res) => {
         Acquisition.update(
             { _id: req.body.id },

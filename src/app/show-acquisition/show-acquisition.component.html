@@ -6,10 +6,15 @@
   </div>
   <div class="ui-g-1 margen">
   </div>
-  <div class="ui-g-6 center-table">
 
-
-<p-table [columns]="cols" [value]="acquisitions" selectionMode="single" [(selection)]="selectedAcquisition" (onRowSelect)="onRowSelect($event)" [autoLayout]="true" [paginator]="true" [rows]="15">
+<div class="ui-g-6 center-table">
+<p-table #dt [columns]="cols" [value]="acquisitions" selectionMode="single" [(selection)]="selectedAcquisition" (onRowSelect)="onRowSelect($event)" [autoLayout]="true" [paginator]="true" [rows]="15">
+  <ng-template pTemplate="caption">
+      <div style="text-align: right">
+          <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+          <input type="text" pInputText size="50" placeholder="Búsqueda" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+      </div>
+  </ng-template>
     <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of columns">
@@ -30,9 +35,7 @@
             <button type="button" pButton icon="fa-plus" (click)="showDialogToAdd()" label="Agregar compra"></button>
         </div>
     </ng-template>
-
 </p-table>
-
 </div>
 
 <p-dialog header="Detalle compra" [(visible)]="displayDialogNew" [responsive]="true" showEffect="fade" [modal]="true" [width]="600">

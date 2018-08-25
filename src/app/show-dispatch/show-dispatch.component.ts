@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ShowDispatchService } from './show-dispatch.service';
+import { ShowInventoryService } from '../show-inventory/show-inventory.service';
 import { Dispatch } from '../models/dispatch.model';
 import { Warehouse } from '../models/warehouse.model';
 import { Inventory } from '../models/inventory.model';
@@ -14,7 +15,7 @@ import { DialogModule } from 'primeng/dialog';
   selector: 'app-show-dispatch',
   templateUrl: './show-dispatch.component.html',
   styleUrls: ['./show-dispatch.component.css'],
-  providers: [ShowDispatchService]
+  providers: [ShowDispatchService, ShowInventoryService]
 })
 export class ShowDispatchComponent implements OnInit {
 
@@ -33,11 +34,13 @@ export class ShowDispatchComponent implements OnInit {
   newOrigin: Warehouse;
   newArt: Inventory;
   arts: Inventory[];
+  groser_wh: string;
 
-  constructor(private showDispatchService: ShowDispatchService) { }
+  constructor(private showDispatchService: ShowDispatchService, private showInventoryService: ShowInventoryService) { }
 
 
   ngOnInit() {
+      this.groser_wh = sessionStorage.getItem('wh');
       this.getDispatchs();
 
       this.cols = [
@@ -60,6 +63,13 @@ export class ShowDispatchComponent implements OnInit {
     this.showDispatchService.getAllWH().subscribe(result => {this.warehouse = result['data'];
       this.showDispatchService.getAllInv().subscribe(result => {this.arts = result['data'];
         this.showDispatchService.getAllDis().subscribe(result => {this.dispatchs = result['data'];
+          var filtered = [];
+          for (var i = 0; i < this.dispatchs.length; i++) {
+            if (this.dispatchs[i].destination == this.groser_wh || this.dispatchs[i].origin == this.groser_wh) {
+                filtered.push(this.dispatchs[i]);
+            }
+          }
+          this.dispatchs = filtered;
           this.parseDispatchs();
         });
       });
@@ -113,6 +123,14 @@ export class ShowDispatchComponent implements OnInit {
   }
 
   receiveDispatch() {
+      var actualItem;
+      var actualStock;
+      var i;
+      for (i = 0; i < this.selectedDispatch.arts.length; i++) {
+        actualItem = this.arts.find(objAux => objAux._id == this.selectedDispatch.arts[i].art);
+        actualStock = actualItem.stock_wh.find(objAux => objAux.wh == this.selectedDispatch.destination).stock;
+        this.showInventoryService.updateStock(this.selectedDispatch.arts[i].art, {wh: this.selectedDispatch.destination, stock: actualStock + this.selectedDispatch.arts[i].qty}).subscribe(res =>{console.log('response is ', res)});
+      }
       this.showDispatchService.updateStatusDis(this.selectedDispatch, "Recibido").subscribe(res =>{console.log('response is ', res)});
       this.getDispatchs();
       this.displayDialogEdit = false;
