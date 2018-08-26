@@ -24,6 +24,18 @@ export class ShowDispatchService {
       })
   }
 
+  createDispatch(dispatch: Dispatch){
+    return this.http.post('/api/dispatch/createDispatch',{
+        arts: dispatch.arts,
+        origin: dispatch.origin,
+        destination: dispatch.destination,
+        date1: dispatch.date1,
+        status: "Despachado",
+        coments1: dispatch.coments1,
+        order: null
+      })
+  }
+
   updateStatusDis(dispatch: Dispatch, n_status){
     return this.http.post('/api/dispatch/updateStatusDis',{
       id: dispatch._id,

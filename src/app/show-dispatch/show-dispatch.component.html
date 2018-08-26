@@ -1,12 +1,13 @@
+<p-growl baseZIndex=80 styleClass="myGrowl" [(value)]="msgs"></p-growl>
+
 <div id="layout-content">
   <div>
     <app-menubar-grocer></app-menubar-grocer>
   </div>
   <div class="ui-g-1 margen">
   </div>
-  <div class="ui-g-6 center-table">
 
-
+<div class="ui-g-6 center-table">
 <p-table #dt [columns]="cols" [value]="dispatchs" selectionMode="single" [(selection)]="selectedDispatch" (onRowSelect)="onRowSelect($event)" [autoLayout]="true" [paginator]="true" [rows]="15">
   <ng-template pTemplate="caption">
           <div style="text-align: right">
@@ -36,44 +37,73 @@
 </p-table>
 </div>
 
-<p-dialog header="Agregar despacho" [(visible)]="displayDialogNew" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
-    <div class="ui-g-12">
-        <div class="ui-g-4">
-            <label for="name">Articulo</label>
-        </div>
-        <div class="ui-g-8">
-            <p-dropdown [options]="arts" [(ngModel)]="newArt" placeholder="Seleccione articulo" optionLabel="name" [showClear]="true" filter="true"></p-dropdown>
-        </div>
-    </div>
-    <div class="ui-g-12">
-        <div class="ui-g-4">
-            <label for="name">Origen</label>
-        </div>
-        <div class="ui-g-8">
-            <p-dropdown [options]="warehouse" [(ngModel)]="newOrigin" placeholder="Seleccione origen" optionLabel="name" [showClear]="true"></p-dropdown>
-        </div>
-    </div>
-    <div class="ui-g-12">
-        <div class="ui-g-4">
-            <label for="name">Destino</label>
-        </div>
-        <div class="ui-g-8">
-            <p-dropdown [options]="warehouse" [(ngModel)]="newDestination" placeholder="Seleccione destino" optionLabel="name" [showClear]="true"></p-dropdown>
-        </div>
-    </div>
-    <div class="ui-g-12" *ngIf="dispatch">
+<p-dialog header="Agregar despacho" [(visible)]="displayDialogNew" [responsive]="true" showEffect="fade" [modal]="true" [width]="600">
+    <div class="ui-g ui-fluid" *ngIf="newDispatch">
+      <div class="ui-g-6">
+        <div class="ui-g-12"><b>Destino:</b></div>
         <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="name">Cantidad</label>
+          <p-dropdown [options]="warehouse" [(ngModel)]="newDestination" placeholder="Elegir destino" optionLabel="name" [showClear]="true" filter="true" (onChange)="setDestination()"></p-dropdown>
+        </div>
+      </div>
+      <div class="ui-g-6">
+        <div class="ui-g-12"><b>Comentarios petición:</b></div>
+        <div class="ui-g-12"><textarea  [rows]="3" pInputTextarea [(ngModel)]="newDispatch.coments1"></textarea></div>
+      </div>
+    <div class="ui-g-12">
+        <p-table [columns]="cols2" [value]="newDispatch.arts" [autoLayout]="true">
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of columns">
+                        {{col.header}}
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr [pSelectableRow]="rowData">
+                    <td *ngFor="let col of columns">
+                        {{rowData[col.field]}}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+      </div>
+    </div>
+    <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                <button type="button" pButton icon="fa fa-check" (click)="createDispatch()" label="Crear despacho"></button>
+                <button type="button" pButton icon="fa fa-plus" (click)="addItem()" label="Añadir artículo"></button>
             </div>
-            <div class="ui-g-8">
-                <p-spinner [(ngModel)]="dispatch.qty"></p-spinner>
-            </div>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Agregar item" [(visible)]="displayDialogAddItem" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
+    <div class="ui-g-12">
+        <div class="ui-g-4">
+            <label for="name">Articulo:</label>
+        </div>
+        <div class="ui-g-8">
+            <p-dropdown [options]="arts" [(ngModel)]="newItem" placeholder="Seleccione articulo" optionLabel="name" [showClear]="true" filter="true" (onChange)="getStock()"></p-dropdown>
+        </div>
+    </div>
+    <div class="ui-g-12">
+        <div class="ui-g-4">
+            <label for="name">Stock:</label>
+        </div>
+        <div class="ui-g-8">
+          {{newItemStock}}
+        </div>
+    </div>
+    <div class="ui-g-12">
+        <div class="ui-g-4">
+            <label for="name">Cantidad:</label>
+        </div>
+        <div class="ui-g-8">
+            <p-spinner [(ngModel)]="newItemQty" [min]="1" [max]=newItemStock></p-spinner>
         </div>
     </div>
     <p-footer>
             <div class="ui-dialog-buttonpane ui-helper-clearfix">
-                <button type="button" pButton icon="fa fa-close" (click)="createDispatch()" label="Agregar"></button>
+                <button type="button" pButton icon="fa fa-close" (click)="addItem2()" label="Agregar"></button>
             </div>
     </p-footer>
 </p-dialog>
@@ -146,11 +176,4 @@
           </div>
         </div>
     </div>
-    <p-footer>
-            <div class="ui-dialog-buttonpane ui-helper-clearfix">
-              <!--  <button type="button" pButton icon="fa fa-close" (click)="cancelDispatch()" label="Cancelar"></button> -->
-                <button type="button" pButton icon="fa fa-ban" (click)="rejectDispatch()" label="Rechazar"></button>
-                <button type="button" pButton icon="fa fa-check" (click)="receiveDispatch()" label="Recibir"></button>
-            </div>
-    </p-footer>
 </p-dialog>

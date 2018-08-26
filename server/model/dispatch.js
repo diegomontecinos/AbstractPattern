@@ -10,7 +10,7 @@ const dispatchSchema = new Schema({
   arts: [artSchema],
   origin: { type: Schema.Types.ObjectId, required: true},
   destination: { type: Schema.Types.ObjectId, required: true},
-  order: { type: Schema.Types.ObjectId},
+  order: { type: Schema.Types.ObjectId },
   status: { type: String, required: true },
   coments1: { type: String, required: true},
   coments2: { type: String},

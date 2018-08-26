@@ -3,6 +3,8 @@ export interface Dispatch {
     arts?;
     origin?;
     destination?;
+    originParsed?;
+    destinationParsed?;
     status?;
     date1?;
     date2?;
