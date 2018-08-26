@@ -17,3 +17,7 @@ node app.js-- en la carpeta /Server -- para iniciar Express en el puerto localho
 sudo service mongod start -- para iniciar el servicio de mongo y con este la base de datos.
 
 
+Base de datos:
+Cargar la base de datos que se encuentra en la carpeta db en MongoDB aplicando agregar una 
+nueva colección con los nombres de cada archivo .json en dicha carpeta como se ve en la imagen BD_CompasMongoDB.png 
+
