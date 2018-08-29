@@ -13,6 +13,7 @@ import * as moment from 'moment-timezone';
 import {GrowlModule} from 'primeng/growl';
 import {Message} from 'primeng/components/common/api';
 import { ShowInventoryService } from '../show-inventory/show-inventory.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-show-withdraw',
@@ -51,13 +52,21 @@ export class ShowWithdrawComponent implements OnInit {
   selectedItem: any;
   givebackAux: number;
   msgs: Message[] = [];
-  groser_wh: string = "5b4d6a850ea6ac19a061b34d";
+  groser_wh: string;
   stockAux: number;
+  userType: string;
 
   constructor(private showWithdrawService: ShowWithdrawService,
-  private showInventoryService: ShowInventoryService) {}
+  private showInventoryService: ShowInventoryService, private router: Router) {}
 
   ngOnInit() {
+      this.userType = sessionStorage.getItem('type')
+      this.groser_wh = sessionStorage.getItem('wh');
+      if(this.userType == 'central' || this.userType == 'bodeguero') {
+      }
+      else {
+        this.router.navigate(['']);
+      }
       this.getWithdraws();
 
       this.cols = [
@@ -91,8 +100,15 @@ export class ShowWithdrawComponent implements OnInit {
   getWithdraws() {
     this.showWithdrawService.getAllWH().subscribe(result => {this.warehouse = result['data'];
       this.showWithdrawService.getAllInv().subscribe(result => {this.arts = result['data'];
-        this.showWithdrawService.getAllWithdraw().subscribe(result => {this.withdraws = result['data'];
-          this.showWithdrawService.getAllWorkers().subscribe(result => {this.workers = result['data'];
+        this.showWithdrawService.getAllWorkers().subscribe(result => {this.workers = result['data'];
+          this.showWithdrawService.getAllWithdraw().subscribe(result => {this.withdraws = result['data'];
+          var filtered = [];
+          for (var i = 0; i < this.withdraws.length; i++) {
+            if (this.withdraws[i].warehouse == this.groser_wh) {
+                filtered.push(this.withdraws[i]);
+            }
+          }
+          this.withdraws = filtered;
           this.parseWithdraws();
           });
         });

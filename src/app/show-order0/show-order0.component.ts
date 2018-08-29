@@ -10,6 +10,7 @@ import { Message } from 'primeng/components/common/api';
 import { Dispatch } from '../models/dispatch.model';
 import * as moment from 'moment-timezone';
 import { ShowInventoryService } from '../show-inventory/show-inventory.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-show-order0',
@@ -39,16 +40,24 @@ export class ShowOrder0Component implements OnInit {
     newItem: any;
     warehouse: Warehouse[];
     workers: Worker[];
-    groser_wh: string = "5b4d6a850ea6ac19a061b34d";
     msgs: Message[] = [];
     artsXDispatch: any[];
     stockAux: number;
     originAux: any;
+    groser_wh: string;
+    userType: string;
 
     constructor(private showOrder0Service: ShowOrder0Service,
-    private showInventoryService: ShowInventoryService) {}
+    private showInventoryService: ShowInventoryService, private router: Router) {}
 
     ngOnInit() {
+        this.userType = sessionStorage.getItem('type')
+        this.groser_wh = sessionStorage.getItem('wh');
+        if(this.userType == 'central' || this.userType == 'bodeguero') {
+        }
+        else {
+          this.router.navigate(['']);
+        }
         this.getOrders();
 
         this.cols = [
@@ -68,8 +77,17 @@ export class ShowOrder0Component implements OnInit {
     getOrders() {
       this.showOrder0Service.getAllWH().subscribe(result => {this.warehouse = result['data'];
         this.showOrder0Service.getAllInv().subscribe(result => {this.arts = result['data'];
-          this.showOrder0Service.getAllOrd().subscribe(result => {this.orders = result['data'];
-            this.showOrder0Service.getAllWorkers().subscribe(result => {this.workers = result['data'];
+          this.showOrder0Service.getAllWorkers().subscribe(result => {this.workers = result['data'];
+            this.showOrder0Service.getAllOrd().subscribe(result => {this.orders = result['data'];
+            if(this.userType != "central") {
+              var filtered = [];
+              for (var i = 0; i < this.orders.length; i++) {
+                if (this.orders[i].destination == this.groser_wh) {
+                    filtered.push(this.orders[i]);
+                }
+              }
+              this.orders = filtered;
+            }
             this.parseOrders();
             });
           });
@@ -98,7 +116,11 @@ export class ShowOrder0Component implements OnInit {
 
     onRowSelect(event) {
       if(this.selectedOrder.status == "Espera") {
-        this.displayDialogEdit = true;
+        if(this.userType== "central"){
+          this.displayDialogEdit = true;
+        } else {
+          this.displayDialogFinal = true;
+        }
       }
       else {
         this.displayDialogFinal = true;
@@ -154,35 +176,47 @@ export class ShowOrder0Component implements OnInit {
     }
 
     createDispatch() {
-      var i;
-      var statusOrder: boolean = true;
-      var actualItem;
-      var actualStock;
-      var statusItem;
-      for (i = 0; i < this.newDispatch.arts.length; i++) {
-        if(this.newDispatch.arts[i].qty==this.newDispatch.arts[i].disp){
-          statusItem = "Despachado";
+      var msgAux;
+      if(this.newDispatch.coments1 == null || this.newDispatch.arts.length < 1) {
+        this.msgs = [];
+        msgAux = null;
+        if(this.newDispatch.arts.length < 1) {
+          msgAux = "Se debe añadir al menos un elemento al despacho";
+        } else if(this.newDispatch.coments1 == null) {
+          msgAux = "Faltan comentarios del despacho";
         }
-        else{
-          statusItem = "Espera";
-          statusOrder = false;
+        this.msgs.push({severity:'error', summary:'Error', detail:msgAux});
+      } else {
+        var i;
+        var statusOrder: boolean = true;
+        var actualItem;
+        var actualStock;
+        var statusItem;
+        for (i = 0; i < this.newDispatch.arts.length; i++) {
+          if(this.newDispatch.arts[i].qty==this.newDispatch.arts[i].disp){
+            statusItem = "Despachado";
+          }
+          else{
+            statusItem = "Espera";
+            statusOrder = false;
+          }
+          if(statusOrder==true){
+            this.showOrder0Service.updateOrderStatus({id: this.selectedOrder._id, status: "Finalizado"}).subscribe(res =>{console.log('response is ', res)});
+          }
+          actualItem = this.arts.find(objAux => objAux._id == this.newDispatch.arts[i].art);
+          actualStock = actualItem.stock_wh.find(objAux => objAux.wh == this.newDispatch.origin).stock;
+          this.showInventoryService.updateStock(this.newDispatch.arts[i].art, {wh: this.newDispatch.origin, stock: actualStock - this.newDispatch.arts[i].disp}).subscribe(res =>{console.log('response is ', res)});
+          this.showOrder0Service.updateOrderItem({id: this.selectedOrder._id, art: this.newDispatch.arts[i].art, status: statusItem, disp: this.newDispatch.arts[i].disp}).subscribe(res =>{console.log('response is ', res)});
+          this.newDispatch.arts[i] = {art: this.newDispatch.arts[i].art, qty: this.newDispatch.arts[i].disp};
         }
-        if(statusOrder==true){
-          this.showOrder0Service.updateOrderStatus({id: this.selectedOrder._id, status: "Finalizado"}).subscribe(res =>{console.log('response is ', res)});
-        }
-        actualItem = this.arts.find(objAux => objAux._id == this.newDispatch.arts[i].art);
-        actualStock = actualItem.stock_wh.find(objAux => objAux.wh == this.newDispatch.origin).stock;
-        this.showInventoryService.updateStock(this.newDispatch.arts[i].art, {wh: this.newDispatch.origin, stock: actualStock - this.newDispatch.arts[i].disp}).subscribe(res =>{console.log('response is ', res)});
-        this.showOrder0Service.updateOrderItem({id: this.selectedOrder._id, art: this.newDispatch.arts[i].art, status: statusItem, disp: this.newDispatch.arts[i].disp}).subscribe(res =>{console.log('response is ', res)});
-        this.newDispatch.arts[i] = {art: this.newDispatch.arts[i].art, qty: this.newDispatch.arts[i].disp};
+        this.newDispatch.order = this.selectedOrder._id;
+        this.newDispatch.destination = this.selectedOrder.destination;
+        this.newDispatch.status = "Despachado";
+        this.showOrder0Service.createDispatch(this.newDispatch).subscribe(res =>{console.log('response is ', res)});
+        this.displayDialogDispatch = false;
+        this.displayDialogEdit = false;
+        this.getOrders();
       }
-      this.newDispatch.order = this.selectedOrder._id;
-      this.newDispatch.destination = this.selectedOrder.destination;
-      this.newDispatch.status = "Despachado";
-      this.showOrder0Service.createDispatch(this.newDispatch).subscribe(res =>{console.log('response is ', res)});
-      this.displayDialogDispatch = false;
-      this.displayDialogEdit = false;
-      this.getOrders();
     }
 
     createOrder() {

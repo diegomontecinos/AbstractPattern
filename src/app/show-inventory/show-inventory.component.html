@@ -1,3 +1,5 @@
+<p-growl baseZIndex=80 [(value)]="msgs"></p-growl>
+
 <div id="layout-content">
   <div>
     <app-menubar-grocer></app-menubar-grocer>
@@ -279,7 +281,7 @@
                 <label for="qty">Stock:</label>
             </div>
             <div class="ui-g-8">
-                <p-spinner [(ngModel)]="selectedStock.stock"></p-spinner>
+                <p-spinner [(ngModel)]="selectedStock.stock" [min]="0"></p-spinner>
             </div>
         </div>
     </div>

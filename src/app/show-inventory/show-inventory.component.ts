@@ -9,6 +9,8 @@ import { FormsModule } from '@angular/forms';
 import * as _ from 'underscore';
 import {SpinnerModule} from 'primeng/spinner';
 import {ToggleButtonModule} from 'primeng/togglebutton';
+import { Router } from '@angular/router';
+import { Message } from 'primeng/components/common/api';
 
 @Component({
   selector: 'app-show-inventory',
@@ -38,13 +40,23 @@ export class ShowInventoryComponent implements OnInit {
   newWithdraw: Withdraw;
   withdrawDev: boolean;
   selectedStock: any;
+  userType: string;
+  groser_wh: string;
+  msgs: Message[] = [];
 
-  constructor(private showInventoryService: ShowInventoryService) { }
+  constructor(private showInventoryService: ShowInventoryService, private router: Router) { }
 
   ngOnInit() {
-      this.showInventoryService.getAllWH().subscribe(result => {this.warehouse = result['data'];
+      this.userType = sessionStorage.getItem('type');
+      this.groser_wh = sessionStorage.getItem('wh');
+      if(this.userType == 'admin' || this.userType == 'central' || this.userType == 'bodeguero') {
+      }
+      else {
+        this.router.navigate(['']);
+      }
+
       this.getInventory();
-    });
+
 
       this.cols = [
           { field: 'sku', header: 'SKU' },
@@ -59,7 +71,18 @@ export class ShowInventoryComponent implements OnInit {
   }
 
   getInventory() {
-      this.showInventoryService.getAllInv().subscribe(result => {this.materials = result['data'];});
+      this.showInventoryService.getAllWH().subscribe(result => {this.warehouse = result['data'];
+        this.showInventoryService.getAllInv().subscribe(result => {this.materials = result['data'];
+        /*
+          for (var i = 0; i < this.materials.length; i++) {
+            for (var j = (this.materials[i].stock_wh.length -1); j >= 0; j--) {
+              if(this.materials[i].stock_wh[j].wh != this.groser_wh) {
+                this.materials[i].stock_wh = this.materials[i].stock_wh.splice(j, 1);
+              }
+            }
+          } */
+        });
+      });
   }
 
   showDialogToAdd() {
@@ -87,25 +110,39 @@ export class ShowInventoryComponent implements OnInit {
 
   addMaterial() {
     if(this.newMaterial){
-      this.material.stock_wh = [];
-      var i;
-      var objAux;
-      for (i = 0; i < this.warehouse.length; i++) {
-        objAux = {};
-        objAux.wh = this.warehouse[i]._id;
-        objAux.stock = 0;
-        this.material.stock_wh.push(objAux);
+      var msgAux;
+      if (this.material.sku==null || this.material.name==null || this.material.brand==null) {
+        this.msgs = [];
+        msgAux = null;
+        if (this.material.sku==null) {
+          msgAux = 'SKU requerido';
+        } else if(this.material.name==null) {
+          msgAux = 'Nombre requerido';
+        } else if(this.material.brand==null) {
+          msgAux = 'Marca requerida';
+        }
+        this.msgs.push({severity:'error', summary:'Error', detail:msgAux});
+      } else {
+        this.material.stock_wh = [];
+        var i;
+        var objAux;
+        for (i = 0; i < this.warehouse.length; i++) {
+          objAux = {};
+          objAux.wh = this.warehouse[i]._id;
+          objAux.stock = 0;
+          this.material.stock_wh.push(objAux);
+        }
+        this.showInventoryService.addInv(this.material).subscribe(res =>{console.log('response is ', res)
+        this.getInventory();
+        });
+        this.displayDialogNew = false;
       }
-      this.showInventoryService.addInv(this.material).subscribe(res =>{console.log('response is ', res)
-      this.getInventory();
-      });
-      this.displayDialogNew = false;
     }
     else{
       this.showInventoryService.updateInv(this.material).subscribe(res =>{console.log('response is ', res);});
+      this.getInventory();
       this.displayDialogEdit = false;
     }
-
   }
 
   deleteMaterial() {

@@ -12,8 +12,6 @@ import { DialogModule } from 'primeng/dialog';
 import { Message } from 'primeng/components/common/api';
 import { Router } from '@angular/router';
 
-
-
 @Component({
   selector: 'app-show-dispatch',
   templateUrl: './show-dispatch.component.html',
