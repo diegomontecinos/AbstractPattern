@@ -14,12 +14,30 @@ export class ShowWithdrawService {
       return this.http.post('/api/withdraw/getAllWithdraw',{})
   }
 
+<<<<<<< HEAD
   updateStatusWithdraw(withdraw: Withdraw){
     return this.http.post('/api/withdraw/updateStatusWithdraw',{
       id: withdraw._id,
       coments2: withdraw.coments2,
       status: withdraw.status,
       date2: withdraw.date2
+=======
+  updateWithdraw(withdraw: Withdraw){
+    return this.http.post('/api/withdraw/updateWithdraw',{
+      id: withdraw._id,
+      coments2: withdraw.coments2,
+      status: withdraw.status,
+      date2: Date.now()
+  })
+  }
+
+  updateWithdrawItem(id, c){
+    return this.http.post('/api/withdraw/updateWithdrawItem',{
+      id: id,
+      art: c.art,
+      status: c.status,
+      giveback: c.giveback
+>>>>>>> daniel
   })
   }
 
@@ -31,4 +49,23 @@ export class ShowWithdrawService {
       return this.http.post('/api/inventory/getAllInv',{})
   }
 
+<<<<<<< HEAD
+=======
+  getAllWorkers(){
+      return this.http.post('/api/worker/getAllWorkers',{})
+  }
+
+  createWithdraw(withdraw: Withdraw){
+    return this.http.post('api/withdraw/createWithdraw',{
+      worker: withdraw.worker,
+      arts: withdraw.arts,
+      status: withdraw.status,
+      coments1: withdraw.coments1,
+      date1: Date.now(),
+      warehouse: withdraw.warehouse
+    })
+  }
+
+
+>>>>>>> daniel
 }

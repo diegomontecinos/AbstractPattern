@@ -11,6 +11,7 @@ const Warehouse = require('./model/warehouse');
 const Acquisition = require('./model/acquisition');
 const Dispatch = require('./model/dispatch');
 const Withdraw = require('./model/withdraw');
+<<<<<<< HEAD
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended : false}))
@@ -21,6 +22,19 @@ app.post('/api/user/login', (req, res) => {
         User.find({
             username : req.body.username, password : req.body.password
         }, function(err, user){
+=======
+const Worker = require('./model/worker');
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended : false}))
+mongoose.connect(url, function(err){
+    if(err) throw err;});
+
+app.post('/api/user/login', (req, res) => {
+        User.find({
+            username : req.body.username, password : req.body.password
+        }, 'name type wh whName', function(err, user){
+>>>>>>> daniel
             if(err) throw err;
             if(user.length === 1){
                 return res.status(200).json({
@@ -33,6 +47,7 @@ app.post('/api/user/login', (req, res) => {
                     message: 'Login Failed'
                 })
             }
+<<<<<<< HEAD
 
         })
     });
@@ -41,6 +56,12 @@ app.post('/api/user/login', (req, res) => {
 app.post('/api/inventory/getAllInv', (req, res) => {
     mongoose.connect(url, function(err){
         if(err) throw err;
+=======
+        })
+})
+
+app.post('/api/inventory/getAllInv', (req, res) => {
+>>>>>>> daniel
         Inventory.find({},[],{ sort: { _id: -1 } },(err, doc) => {
             if(err) throw err;
             return res.status(200).json({
@@ -48,12 +69,29 @@ app.post('/api/inventory/getAllInv', (req, res) => {
                 data: doc
             })
         })
+<<<<<<< HEAD
     });
 })
 
 app.post('/api/inventory/createInv', (req, res) => {
     mongoose.connect(url, function(err){
         if(err) throw err;
+=======
+})
+
+app.post('/api/inventory/deleteInv', (req, res) => {
+        Inventory.findByIdAndRemove(req.body.id,
+            (err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+})
+
+app.post('/api/inventory/createInv', (req, res) => {
+>>>>>>> daniel
         const inventory = new Inventory({
             sku : req.body.sku,
             name: req.body.name,
@@ -67,12 +105,51 @@ app.post('/api/inventory/createInv', (req, res) => {
                 data: doc
             })
         })
+<<<<<<< HEAD
     });
 })
 
 app.post('/api/orders/getAllOrd', (req, res) => {
     mongoose.connect(url, function(err){
         if(err) throw err;
+=======
+})
+
+app.post('/api/inventory/updateInventory', (req, res) => {
+        Inventory.update(
+            { _id: req.body.id },
+            { sku: req.body.sku,
+            name: req.body.name,
+            brand: req.body.brand,
+            stockWH: req.body.stocwh
+            },
+            (err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+})
+
+app.post('/api/inventory/updateStock', (req, res) => {
+        Inventory.update(
+            { _id: req.body.id,
+            "stock_wh.wh": req.body.wh },
+            { "$set":
+            { "stock_wh.$.stock": req.body.stock }
+            },
+            (err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+})
+
+app.post('/api/orders/getAllOrd', (req, res) => {
+>>>>>>> daniel
         Order.find({},[],{ sort: { _id: -1 } },(err, doc) => {
             if(err) throw err;
             return res.status(200).json({
@@ -80,6 +157,7 @@ app.post('/api/orders/getAllOrd', (req, res) => {
                 data: doc
             })
         })
+<<<<<<< HEAD
     });
 })
 
@@ -90,6 +168,17 @@ app.post('/api/orders/createOrder', (req, res) => {
             name: req.body.name,
             qty: req.body.qty,
             status: req.body.status
+=======
+})
+
+app.post('/api/orders/createOrder', (req, res) => {
+        const order = new Order({
+            destination: req.body.destination,
+            status: req.body.status,
+            date1: req.body.date1,
+            coments1: req.body.coments1,
+            arts: req.body.arts
+>>>>>>> daniel
         })
         order.save((err, doc) => {
             if(err) throw err;
@@ -98,12 +187,18 @@ app.post('/api/orders/createOrder', (req, res) => {
                 data: doc
             })
         })
+<<<<<<< HEAD
     });
 })
 
 app.post('/api/orders/updateOrder', (req, res) => {
     mongoose.connect(url, function(err){
         if(err) throw err;
+=======
+})
+
+app.post('/api/orders/updateOrder', (req, res) => {
+>>>>>>> daniel
         Order.update(
             { _id: req.body.id },
             { name: req.body.name,
@@ -116,12 +211,31 @@ app.post('/api/orders/updateOrder', (req, res) => {
                 data: doc
             })
         })
+<<<<<<< HEAD
     });
 })
 
 app.post('/api/orders/deleteOrder', (req, res) => {
     mongoose.connect(url, function(err){
         if(err) throw err;
+=======
+})
+
+app.post('/api/orders/updateOrderStatus', (req, res) => {
+        Order.update(
+            { _id: req.body.id },
+            { status: req.body.status },
+            (err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+})
+
+app.post('/api/orders/deleteOrder', (req, res) => {
+>>>>>>> daniel
         Order.findByIdAndRemove(req.body.id,
             (err, doc) => {
             if(err) throw err;
@@ -130,12 +244,35 @@ app.post('/api/orders/deleteOrder', (req, res) => {
                 data: doc
             })
         })
+<<<<<<< HEAD
     });
 })
 
 app.post('/api/warehouse/getAllWH', (req, res) => {
     mongoose.connect(url, function(err){
         if(err) throw err;
+=======
+})
+
+app.post('/api/orders/updateOrderItem', (req, res) => {
+        Order.update(
+            { _id: req.body.id,
+            "arts.art": req.body.art },
+            { "$set":
+            { "arts.$.status": req.body.status,
+              "arts.$.disp": req.body.disp }
+            },
+            (err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+})
+
+app.post('/api/warehouse/getAllWH', (req, res) => {
+>>>>>>> daniel
         Warehouse.find({},[],{ sort: { _id: 1 } },(err, doc) => {
             if(err) throw err;
             return res.status(200).json({
@@ -143,12 +280,19 @@ app.post('/api/warehouse/getAllWH', (req, res) => {
                 data: doc
             })
         })
+<<<<<<< HEAD
     });
 })
 
 app.post('/api/acquisition/getAllAcq', (req, res) => {
     mongoose.connect(url, function(err){
         if(err) throw err;
+=======
+})
+
+app.post('/api/acquisition/getAllAcq', (req, res) => {
+
+>>>>>>> daniel
         Acquisition.find({},[],{ sort: { _id: -1 } },(err, doc) => {
             if(err) throw err;
             return res.status(200).json({
@@ -156,6 +300,7 @@ app.post('/api/acquisition/getAllAcq', (req, res) => {
                 data: doc
             })
         })
+<<<<<<< HEAD
     });
 })
 
@@ -169,6 +314,17 @@ app.post('/api/acquisition/createAcq', (req, res) => {
             coments: req.body.coments,
             dateAcq: req.body.dateAcq,
             destination: req.body.destination
+=======
+
+})
+
+app.post('/api/acquisition/createAcquisition', (req, res) => {
+        const acquisition = new Acquisition({
+            arts: req.body.arts,
+            status: req.body.status,
+            coments1: req.body.coments1,
+            date1: req.body.date1,
+>>>>>>> daniel
         })
         acquisition.save((err, doc) => {
             if(err) throw err;
@@ -177,12 +333,48 @@ app.post('/api/acquisition/createAcq', (req, res) => {
                 data: doc
             })
         })
+<<<<<<< HEAD
     });
 })
 
 app.post('/api/acquisition/updateStatusAcq', (req, res) => {
     mongoose.connect(url, function(err){
         if(err) throw err;
+=======
+})
+
+app.post('/api/acquisition/cancelAcquisition', (req, res) => {
+        Acquisition.findByIdAndRemove(req.body.id,
+            (err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+})
+
+app.post('/api/acquisition/updateAcquisition', (req, res) => {
+        Acquisition.update(
+            { _id: req.body.id },
+            { status: req.body.status,
+              date2: req.body.date2,
+              date3: req.body.date3,
+              date4: req.body.date4,
+              coments2: req.body.coments2,
+              coments3: req.body.coments3,
+              coments4: req.body.coments4 },
+            (err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+})
+
+app.post('/api/acquisition/updateStatusAcq', (req, res) => {
+>>>>>>> daniel
         Acquisition.update(
             { _id: req.body.id },
             { coments2: req.body.coments2,
@@ -194,12 +386,18 @@ app.post('/api/acquisition/updateStatusAcq', (req, res) => {
                 data: doc
             })
         })
+<<<<<<< HEAD
     });
 })
 
 app.post('/api/dispatch/getAllDis', (req, res) => {
     mongoose.connect(url, function(err){
         if(err) throw err;
+=======
+})
+
+app.post('/api/dispatch/getAllDis', (req, res) => {
+>>>>>>> daniel
         Dispatch.find({},[],{ sort: { _id: -1 } },(err, doc) => {
             if(err) throw err;
             return res.status(200).json({
@@ -207,6 +405,7 @@ app.post('/api/dispatch/getAllDis', (req, res) => {
                 data: doc
             })
         })
+<<<<<<< HEAD
     });
 })
 
@@ -220,6 +419,19 @@ app.post('/api/dispatch/createDis', (req, res) => {
             qty: req.body.qty,
             date_dis: req.body.date_dis,
             status: req.body.status
+=======
+})
+
+app.post('/api/dispatch/createDispatch', (req, res) => {
+        const dispatch = new Dispatch({
+            arts: req.body.arts,
+            origin: req.body.origin,
+            destination: req.body.destination,
+            date1: req.body.date1,
+            coments1: req.body.coments1,
+            status: req.body.status,
+            order: req.body.order
+>>>>>>> daniel
         })
         dispatch.save((err, doc) => {
             if(err) throw err;
@@ -228,6 +440,7 @@ app.post('/api/dispatch/createDis', (req, res) => {
                 data: doc
             })
         })
+<<<<<<< HEAD
     });
 })
 
@@ -238,6 +451,16 @@ app.post('/api/dispatch/updateStatusDis', (req, res) => {
             { _id: req.body.id },
             { coments: req.body.coments,
             status: req.body.status },
+=======
+})
+
+app.post('/api/dispatch/updateStatusDis', (req, res) => {
+        Dispatch.update(
+            { _id: req.body.id },
+            { coments2: req.body.coments2,
+            status: req.body.status,
+            date2: req.body.date2 },
+>>>>>>> daniel
             (err, doc) => {
             if(err) throw err;
             return res.status(200).json({
@@ -245,12 +468,18 @@ app.post('/api/dispatch/updateStatusDis', (req, res) => {
                 data: doc
             })
         })
+<<<<<<< HEAD
     });
 })
 
 app.post('/api/withdraw/getAllWithdraw', (req, res) => {
     mongoose.connect(url, function(err){
         if(err) throw err;
+=======
+})
+
+app.post('/api/withdraw/getAllWithdraw', (req, res) => {
+>>>>>>> daniel
         Withdraw.find({},[],{ sort: { _id: -1 } },(err, doc) => {
             if(err) throw err;
             return res.status(200).json({
@@ -258,6 +487,7 @@ app.post('/api/withdraw/getAllWithdraw', (req, res) => {
                 data: doc
             })
         })
+<<<<<<< HEAD
     });
 })
 
@@ -271,6 +501,18 @@ app.post('/api/withdraw/createWithdraw', (req, res) => {
             coments1: req.body.coments1,
             date1: req.body.date1,
             warehouse: req.body.warehouse
+=======
+})
+
+app.post('/api/withdraw/createWithdraw', (req, res) => {
+        const withdraw = new Withdraw({
+            arts: req.body.arts,
+            status: req.body.status,
+            coments1: req.body.coments1,
+            date1: req.body.date1,
+            warehouse: req.body.warehouse,
+            worker: req.body.worker
+>>>>>>> daniel
         })
         withdraw.save((err, doc) => {
             if(err) throw err;
@@ -279,12 +521,18 @@ app.post('/api/withdraw/createWithdraw', (req, res) => {
                 data: doc
             })
         })
+<<<<<<< HEAD
     });
 })
 
 app.post('/api/withdraw/updateStatusWithdraw', (req, res) => {
     mongoose.connect(url, function(err){
         if(err) throw err;
+=======
+})
+
+app.post('/api/withdraw/updateWithdraw', (req, res) => {
+>>>>>>> daniel
         Withdraw.update(
             { _id: req.body.id },
             { coments2: req.body.coments2,
@@ -297,7 +545,37 @@ app.post('/api/withdraw/updateStatusWithdraw', (req, res) => {
                 data: doc
             })
         })
+<<<<<<< HEAD
     });
+=======
+})
+
+app.post('/api/withdraw/updateWithdrawItem', (req, res) => {
+        Withdraw.update(
+            { _id: req.body.id,
+            "arts.art": req.body.art },
+            { "$set":
+            { "arts.$.status": req.body.status,
+              "arts.$.giveback": req.body.giveback,}
+            },
+            (err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+})
+
+app.post('/api/worker/getAllWorkers', (req, res) => {
+        Worker.find({},[],{ sort: { _id: -1 } },(err, doc) => {
+            if(err) throw err;
+            return res.status(200).json({
+                status: 'success',
+                data: doc
+            })
+        })
+>>>>>>> daniel
 })
 
 app.listen(3000, () => console.log('Servidor up! en puerto 3000!!!'))

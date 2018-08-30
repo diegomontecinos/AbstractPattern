@@ -1,0 +1,48 @@
+.menu {
+  min-width: 240px;
+  max-width: 260px;
+}
+
+#layout-topbar {
+    background-color: #20272a;
+    box-sizing: border-box;
+    display: block;
+    padding: 0;
+    height: 70px;
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9997;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.3);
+}
+
+#layout-sidebar {
+    position: fixed;
+    left: 0;
+    top: 70px;
+    height: calc(100% - 70px);
+    background-color: #fff;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 300px;
+    box-shadow: 0 0 5px 0 rgba(0,0,0,.3);
+}
+
+.layout-menu {
+    overflow-y: auto;
+    width: 300px;
+}
+
+.welcome {
+    color: #fff;
+    transition: background-color .2s;
+    min-width: 120px;
+    box-sizing: border-box;
+    height: 100%;
+    line-height: 70px;
+    font-size: 16px;
+    margin-left: auto;
+    margin-right: 30px;
+}

@@ -24,14 +24,31 @@ export class ShowInventoryService {
     }
 
     updateInv(material: Inventory){
+<<<<<<< HEAD
       return this.http.post('/api/inventory/updateInv',{
+=======
+      return this.http.post('/api/inventory/updateInventory',{
+>>>>>>> daniel
         id: material._id,
         sku : material.sku,
         name: material.name,
         brand: material.brand,
         stock_wh: material.stock_wh
+<<<<<<< HEAD
     })
 }
+=======
+      })
+    }
+
+    updateStock(id, stock_wh){
+      return this.http.post('/api/inventory/updateStock',{
+        id: id,
+        wh: stock_wh.wh,
+        stock : stock_wh.stock
+      })
+    }
+>>>>>>> daniel
 
     deleteInv(id){
       return this.http.post('/api/inventory/deleteInv',{id : id})

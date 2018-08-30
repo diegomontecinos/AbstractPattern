@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 <div class="ui-g">
   <div class="ui-g-2 menu">
+=======
+<p-growl baseZIndex=80 styleClass="myGrowl" [(value)]="msgs"></p-growl>
+
+<div id="layout-content">
+  <div>
+>>>>>>> daniel
     <app-menubar-grocer></app-menubar-grocer>
   </div>
   <div class="ui-g-1 margen">
   </div>
+<<<<<<< HEAD
   <div class="ui-g-8 center-table">
 
 
@@ -23,11 +31,41 @@
         </tr>
     </ng-template>
 
+=======
+
+<div class="ui-g-7 center-table">
+<p-table #dt [columns]="cols" [value]="dispatchs" selectionMode="single" [(selection)]="selectedDispatch" (onRowSelect)="onRowSelect($event)" [autoLayout]="true" [paginator]="true" [rows]="15">
+  <ng-template pTemplate="caption">
+          <div style="text-align: right">
+              <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+              <input type="text" pInputText size="50" placeholder="Filtro" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+          </div>
+      </ng-template>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                {{col.header}}
+                <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+            </th>
+        </tr>
+        <th *ngFor="let col of columns" [ngSwitch]="col.field">
+              <p-dropdown *ngSwitchCase="'status'" [options]="statuses" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value, col.field, 'equals')"></p-dropdown>
+        </th>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+          <tr [pSelectableRow]="rowData">
+              <td *ngFor="let col of columns">
+                  {{rowData[col.field]}}
+              </td>
+          </tr>
+      </ng-template>
+>>>>>>> daniel
     <ng-template pTemplate="summary" let-rowData>
         <div style="text-align:left">
             <button type="button" pButton icon="fa-plus" (click)="showDialogToAdd()" label="Agregar despacho"></button>
         </div>
     </ng-template>
+<<<<<<< HEAD
 
 </p-table>
 
@@ -40,18 +78,77 @@
         </div>
         <div class="ui-g-8">
             <p-dropdown [options]="arts" [(ngModel)]="newArt" placeholder="Seleccione articulo" optionLabel="name" [showClear]="true" filter="true"></p-dropdown>
+=======
+</p-table>
+</div>
+
+<p-dialog header="Agregar despacho" [(visible)]="displayDialogNew" [responsive]="true" showEffect="fade" [modal]="true" [width]="600">
+    <div class="ui-g ui-fluid" *ngIf="newDispatch">
+      <div class="ui-g-6">
+        <div class="ui-g-12"><b>Destino:</b></div>
+        <div class="ui-g-12">
+          <p-dropdown [options]="warehouse" [(ngModel)]="newDestination" placeholder="Elegir destino" optionLabel="name" [showClear]="true" filter="true" (onChange)="setDestination()"></p-dropdown>
+        </div>
+      </div>
+      <div class="ui-g-6">
+        <div class="ui-g-12"><b>Comentarios despacho:</b></div>
+        <div class="ui-g-12"><textarea  [rows]="3" pInputTextarea [(ngModel)]="newDispatch.coments1"></textarea></div>
+      </div>
+    <div class="ui-g-12">
+        <p-table [columns]="cols2" [value]="newDispatch.arts" [autoLayout]="true">
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of columns">
+                        {{col.header}}
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr [pSelectableRow]="rowData">
+                    <td *ngFor="let col of columns">
+                        {{rowData[col.field]}}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+      </div>
+    </div>
+    <p-footer>
+            <div class="ui-dialog-buttonpane ui-helper-clearfix">
+                <button type="button" pButton icon="fa fa-check" (click)="createDispatch()" label="Crear despacho"></button>
+                <button type="button" pButton icon="fa fa-plus" (click)="addItem()" label="Añadir artículo"></button>
+            </div>
+    </p-footer>
+</p-dialog>
+
+<p-dialog header="Agregar item" [(visible)]="displayDialogAddItem" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
+    <div class="ui-g-12">
+        <div class="ui-g-4">
+            <label for="name">Articulo:</label>
+        </div>
+        <div class="ui-g-8">
+            <p-dropdown [options]="arts" [(ngModel)]="newItem" placeholder="Seleccione articulo" optionLabel="name" [showClear]="true" filter="true" (onChange)="getStock()"></p-dropdown>
+>>>>>>> daniel
         </div>
     </div>
     <div class="ui-g-12">
         <div class="ui-g-4">
+<<<<<<< HEAD
             <label for="name">Origen</label>
         </div>
         <div class="ui-g-8">
             <p-dropdown [options]="warehouse" [(ngModel)]="newOrigin" placeholder="Seleccione origen" optionLabel="name" [showClear]="true"></p-dropdown>
+=======
+            <label for="name">Stock:</label>
+        </div>
+        <div class="ui-g-8">
+          {{newItemStock}}
+>>>>>>> daniel
         </div>
     </div>
     <div class="ui-g-12">
         <div class="ui-g-4">
+<<<<<<< HEAD
             <label for="name">Destino</label>
         </div>
         <div class="ui-g-8">
@@ -66,15 +163,26 @@
             <div class="ui-g-8">
                 <p-spinner [(ngModel)]="dispatch.qty"></p-spinner>
             </div>
+=======
+            <label for="name">Cantidad:</label>
+        </div>
+        <div class="ui-g-8">
+            <p-spinner [(ngModel)]="newItemQty" [min]="1" [max]=newItemStock></p-spinner>
+>>>>>>> daniel
         </div>
     </div>
     <p-footer>
             <div class="ui-dialog-buttonpane ui-helper-clearfix">
+<<<<<<< HEAD
                 <button type="button" pButton icon="fa fa-close" (click)="createDispatch()" label="Agregar"></button>
+=======
+                <button type="button" pButton icon="fa fa-close" (click)="addItem2()" label="Agregar"></button>
+>>>>>>> daniel
             </div>
     </p-footer>
 </p-dialog>
 
+<<<<<<< HEAD
 <p-dialog header="Detalle despacho" [(visible)]="displayDialogEdit" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
     <div class="ui-g ui-fluid" *ngIf="dispatch">
         <div class="ui-g-12">
@@ -92,13 +200,81 @@
             <div class="ui-g-8">
                 <textarea  [rows]="3" pInputTextarea [(ngModel)]="dispatch.coments"></textarea>
             </div>
+=======
+<p-dialog header="Detalle despacho" [(visible)]="displayDialogEdit" [responsive]="true" showEffect="fade" [modal]="true" [width]="600">
+    <div class="ui-g ui-fluid" *ngIf="selectedDispatch">
+        <div class="ui-g-6"><b>Código despacho:</b> {{selectedDispatch._id}}</div>
+        <div class="ui-g-6"><b>Fecha despacho:</b> {{selectedDispatch.dateFormat1}}</div>
+        <div class="ui-g-6"><b>Comentarios despacho:</b> {{selectedDispatch.coments1}}</div>
+        <div class="ui-g-6"><b>Comentarios recepción:</b></div>
+        <div class="ui-g-6"></div>
+        <div class="ui-g-6"><textarea  [rows]="3" pInputTextarea [(ngModel)]="selectedDispatch.coments2"></textarea></div>
+        <div class="ui-g-12"><b>Artículos despacho:</b></div>
+        <div class="ui-g-12">
+          <div class="ui-g-8 center-table">
+            <p-table [columns]="cols2" [value]="selectedDispatch.arts" [autoLayout]="true">
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns">
+                            {{col.header}}
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr [pSelectableRow]="rowData">
+                        <td *ngFor="let col of columns">
+                            {{rowData[col.field]}}
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+          </div>
+>>>>>>> daniel
         </div>
     </div>
     <p-footer>
             <div class="ui-dialog-buttonpane ui-helper-clearfix">
+<<<<<<< HEAD
                 <button type="button" pButton icon="fa fa-close" (click)="cancelDispatch()" label="Cancelar"></button>
+=======
+              <!--  <button type="button" pButton icon="fa fa-close" (click)="cancelDispatch()" label="Cancelar"></button> -->
+>>>>>>> daniel
                 <button type="button" pButton icon="fa fa-ban" (click)="rejectDispatch()" label="Rechazar"></button>
                 <button type="button" pButton icon="fa fa-check" (click)="receiveDispatch()" label="Recibir"></button>
             </div>
     </p-footer>
 </p-dialog>
+<<<<<<< HEAD
+=======
+
+<p-dialog header="Detalle despacho" [(visible)]="displayDialogFinal" [responsive]="true" showEffect="fade" [modal]="true" [width]="600">
+    <div class="ui-g ui-fluid" *ngIf="selectedDispatch">
+        <div class="ui-g-6"><b>Código despacho:</b> {{selectedDispatch._id}}</div>
+        <div class="ui-g-6"><b>Fecha recepción:</b> {{selectedDispatch.dateFormat2}}</div>
+        <div class="ui-g-6"><b>Fecha despacho:</b> {{selectedDispatch.dateFormat1}}</div>
+        <div class="ui-g-6"><b>Comentarios recepción:</b> {{selectedDispatch.coments2}}</div>
+        <div class="ui-g-6"><b>Comentarios despacho:</b> {{selectedDispatch.coments1}}</div>
+        <div class="ui-g-12"><b>Artículos despacho:</b></div>
+        <div class="ui-g-12">
+          <div class="ui-g-8 center-table">
+            <p-table [columns]="cols2" [value]="selectedDispatch.arts" [autoLayout]="true">
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns">
+                            {{col.header}}
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr [pSelectableRow]="rowData">
+                        <td *ngFor="let col of columns">
+                            {{rowData[col.field]}}
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+          </div>
+        </div>
+    </div>
+</p-dialog>
+>>>>>>> daniel

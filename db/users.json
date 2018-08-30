@@ -1,0 +1,4 @@
+{"_id":{"$oid":"5b785b2ea4f8132d00047550"},"name":"daniel","username":"daniel","password":"123","type":"central","wh":{"$oid":"5b4d6a850ea6ac19a061b34d"},"whName":"Bodega Central"}
+{"_id":{"$oid":"5b789419e14771271824358f"},"name":"admin","username":"admin","password":"admin","type":"admin","whName":"Admin"}
+{"_id":{"$oid":"5b7b6986c1f30036181c9d89"},"name":"Bodeguero 1","username":"bodega1","password":"bodega1","type":"bodeguero","wh":{"$oid":"5b4d6a990ea6ac19a061b34e"},"whName":"Bodega 1"}
+{"_id":{"$oid":"5b81b17fafd65e10384f9beb"},"name":"Bodeguero 2","username":"bodega2","password":"bodega2","type":"bodeguero","wh":{"$oid":"5b52df9ccd7ff35ad4e2c7d0"},"whName":"Bodega 2"}
