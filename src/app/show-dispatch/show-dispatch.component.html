@@ -1,37 +1,11 @@
-<<<<<<< HEAD
-<div class="ui-g">
-  <div class="ui-g-2 menu">
-=======
 <p-growl baseZIndex=80 styleClass="myGrowl" [(value)]="msgs"></p-growl>
 
 <div id="layout-content">
   <div>
->>>>>>> daniel
     <app-menubar-grocer></app-menubar-grocer>
   </div>
   <div class="ui-g-1 margen">
   </div>
-<<<<<<< HEAD
-  <div class="ui-g-8 center-table">
-
-
-<p-table [columns]="cols" [value]="dispatchs" selectionMode="single" [(selection)]="selectedDispatch" (onRowSelect)="onRowSelect($event)" [autoLayout]="true" [paginator]="true" [rows]="15">
-    <ng-template pTemplate="header" let-columns>
-        <tr>
-            <th *ngFor="let col of columns">
-                {{col.header}}
-            </th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-rowData let-columns="columns">
-        <tr [pSelectableRow]="rowData">
-            <td *ngFor="let col of columns">
-                {{rowData[col.field]}}
-            </td>
-        </tr>
-    </ng-template>
-
-=======
 
 <div class="ui-g-7 center-table">
 <p-table #dt [columns]="cols" [value]="dispatchs" selectionMode="single" [(selection)]="selectedDispatch" (onRowSelect)="onRowSelect($event)" [autoLayout]="true" [paginator]="true" [rows]="15">
@@ -59,26 +33,11 @@
               </td>
           </tr>
       </ng-template>
->>>>>>> daniel
     <ng-template pTemplate="summary" let-rowData>
         <div style="text-align:left">
             <button type="button" pButton icon="fa-plus" (click)="showDialogToAdd()" label="Agregar despacho"></button>
         </div>
     </ng-template>
-<<<<<<< HEAD
-
-</p-table>
-
-</div>
-
-<p-dialog header="Agregar despacho" [(visible)]="displayDialogNew" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
-    <div class="ui-g-12">
-        <div class="ui-g-4">
-            <label for="name">Articulo</label>
-        </div>
-        <div class="ui-g-8">
-            <p-dropdown [options]="arts" [(ngModel)]="newArt" placeholder="Seleccione articulo" optionLabel="name" [showClear]="true" filter="true"></p-dropdown>
-=======
 </p-table>
 </div>
 
@@ -128,79 +87,31 @@
         </div>
         <div class="ui-g-8">
             <p-dropdown [options]="arts" [(ngModel)]="newItem" placeholder="Seleccione articulo" optionLabel="name" [showClear]="true" filter="true" (onChange)="getStock()"></p-dropdown>
->>>>>>> daniel
         </div>
     </div>
     <div class="ui-g-12">
         <div class="ui-g-4">
-<<<<<<< HEAD
-            <label for="name">Origen</label>
-        </div>
-        <div class="ui-g-8">
-            <p-dropdown [options]="warehouse" [(ngModel)]="newOrigin" placeholder="Seleccione origen" optionLabel="name" [showClear]="true"></p-dropdown>
-=======
             <label for="name">Stock:</label>
         </div>
         <div class="ui-g-8">
           {{newItemStock}}
->>>>>>> daniel
         </div>
     </div>
     <div class="ui-g-12">
         <div class="ui-g-4">
-<<<<<<< HEAD
-            <label for="name">Destino</label>
-        </div>
-        <div class="ui-g-8">
-            <p-dropdown [options]="warehouse" [(ngModel)]="newDestination" placeholder="Seleccione destino" optionLabel="name" [showClear]="true"></p-dropdown>
-        </div>
-    </div>
-    <div class="ui-g-12" *ngIf="dispatch">
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="name">Cantidad</label>
-            </div>
-            <div class="ui-g-8">
-                <p-spinner [(ngModel)]="dispatch.qty"></p-spinner>
-            </div>
-=======
             <label for="name">Cantidad:</label>
         </div>
         <div class="ui-g-8">
             <p-spinner [(ngModel)]="newItemQty" [min]="1" [max]=newItemStock></p-spinner>
->>>>>>> daniel
         </div>
     </div>
     <p-footer>
             <div class="ui-dialog-buttonpane ui-helper-clearfix">
-<<<<<<< HEAD
-                <button type="button" pButton icon="fa fa-close" (click)="createDispatch()" label="Agregar"></button>
-=======
                 <button type="button" pButton icon="fa fa-close" (click)="addItem2()" label="Agregar"></button>
->>>>>>> daniel
             </div>
     </p-footer>
 </p-dialog>
 
-<<<<<<< HEAD
-<p-dialog header="Detalle despacho" [(visible)]="displayDialogEdit" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
-    <div class="ui-g ui-fluid" *ngIf="dispatch">
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="name">Código despacho</label>
-            </div>
-            <div class="ui-g-8">
-                {{dispatch._id}}
-            </div>
-        </div>
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="qty">Comentarios:</label>
-            </div>
-            <div class="ui-g-8">
-                <textarea  [rows]="3" pInputTextarea [(ngModel)]="dispatch.coments"></textarea>
-            </div>
-=======
 <p-dialog header="Detalle despacho" [(visible)]="displayDialogEdit" [responsive]="true" showEffect="fade" [modal]="true" [width]="600">
     <div class="ui-g ui-fluid" *ngIf="selectedDispatch">
         <div class="ui-g-6"><b>Código despacho:</b> {{selectedDispatch._id}}</div>
@@ -229,23 +140,16 @@
                 </ng-template>
             </p-table>
           </div>
->>>>>>> daniel
         </div>
     </div>
     <p-footer>
             <div class="ui-dialog-buttonpane ui-helper-clearfix">
-<<<<<<< HEAD
-                <button type="button" pButton icon="fa fa-close" (click)="cancelDispatch()" label="Cancelar"></button>
-=======
               <!--  <button type="button" pButton icon="fa fa-close" (click)="cancelDispatch()" label="Cancelar"></button> -->
->>>>>>> daniel
                 <button type="button" pButton icon="fa fa-ban" (click)="rejectDispatch()" label="Rechazar"></button>
                 <button type="button" pButton icon="fa fa-check" (click)="receiveDispatch()" label="Recibir"></button>
             </div>
     </p-footer>
 </p-dialog>
-<<<<<<< HEAD
-=======
 
 <p-dialog header="Detalle despacho" [(visible)]="displayDialogFinal" [responsive]="true" showEffect="fade" [modal]="true" [width]="600">
     <div class="ui-g ui-fluid" *ngIf="selectedDispatch">
@@ -277,4 +181,3 @@
         </div>
     </div>
 </p-dialog>
->>>>>>> daniel

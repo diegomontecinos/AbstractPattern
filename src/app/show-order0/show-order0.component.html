@@ -1,12 +1,7 @@
-<<<<<<< HEAD
-<div class="ui-g">
-  <div class="ui-g-2 menu">
-=======
 <p-growl baseZIndex=80 styleClass="myGrowl" [(value)]="msgs"></p-growl>
 
 <div id="layout-content">
   <div>
->>>>>>> daniel
     <app-menubar-grocer></app-menubar-grocer>
   </div>
   <div class="ui-g-1 margen">
@@ -14,15 +9,6 @@
   <div class="ui-g-6 center-table">
 
 
-<<<<<<< HEAD
-<p-table [columns]="cols" [value]="orders" selectionMode="single" [(selection)]="selectedOrder" (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="15">
-    <ng-template pTemplate="header" let-columns>
-        <tr>
-            <th *ngFor="let col of columns">
-                {{col.header}}
-            </th>
-        </tr>
-=======
 <p-table #dt [columns]="cols" [value]="orders" selectionMode="single" [(selection)]="selectedOrder" (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="15" [autoLayout]="true">
   <ng-template pTemplate="caption">
           <div style="text-align: right">
@@ -40,7 +26,6 @@
         <th *ngFor="let col of columns" [ngSwitch]="col.field">
               <p-dropdown *ngSwitchCase="'status'" [options]="statuses" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value, col.field, 'equals')"></p-dropdown>
         </th>
->>>>>>> daniel
     </ng-template>
     <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr [pSelectableRow]="rowData">
@@ -52,11 +37,7 @@
 
     <ng-template pTemplate="summary" let-rowData>
         <div style="text-align:left">
-<<<<<<< HEAD
-            <button type="button" pButton icon="fa-plus" (click)="showDialogToAdd()" label="Agregar orden"></button>
-=======
             <button type="button" pButton icon="fa-plus" (click)="showDialogAddOrder()" label="Agregar orden"></button>
->>>>>>> daniel
         </div>
     </ng-template>
 
@@ -64,33 +45,6 @@
 
 </div>
 
-<<<<<<< HEAD
-<p-dialog header="Detalle ordenes" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
-    <div class="ui-g ui-fluid" *ngIf="order">
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="name">Nombre:</label>
-            </div>
-            <div class="ui-g-8">
-                {{order.art}}
-            </div>
-        </div>
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="qty">Cantidad:</label>
-            </div>
-            <div class="ui-g-8">
-                <input pInputText id="qty" [(ngModel)]="order.qty" />
-            </div>
-        </div>
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="status">Estado</label>
-            </div>
-            <div class="ui-g-8">
-                <input pInputText id="status" [(ngModel)]="order.status" />
-            </div>
-=======
 <p-dialog header="Agregar nueva orden" [(visible)]="displayDialogAddOrder" [responsive]="true" showEffect="fade" [modal]="true" [width]="900">
     <div class="ui-g ui-fluid" *ngIf="newOrder">
         <div class="ui-g-12"><b>Comentarios:</b></div>
@@ -114,52 +68,16 @@
                   </tr>
               </ng-template>
           </p-table>
->>>>>>> daniel
         </div>
     </div>
     <p-footer>
             <div class="ui-dialog-buttonpane ui-helper-clearfix">
-<<<<<<< HEAD
-                <button type="button" pButton icon="fa fa-close" (click)="deleteOrder()" label="Borrar"></button>
-                <button type="button" pButton icon="fa fa-check" (click)="addOrder()" label="Guardar"></button>
-                <button type="button" pButton icon="fa fa-check" (click)="dispatch()" label="Despachar"></button>
-=======
                 <button type="button" pButton icon="fa fa-plus" (click)="addItem()" label="Agregar artículo"></button>
                 <button type="button" pButton icon="fa fa-check" (click)="createOrder()" label="Agregar orden"></button>
->>>>>>> daniel
             </div>
     </p-footer>
 </p-dialog>
 
-<<<<<<< HEAD
-<p-dialog header="Detalle ordenes" [(visible)]="displayDispatch" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
-    <div class="ui-g ui-fluid" *ngIf="order">
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="name">Nombre:</label>
-            </div>
-            <div class="ui-g-8">
-                {{order.art}}
-            </div>
-        </div>
-        <div class="ui-g-12">
-            <div class="ui-g-4">
-                <label for="qty">Cantidad:</label>
-            </div>
-            <div class="ui-g-8">
-                {{order.qty}}
-            </div>
-        </div>
-
-    </div>
-    <p-footer>
-            <div class="ui-dialog-buttonpane ui-helper-clearfix">
-                <button type="button" pButton icon="fa fa-close" (click)="cancelDispatch()" label="Cancelar"></button>
-                <button type="button" pButton icon="fa fa-check" (click)="createDispatch()" label="Despachar"></button>
-            </div>
-    </p-footer>
-</p-dialog>
-=======
 <p-dialog header="Agregar artículo a orden" [(visible)]="displayDialogAddItem" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
   <div class="ui-g ui-fluid" *ngIf="newItem">
       <div class="ui-g-12">
@@ -303,4 +221,3 @@
           </div>
   </p-footer>
 </p-dialog>
->>>>>>> daniel

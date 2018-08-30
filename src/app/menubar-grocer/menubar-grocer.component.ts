@@ -15,16 +15,6 @@ export class MenubarGrocerComponent implements OnInit {
 
   public items: MenuItem[];
 
-<<<<<<< HEAD
-  ngOnInit() {
-    this.items = [
-      {label: 'Inventario', routerLink: ['/bodeguero/inventario']},
-      {label: 'Despachos', routerLink: ['/bodeguero/despachos']},
-      {label: 'Adquisiciones', routerLink: ['/bodeguero/adquisiciones']},
-      {label: 'Ordenes', routerLink: ['/bodeguero/ordenes0']},
-      {label: 'Retiros', routerLink: ['/bodeguero/retiros']}
-    ];
-=======
   type: string;
   username: string;
   whName: string;
@@ -56,7 +46,6 @@ export class MenubarGrocerComponent implements OnInit {
         {label: 'Ordenes', routerLink: ['/bodeguero/ordenes0']},
         {label: 'Retiros', routerLink: ['/bodeguero/retiros']}
       ];
->>>>>>> daniel
   }
 
 }

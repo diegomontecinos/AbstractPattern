@@ -1,10 +1,5 @@
 export interface Orders {
     _id?;
-<<<<<<< HEAD
-    name?;
-    qty?;
-    status?;
-=======
     destination?;
     status?;
     arts?;
@@ -14,5 +9,4 @@ export interface Orders {
     coments2?;
     dateFormat1?;
     dateFormat2?;
->>>>>>> daniel
 }

@@ -8,29 +8,17 @@ import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { Warehouse } from '../models/warehouse.model';
 import { Inventory } from '../models/inventory.model';
-<<<<<<< HEAD
-import * as moment from 'moment';
-=======
 import { Worker } from '../models/worker.model';
 import * as moment from 'moment-timezone';
 import {GrowlModule} from 'primeng/growl';
 import {Message} from 'primeng/components/common/api';
 import { ShowInventoryService } from '../show-inventory/show-inventory.service';
 import { Router } from '@angular/router';
->>>>>>> daniel
 
 @Component({
   selector: 'app-show-withdraw',
   templateUrl: './show-withdraw.component.html',
   styleUrls: ['./show-withdraw.component.css'],
-<<<<<<< HEAD
-  providers: [ ShowWithdrawService ]
-})
-
-
-export class ShowWithdrawComponent implements OnInit {
-
-=======
   providers: [ ShowWithdrawService, ShowInventoryService ]
 })
 
@@ -38,25 +26,18 @@ export class ShowWithdrawComponent implements OnInit {
 
   displayDialogAdd: boolean;
   displayDialogAddItem: boolean;
->>>>>>> daniel
   displayDialogEdit: boolean;
   displayDialogFinal: boolean;
   displayDialogCancel: boolean;
   displayDialogCancel2: boolean;
-<<<<<<< HEAD
-=======
   displayDialogGiveback: boolean;
   withdrawDev: boolean;
->>>>>>> daniel
   withdraw: Withdraw;
   selectedWithdraw: Withdraw;
   newWithdraw: boolean;
   withdraws: Withdraw[];
   cols: any[];
-<<<<<<< HEAD
-=======
   cols2: any[];
->>>>>>> daniel
   warehouse: Warehouse[];
   comentsWithdraw: string;
   newDestination: Warehouse;
@@ -64,29 +45,6 @@ export class ShowWithdrawComponent implements OnInit {
   newArt: Inventory;
   arts: Inventory[];
   qtyAux: number;
-<<<<<<< HEAD
-
-  constructor(private showWithdrawService: ShowWithdrawService) { }
-
-
-  ngOnInit() {
-
-      this.showWithdrawService.getAllWH().subscribe(result => {this.warehouse = result['data'];
-        this.showWithdrawService.getAllInv().subscribe(result => {this.arts = result['data'];
-          this.showWithdrawService.getAllWithdraw().subscribe(result => {this.withdraws = result['data'];
-            this.parseWithdraws();
-          });
-        });
-      });
-
-      this.cols = [
-          { field: '_id', header: 'Código retiro' },
-          { field: 'art', header: 'Artículo' },
-          { field: 'qty', header: 'Cantidad' },
-          { field: 'dateFormat1', header: 'Fecha' },
-          { field: 'status', header: 'Estado' }
-      ];
-=======
   workers: Worker[];
   worker: Worker;
   newItem: any;
@@ -131,62 +89,10 @@ export class ShowWithdrawComponent implements OnInit {
           { label: 'Terminado', value: 'Terminado' },
           { label: 'Cancelado', value: 'Cancelado' }
       ];
->>>>>>> daniel
   }
 
   parseWithdraws() {
     var i;
-<<<<<<< HEAD
-    for (i = 0; i < this.withdraws.length; i++) {
-        this.withdraws[i].art = (this.arts.find(objAux => objAux._id === this.withdraws[i].art)).name;
-        this.withdraws[i].dateFormat1 = moment(this.withdraws[i].date1).format("DD/MM/YYYY");
-        this.withdraws[i].dateFormat2 = moment(this.withdraws[i].date2).format("DD/MM/YYYY");
-    }
-
-  }
-
-  onRowSelect(event) {
-      this.newWithdraw = false;
-      this.withdraw = this.cloneWithdraw(event.data);
-      this.qtyAux = this.withdraw.qty;
-      if(this.withdraw.status == "Espera devolución") {
-        this.displayDialogEdit = true;
-      } else if (this.withdraw.status == "Cancelado" || this.withdraw.status == "No regresado" || this.withdraw.status == "Regreado parcial"
-                    || this.withdraw.status == "Regresado") {
-        this.displayDialogFinal = true;
-      } else if (this.withdraw.status == "Retirado") {
-        this.displayDialogCancel = true;
-      }
-
-  }
-
-  cancelWithdraw() {
-      this.displayDialogCancel2 = true;
-  }
-
-  cancelWithdraw2() {
-      this.withdraw.status = "Cancelado"
-      this.showWithdrawService.updateStatusWithdraw(this.withdraw).subscribe(res =>{console.log('response is ', res)});
-      this.displayDialogCancel = false;
-      this.displayDialogCancel2 = false;
-  }
-
-  givebackWithdraw() {
-      if(this.qtyAux == this.withdraw.qty) {
-        this.withdraw.status = "Regresado";
-        this.showWithdrawService.updateStatusWithdraw(this.withdraw).subscribe(res =>{console.log('response is ', res)});
-        this.displayDialogEdit = false;
-      } else if (this.qtyAux < this.withdraw.qty) {
-        this.withdraw.status = "Regresado parcial";
-        this.showWithdrawService.updateStatusWithdraw(this.withdraw).subscribe(res =>{console.log('response is ', res)});
-        this.displayDialogEdit = false;
-      } else if (this.qtyAux > this.withdraw.qty) {}
-  }
-
-  nogivebackWithdraw() {
-    this.withdraw.status = "No regresado";
-    this.showWithdrawService.updateStatusWithdraw(this.withdraw).subscribe(res =>{console.log('response is ', res)});
-=======
     var j;
     for (i = 0; i < this.withdraws.length; i++) {
         /**this.withdraws[i].art = (this.arts.find(objAux => objAux._id === this.withdraws[i].art)).name; */
@@ -360,7 +266,6 @@ export class ShowWithdrawComponent implements OnInit {
       this.getWithdraws();
       this.displayDialogEdit = false;
     }
->>>>>>> daniel
   }
 
   cloneWithdraw(c: Withdraw): Withdraw {

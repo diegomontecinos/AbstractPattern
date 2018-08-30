@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Orders } from '../models/order.model';
-<<<<<<< HEAD
-=======
 import { Dispatch } from '../models/dispatch.model';
->>>>>>> daniel
 
 @Injectable()
 export class ShowOrder0Service {
@@ -17,24 +14,6 @@ export class ShowOrder0Service {
       return this.http.post('/api/orders/getAllOrd',{})
     }
 
-<<<<<<< HEAD
-    addOrder(order: Orders){
-      return this.http.post('/api/orders/createOrder',{
-          name : order.name,
-          qty: order.qty,
-          status: order.status
-        })
-    }
-
-    updateOrder(order: Orders){
-      return this.http.post('/api/orders/updateOrder',{
-        id: order._id,
-        name : order.name,
-        qty: order.qty,
-        status: order.status
-    })
-}
-=======
     createOrder(order: Orders){
       return this.http.post('/api/orders/createOrder',{
         destination: order.destination,
@@ -72,14 +51,11 @@ export class ShowOrder0Service {
       order: dispatch.order
       })
   }
->>>>>>> daniel
 
     deleteOrder(id){
       return this.http.post('/api/orders/deleteOrder',{id : id})
     }
 
-<<<<<<< HEAD
-=======
     getAllWH(){
         return this.http.post('/api/warehouse/getAllWH',{})
     }
@@ -92,5 +68,4 @@ export class ShowOrder0Service {
         return this.http.post('/api/worker/getAllWorkers',{})
     }
 
->>>>>>> daniel
 }

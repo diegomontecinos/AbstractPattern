@@ -12,10 +12,7 @@ import { Router } from '@angular/router';
 export class LoginComponent {
 
   public user : User;
-<<<<<<< HEAD
-=======
   dataGroser: any;
->>>>>>> daniel
 
   constructor(private loginService: LoginService, private router: Router) {
       this.user = new User();
@@ -26,13 +23,6 @@ export class LoginComponent {
         this.loginService.validateLogin(this.user).subscribe(result => {
         console.log('result is ', result);
         if(result['status'] === 'success') {
-<<<<<<< HEAD
-          this.router.navigate(['/bodeguero/home']);
-        } else {
-          alert('Wrong username password');
-        }
-
-=======
           this.dataGroser = result['data'][0];
           sessionStorage.setItem('user', this.dataGroser.name);
           sessionStorage.setItem('type', this.dataGroser.type);
@@ -42,16 +32,11 @@ export class LoginComponent {
         } else {
           alert('Usuario o contraseña incorrecta');
         }
->>>>>>> daniel
       }, error => {
         console.log('error is ', error);
       });
     } else {
-<<<<<<< HEAD
-        alert('enter user name and password');
-=======
         alert('Ingrese usurio y contraseña');
->>>>>>> daniel
     }
   }
 

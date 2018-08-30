@@ -1,12 +1,7 @@
-<<<<<<< HEAD
-<div class="ui-g">
-  <div class="ui-g-2 menu">
-=======
 <p-growl baseZIndex=80 [(value)]="msgs"></p-growl>
 
 <div id="layout-content">
   <div>
->>>>>>> daniel
     <app-menubar-grocer></app-menubar-grocer>
   </div>
   <div class="ui-g-1 margen">
@@ -14,13 +9,6 @@
 
 
 <div class="ui-g-6 center-table">
-<<<<<<< HEAD
-<p-table [columns]="cols" [value]="materials" selectionMode="single" [(selection)]="selectedMaterial" (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="15">
-    <ng-template pTemplate="header" let-columns>
-        <tr>
-            <th *ngFor="let col of columns">
-                {{col.header}}
-=======
 <p-table #dt [columns]="cols" [value]="materials" selectionMode="single" [(selection)]="selectedMaterial" (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="15">
     <ng-template pTemplate="caption">
         <div style="text-align: right">
@@ -33,7 +21,6 @@
             <th *ngFor="let col of columns" [pSortableColumn]="col.field">
                 {{col.header}}
                 <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
->>>>>>> daniel
             </th>
         </tr>
     </ng-template>
@@ -57,11 +44,7 @@
     <div class="ui-g ui-fluid" *ngIf="material">
         <div class="ui-g-12">
             <div class="ui-g-4">
-<<<<<<< HEAD
-                <label for="name">SKU</label>
-=======
                 <label for="sku">SKU</label>
->>>>>>> daniel
             </div>
             <div class="ui-g-8">
                 <input pInputText id="sku" [(ngModel)]="material.sku" />
@@ -69,11 +52,7 @@
         </div>
         <div class="ui-g-12">
             <div class="ui-g-4">
-<<<<<<< HEAD
-                <label for="qty">Nombre</label>
-=======
                 <label for="name">Nombre</label>
->>>>>>> daniel
             </div>
             <div class="ui-g-8">
                 <input pInputText id="name" [(ngModel)]="material.name" />
@@ -81,17 +60,10 @@
         </div>
         <div class="ui-g-12">
             <div class="ui-g-4">
-<<<<<<< HEAD
-                <label for="qty">Marca</label>
-            </div>
-            <div class="ui-g-8">
-                <input pInputText id="name" [(ngModel)]="material.brand" />
-=======
                 <label for="brand">Marca</label>
             </div>
             <div class="ui-g-8">
                 <input pInputText id="brand" [(ngModel)]="material.brand" />
->>>>>>> daniel
             </div>
         </div>
     </div>
@@ -128,32 +100,6 @@
             <div class="ui-g-8">
                 <input pInputText id="brand" [(ngModel)]="material.brand" />
             </div>
-<<<<<<< HEAD
-            <div class="ui-g-12">
-              <p-table [value]="stockWH" >
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>Bodega</th>
-                        <th>Stock</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-WH>
-                    <tr>
-                        <td>{{WH.name}}</td>
-                        <td>{{WH.stock}}</td>
-                    </tr>
-                </ng-template>
-              </p-table>
-            </div>
-        </div>
-    </div>
-    <p-footer>
-            <div class="ui-dialog-buttonpane ui-helper-clearfix">
-                <!--<button type="button" pButton icon="fa fa-close" (click)="deleteMaterial()" label="Borrar"></button>-->
-                <button type="button" pButton icon="fa fa-save" (click)="addMaterial()" label="Guardar"></button>
-                <button type="button" pButton icon="fa fa-check" (click)="acquire()" label="Adquirir"></button>
-                <button type="button" pButton icon="fa fa-reply" (click)="showWithdraw()" label="Retirar"></button>
-=======
         </div>
             <div class="ui-g-12">
             <p-table [columns]="cols2" [value]="stockWH" selectionMode="single" [(selection)]="selectedStock" (onRowSelect)="onRowSelectWHStock($event)">
@@ -182,13 +128,10 @@
                 <!--
                 <button type="button" pButton icon="fa fa-check" (click)="acquire()" label="Adquirir"></button>
                 <button type="button" pButton icon="fa fa-reply" (click)="showWithdraw()" label="Retirar"></button> -->
->>>>>>> daniel
             </div>
     </p-footer>
 </p-dialog>
 
-<<<<<<< HEAD
-=======
 <p-dialog header="Confirmar" [(visible)]="displayDialogEDelete" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
   <div class="ui-g ui-fluid" *ngIf="material">
     <div class="ui-g-8 center">
@@ -202,7 +145,6 @@
 </p-footer>
 </p-dialog>
 
->>>>>>> daniel
 <p-dialog header="Adquirir artículo" [(visible)]="displayAcquire" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
     <div class="ui-g ui-fluid" *ngIf="material">
         <div class="ui-g-12">
@@ -299,19 +241,13 @@
           </div>
       </div>
     </div>
-<<<<<<< HEAD
-    <p-footer ng-style="{'visibility': isMenuOpen?'visible':'hidden'}">
-=======
     <p-footer>
->>>>>>> daniel
             <div class="ui-dialog-buttonpane ui-helper-clearfix" >
                 <button type="button" pButton icon="fa fa-close" (click)="cancelWithdraw()" label="Cancelar"></button>
                 <button type="button" pButton icon="fa fa-check" (click)="createWithdraw()" label="Retirar"></button>
             </div>
     </p-footer>
 </p-dialog>
-<<<<<<< HEAD
-=======
 
 <p-dialog header="Editar stock" [(visible)]="displayDialogStock" [responsive]="true" showEffect="fade" [modal]="true" [width]="400">
     <div class="ui-g ui-fluid" *ngIf="material">
@@ -356,4 +292,3 @@
             </div>
     </p-footer>
 </p-dialog>
->>>>>>> daniel

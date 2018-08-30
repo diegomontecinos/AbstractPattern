@@ -13,10 +13,7 @@ import {ButtonModule} from 'primeng/button';
 import {SpinnerModule} from 'primeng/spinner';
 import {DropdownModule} from 'primeng/dropdown';
 import {ToggleButtonModule} from 'primeng/togglebutton';
-<<<<<<< HEAD
-=======
 import {GrowlModule} from 'primeng/growl';
->>>>>>> daniel
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -29,10 +26,7 @@ import { MenubarComponent } from './menubar/menubar.component';
 import { MenubarGrocerComponent } from './menubar-grocer/menubar-grocer.component';
 import { ShowOrder0Component } from './show-order0/show-order0.component';
 import { ShowWithdrawComponent } from './show-withdraw/show-withdraw.component';
-<<<<<<< HEAD
-=======
 import { ShowWarehouseComponent } from './show-warehouse/show-warehouse.component';
->>>>>>> daniel
 
 @NgModule({
   declarations: [
@@ -46,12 +40,8 @@ import { ShowWarehouseComponent } from './show-warehouse/show-warehouse.componen
     MenubarComponent,
     MenubarGrocerComponent,
     ShowOrder0Component,
-<<<<<<< HEAD
-    ShowWithdrawComponent
-=======
     ShowWithdrawComponent,
     ShowWarehouseComponent
->>>>>>> daniel
   ],
   imports: [
     BrowserModule,
@@ -66,12 +56,8 @@ import { ShowWarehouseComponent } from './show-warehouse/show-warehouse.componen
     ButtonModule,
     SpinnerModule,
     DropdownModule,
-<<<<<<< HEAD
-    ToggleButtonModule
-=======
     ToggleButtonModule,
     GrowlModule
->>>>>>> daniel
   ],
   providers: [],
   bootstrap: [AppComponent]

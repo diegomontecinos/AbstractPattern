@@ -9,11 +9,8 @@ import { FormsModule } from '@angular/forms';
 import * as _ from 'underscore';
 import {SpinnerModule} from 'primeng/spinner';
 import {ToggleButtonModule} from 'primeng/togglebutton';
-<<<<<<< HEAD
-=======
 import { Router } from '@angular/router';
 import { Message } from 'primeng/components/common/api';
->>>>>>> daniel
 
 @Component({
   selector: 'app-show-inventory',
@@ -23,46 +20,24 @@ import { Message } from 'primeng/components/common/api';
 })
 export class ShowInventoryComponent implements OnInit {
 
-<<<<<<< HEAD
-  isMenuOpen?: boolean;
-=======
->>>>>>> daniel
   displayDialogNew: boolean;
   displayDialogEdit: boolean;
   displayAcquire: boolean;
   displayWithdraw: boolean;
-<<<<<<< HEAD
-=======
   displayDialogStock: boolean;
   displayDialogEDelete: boolean;
->>>>>>> daniel
   material: Inventory;
   selectedMaterial: Inventory;
   newMaterial: boolean;
   materials: Inventory[];
   cols: any[];
-<<<<<<< HEAD
-  warehouse: Warehouse[];
-  stockWH: any[];
-=======
   cols2: any[];
   warehouse: Warehouse[];
   stockWH: any[any];
->>>>>>> daniel
   qtyAcquire: number;
   comentsAcquire: string;
   newDestination: Warehouse;
   newWithdraw: Withdraw;
-<<<<<<< HEAD
-  newWHStock: any[];
-  withdrawDev: boolean;
-
-  constructor(private showInventoryService: ShowInventoryService) { }
-
-  ngOnInit() {
-      this.showInventoryService.getAllInv().subscribe(result => {this.materials = result['data'];});
-      this.showInventoryService.getAllWH().subscribe(result => {this.warehouse = result['data'];});
-=======
   withdrawDev: boolean;
   selectedStock: any;
   userType: string;
@@ -82,15 +57,12 @@ export class ShowInventoryComponent implements OnInit {
 
       this.getInventory();
 
->>>>>>> daniel
 
       this.cols = [
           { field: 'sku', header: 'SKU' },
           { field: 'name', header: 'Nombre' },
           { field: 'brand', header: 'Marca' }
       ];
-<<<<<<< HEAD
-=======
 
       this.cols2 = [
           { field: 'name', header: 'Bodega' },
@@ -111,7 +83,6 @@ export class ShowInventoryComponent implements OnInit {
           } */
         });
       });
->>>>>>> daniel
   }
 
   showDialogToAdd() {
@@ -128,24 +99,6 @@ export class ShowInventoryComponent implements OnInit {
       this.displayDialogEdit = true;
   }
 
-<<<<<<< HEAD
-  addMaterial() {
-    if(this.newMaterial){
-      this.material.stock_wh = [];
-      var i;
-      var objAux;
-      for (i = 0; i < this.warehouse.length; i++) {
-        objAux = {};
-        objAux.wh = this.warehouse[i]._id;
-        objAux.stock = 0;
-        this.material.stock_wh.push(objAux);
-      }
-      this.showInventoryService.addInv(this.material).subscribe(res =>{console.log('response is ', res)});
-      this.displayDialogNew = false;
-    }
-    else{
-      this.showInventoryService.updateInv(this.material).subscribe(res =>{console.log('response is ', res)});
-=======
   onRowSelectWHStock(event) {
     this.displayDialogStock = true;
   }
@@ -188,7 +141,6 @@ export class ShowInventoryComponent implements OnInit {
     else{
       this.showInventoryService.updateInv(this.material).subscribe(res =>{console.log('response is ', res);});
       this.getInventory();
->>>>>>> daniel
       this.displayDialogEdit = false;
     }
   }
@@ -197,11 +149,6 @@ export class ShowInventoryComponent implements OnInit {
     if(!this.newMaterial){
       this.showInventoryService.deleteInv(this.material).subscribe(res =>{console.log('response is ', res)});
     }
-<<<<<<< HEAD
-      this.displayDialogEdit = false;
-  }
-
-=======
       let index = this.materials.indexOf(this.selectedMaterial);
       this.materials = this.materials.filter((val, i) => i != index);
       this.displayDialogEDelete = false;
@@ -212,7 +159,6 @@ export class ShowInventoryComponent implements OnInit {
     this.displayDialogEDelete = true;
   }
 
->>>>>>> daniel
   showWithdraw () {
     this.newWithdraw = {};
     this.displayWithdraw = true;
@@ -226,14 +172,6 @@ export class ShowInventoryComponent implements OnInit {
     this.displayWithdraw = false;
     this.displayDialogEdit = false;
     if(this.withdrawDev){
-<<<<<<< HEAD
-      this.newWithdraw.status = "Espera devolución"
-    }
-    else{
-      this.newWithdraw.status = "Retirado"
-    }
-    this.showInventoryService.createWithdraw(this.material._id, this.newWithdraw).subscribe(res =>{console.log('response is ', res)});
-=======
       this.newWithdraw.status = "Espera devolución";
     }
     else{
@@ -250,7 +188,6 @@ export class ShowInventoryComponent implements OnInit {
     }
     this.showInventoryService.createWithdraw(this.material._id, this.newWithdraw).subscribe(res =>{console.log('response is ', res)});
     this.showInventoryService.updateStock(this.material._id, this.stockWH[index]).subscribe(res =>{console.log('response is ', res);});
->>>>>>> daniel
   }
 
   cloneMaterial(c: Inventory): Inventory {
@@ -261,8 +198,6 @@ export class ShowInventoryComponent implements OnInit {
       return material;
   }
 
-<<<<<<< HEAD
-=======
   cloneStock(c) {
       let whSotck = {};
       for (let prop in c) {
@@ -271,7 +206,6 @@ export class ShowInventoryComponent implements OnInit {
       return whSotck;
   }
 
->>>>>>> daniel
   mergeStock(c: Inventory, d: Warehouse[]) {
     var finalArray = _.map(c.stock_wh, function(item){
     return _.extend(item, _.omit(_.findWhere(d, {_id: item.wh})));

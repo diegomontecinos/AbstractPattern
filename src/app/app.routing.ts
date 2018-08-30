@@ -9,28 +9,18 @@ import { ShowAcquisitionComponent } from './show-acquisition/show-acquisition.co
 import { ShowOrderComponent } from './show-order/show-order.component';
 import { ShowOrder0Component } from './show-order0/show-order0.component';
 import { ShowWithdrawComponent } from './show-withdraw/show-withdraw.component';
-<<<<<<< HEAD
-=======
 import { ShowWarehouseComponent } from './show-warehouse/show-warehouse.component';
->>>>>>> daniel
 
 export const AppRoutes: Routes = [
     { path: '', component: LoginComponent },
     { path: 'bodeguero/home', component: HomeBodegueroComponent },
     { path: 'bodeguero/despachos', component: ShowDispatchComponent },
     { path: 'bodeguero/inventario', component: ShowInventoryComponent },
-<<<<<<< HEAD
-    { path: 'bodeguero/adquisiciones', component: ShowAcquisitionComponent },
-    { path: 'bodeguero/ordenes', component: ShowOrderComponent },
-    { path: 'bodeguero/ordenes0', component: ShowOrder0Component },
-    { path: 'bodeguero/retiros', component: ShowWithdrawComponent }
-=======
     { path: 'adquisiciones', component: ShowAcquisitionComponent },
     { path: 'bodeguero/ordenes', component: ShowOrderComponent },
     { path: 'bodeguero/ordenes0', component: ShowOrder0Component },
     { path: 'bodeguero/retiros', component: ShowWithdrawComponent },
     { path: 'bodegas', component: ShowWarehouseComponent }
->>>>>>> daniel
 ];
 
 export const ROUTING: ModuleWithProviders = RouterModule.forRoot(AppRoutes);

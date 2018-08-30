@@ -1,16 +1,5 @@
 export interface Dispatch {
     _id?;
-<<<<<<< HEAD
-    art?;
-    origin?;
-    destination?;
-    qty?;
-    status?;
-    date_dis?;
-    coments?;
-    dateFormat?;
-    date_rec?;
-=======
     arts?;
     origin?;
     destination?;
@@ -24,5 +13,4 @@ export interface Dispatch {
     dateFormat1?;
     dateFormat2?;
     order?;
->>>>>>> daniel
 }

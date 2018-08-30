@@ -1,17 +1,5 @@
 export interface Acquisition {
     _id?;
-<<<<<<< HEAD
-    art?;
-    qty?;
-    dateAcq?;
-    status?;
-    coments?;
-    coments2?;
-    destination?;
-    dateRec?;
-    dateAcqFormat?;
-    dateRecFormat?;
-=======
     arts?;
     date1?;
     date2?;
@@ -26,5 +14,4 @@ export interface Acquisition {
     dateFormat2?;
     dateFormat3?;
     dateFormat4?;
->>>>>>> daniel
 }
