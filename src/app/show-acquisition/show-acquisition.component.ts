@@ -46,6 +46,7 @@ export class ShowAcquisitionComponent implements OnInit {
     msgs: Message[] = [];
     userType: string;
     groser_wh: string;
+    statuses: any[];
 
     constructor(private showAcquisitionService: ShowAcquisitionService, private router: Router,
                 private showInventoryService: ShowInventoryService) { }
@@ -70,6 +71,15 @@ export class ShowAcquisitionComponent implements OnInit {
             { field: 'name', header: 'Nombre' },
             { field: 'brand', header: 'Marca' },
             { field: 'qty', header: 'Cantidad' }
+        ];
+
+        this.statuses = [
+            { label: 'Todo', value: null },
+            { label: 'Espera', value: 'Espera' },
+            { label: 'Confirmado', value: 'Confirmado' },
+            { label: 'Rechazado', value: 'Rechazado' },
+            { label: 'Despachado', value: 'Despachado' },
+            { label: 'Recibido', value: 'Recibido' }
         ];
     }
 

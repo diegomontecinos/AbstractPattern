@@ -46,6 +46,7 @@ export class ShowOrder0Component implements OnInit {
     originAux: any;
     groser_wh: string;
     userType: string;
+    statuses: any[];
 
     constructor(private showOrder0Service: ShowOrder0Service,
     private showInventoryService: ShowInventoryService, private router: Router) {}
@@ -71,6 +72,12 @@ export class ShowOrder0Component implements OnInit {
             { field: 'qty', header: 'Cantidad' },
             { field: 'disp', header: 'Despachado'},
             { field: 'status', header: 'Estado' }
+        ];
+
+        this.statuses = [
+            { label: 'Todo', value: null },
+            { label: 'Espera', value: 'Espera' },
+            { label: 'Despachado', value: 'Despachado' }
         ];
     }
 
@@ -145,7 +152,9 @@ export class ShowOrder0Component implements OnInit {
       if(this.selectedItemDispatch.disp == this.selectedItemDispatch.qty){
         this.selectedItemDispatch.status = "Despachado";
       }
+      this.selectedItemDispatch.disp = this.selectedItemDispatch.disp + this.selectedItemDispatch.disp2;
       this.newDispatch.arts.push(this.selectedItemDispatch);
+
       let index = this.artsXDispatch.indexOf(this.selectedItemDispatch);
       this.artsXDispatch = this.artsXDispatch.filter((val, i) => i != index);
       this.displayDialogDispatch2 = false;
@@ -200,14 +209,15 @@ export class ShowOrder0Component implements OnInit {
             statusItem = "Espera";
             statusOrder = false;
           }
-          if(statusOrder==true){
-            this.showOrder0Service.updateOrderStatus({id: this.selectedOrder._id, status: "Finalizado"}).subscribe(res =>{console.log('response is ', res)});
-          }
           actualItem = this.arts.find(objAux => objAux._id == this.newDispatch.arts[i].art);
           actualStock = actualItem.stock_wh.find(objAux => objAux.wh == this.newDispatch.origin).stock;
-          this.showInventoryService.updateStock(this.newDispatch.arts[i].art, {wh: this.newDispatch.origin, stock: actualStock - this.newDispatch.arts[i].disp}).subscribe(res =>{console.log('response is ', res)});
+          this.showInventoryService.updateStock(this.newDispatch.arts[i].art, {wh: this.newDispatch.origin, stock: actualStock - this.newDispatch.arts[i].disp2}).subscribe(res =>{console.log('response is ', res)});
           this.showOrder0Service.updateOrderItem({id: this.selectedOrder._id, art: this.newDispatch.arts[i].art, status: statusItem, disp: this.newDispatch.arts[i].disp}).subscribe(res =>{console.log('response is ', res)});
-          this.newDispatch.arts[i] = {art: this.newDispatch.arts[i].art, qty: this.newDispatch.arts[i].disp};
+          this.newDispatch.arts[i] = {art: this.newDispatch.arts[i].art, qty: this.newDispatch.arts[i].disp2};
+          delete this.newDispatch.arts[i].disp2;
+        }
+        if(statusOrder==true){
+          this.showOrder0Service.updateOrderStatus({id: this.selectedOrder._id, status: "Finalizado"}).subscribe(res =>{console.log('response is ', res)});
         }
         this.newDispatch.order = this.selectedOrder._id;
         this.newDispatch.destination = this.selectedOrder.destination;

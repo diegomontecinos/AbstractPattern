@@ -39,6 +39,7 @@ export class ShowDispatchComponent implements OnInit {
   newItemStock: number;
   msgs: Message[] = [];
   userType: string;
+  statuses: any[];
 
   constructor(private showDispatchService: ShowDispatchService, private showInventoryService: ShowInventoryService, private router: Router) { }
 
@@ -66,7 +67,13 @@ export class ShowDispatchComponent implements OnInit {
           { field: 'qty', header: 'Cantidad' }
       ];
 
-
+      this.statuses = [
+          { label: 'Todo', value: null },
+          { label: 'Despachado', value: 'Despachado' },
+          { label: 'Recibido', value: 'Recibido' },
+          { label: 'Rechazado', value: 'Rechazado' },
+          { label: 'Cancelado', value: 'Cancelado' }
+      ];
   }
 
   getDispatchs() {
@@ -152,6 +159,7 @@ export class ShowDispatchComponent implements OnInit {
   addItem() {
     this.newItem = null;
     this.newItemQty = null;
+    this.newItemStock = null;
     this.displayDialogAddItem = true;
   }
 

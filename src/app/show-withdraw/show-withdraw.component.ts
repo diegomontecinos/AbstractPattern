@@ -55,6 +55,7 @@ export class ShowWithdrawComponent implements OnInit {
   groser_wh: string;
   stockAux: number;
   userType: string;
+  statuses: any[];
 
   constructor(private showWithdrawService: ShowWithdrawService,
   private showInventoryService: ShowInventoryService, private router: Router) {}
@@ -81,6 +82,13 @@ export class ShowWithdrawComponent implements OnInit {
           { field: 'status', header: 'Estado' },
           { field: 'giveback', header: 'Devueltos' }
       ]
+
+      this.statuses = [
+          { label: 'Todo', value: null },
+          { label: 'Espera', value: 'Espera' },
+          { label: 'Terminado', value: 'Terminado' },
+          { label: 'Cancelado', value: 'Cancelado' }
+      ];
   }
 
   parseWithdraws() {
@@ -143,7 +151,7 @@ export class ShowWithdrawComponent implements OnInit {
   getStock() {
     var artAux = null;
     this.newItem.qty = 0;
-    this.stockAux = this.newItem.art.stock_wh.find(objAux => objAux.wh == this.groser_wh).stock;
+    this.stockAux = this.newArt.stock_wh.find(objAux => objAux.wh == this.groser_wh).stock;
   }
 
   addItem2() {
@@ -220,6 +228,7 @@ export class ShowWithdrawComponent implements OnInit {
         }
       }
       this.withdraw.arts = this.items;
+      this.withdraw.warehouse = this.groser_wh;
       if(allAux) {
         this.withdraw.status = "Terminado"
       }

@@ -9,7 +9,7 @@
   <div class="ui-g-6 center-table">
 
 
-<p-table #dt [columns]="cols" [value]="orders" selectionMode="single" [(selection)]="selectedOrder" (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="15">
+<p-table #dt [columns]="cols" [value]="orders" selectionMode="single" [(selection)]="selectedOrder" (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="15" [autoLayout]="true">
   <ng-template pTemplate="caption">
           <div style="text-align: right">
               <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
@@ -18,10 +18,14 @@
       </ng-template>
     <ng-template pTemplate="header" let-columns>
         <tr>
-            <th *ngFor="let col of columns">
+            <th *ngFor="let col of columns" [pSortableColumn]="col.field">
                 {{col.header}}
+                <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
             </th>
         </tr>
+        <th *ngFor="let col of columns" [ngSwitch]="col.field">
+              <p-dropdown *ngSwitchCase="'status'" [options]="statuses" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value, col.field, 'equals')"></p-dropdown>
+        </th>
     </ng-template>
     <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr [pSelectableRow]="rowData">
@@ -79,7 +83,7 @@
       <div class="ui-g-12">
           <div class="ui-g-4"><b>Item:</b></div>
           <div class="ui-g-8">
-                <p-dropdown [options]="arts" [(ngModel)]="newItem.art" placeholder="Seleccione artículo" optionLabel="name" [showClear]="true" (onChange)="getStock()"></p-dropdown>
+                <p-dropdown [options]="arts" [(ngModel)]="newItem.art" placeholder="Seleccione artículo" optionLabel="name" [showClear]="true" filter="true" (onChange)="getStock()"></p-dropdown>
           </div>
       </div>
       <div class="ui-g-12">
@@ -209,7 +213,7 @@
   <div class="ui-g ui-fluid" *ngIf="selectedItemDispatch">
       <div class="ui-g-12"><b>Item:</b> {{selectedItemDispatch.name}}</div>
       <div class="ui-g-12"><b>Stock:</b> {{stockAux}}</div>
-      <div class="ui-g-12"><b>Cantidad:</b><p-spinner [(ngModel)]="selectedItemDispatch.disp" [min]="1" [max]=stockAux></p-spinner></div>
+      <div class="ui-g-12"><b>Cantidad:</b><p-spinner [(ngModel)]="selectedItemDispatch.disp2" [min]="1" [max]=stockAux></p-spinner></div>
   </div>
   <p-footer>
           <div class="ui-dialog-buttonpane ui-helper-clearfix">

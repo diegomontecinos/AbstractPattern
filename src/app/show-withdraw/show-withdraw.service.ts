@@ -51,7 +51,7 @@ export class ShowWithdrawService {
       status: withdraw.status,
       coments1: withdraw.coments1,
       date1: Date.now(),
-      warehouse: "5b4d6a850ea6ac19a061b34d"
+      warehouse: withdraw.warehouse
     })
   }
 

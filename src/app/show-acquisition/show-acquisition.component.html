@@ -17,10 +17,14 @@
   </ng-template>
     <ng-template pTemplate="header" let-columns>
         <tr>
-            <th *ngFor="let col of columns">
+            <th *ngFor="let col of columns" [pSortableColumn]="col.field">
                 {{col.header}}
+                <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
             </th>
         </tr>
+        <th *ngFor="let col of columns" [ngSwitch]="col.field">
+              <p-dropdown *ngSwitchCase="'status'" [options]="statuses" [style]="{'width':'100%'}" (onChange)="dt.filter($event.value, col.field, 'equals')"></p-dropdown>
+        </th>
     </ng-template>
     <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr [pSelectableRow]="rowData">
@@ -74,7 +78,7 @@
     <div class="ui-g-12">
       <div class="ui-g-4"><b>Item:</b></div>
       <div class="ui-g-8">
-        <p-dropdown [options]="arts" [(ngModel)]="newItem" [style]="{'width':'150px'}" filter="true" optionLabel="name" placeholder="Seleccione item"></p-dropdown>
+        <p-dropdown [options]="arts" [(ngModel)]="newItem" [style]="{'width':'200px'}" filter="true" optionLabel="name" [showClear]="true" placeholder="Seleccione item"></p-dropdown>
       </div>
     </div>
     <div class="ui-g-12">
